@@ -21,12 +21,17 @@ pretty_urls:
   trailing_html: false # Set to false to remove trailing '.html' from permalinks
 
 # Directory
+#资源文件夹，这个文件夹用来存放内容
 source_dir: source
+# 公共文件夹，这个文件夹用于存放生成的站点文件。
 public_dir: public
+	# 标签文件夹
 tag_dir: tags
+# 归档文件夹
 archive_dir: archives
+# 分类文件夹
 category_dir: categories
-code_dir: downloads/code
+code_dir: source/code
 i18n_dir: :lang
 skip_render:
 
