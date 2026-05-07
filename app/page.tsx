@@ -109,7 +109,7 @@ export default function Home() {
             href="#"
             className="shrink-0 text-[16px] font-semibold tracking-[0.08em]"
           >
-            klay
+            Klay's Studio
           </a>
           <div className="flex min-w-0 items-center gap-1 overflow-x-auto text-[14px] text-notion-muted">
             {navLinks.map((link) => (
