@@ -92,7 +92,7 @@ function Section({
 }>) {
   return (
     <section id={id} className="scroll-mt-24">
-      <h2 className="mb-6 text-[15px] font-semibold text-notion-text">
+      <h2 className="mb-6 border-l-4 border-notion-accent pl-3 text-[15px] font-semibold text-notion-text">
         {title}
       </h2>
       {children}
@@ -103,9 +103,12 @@ function Section({
 export default function Home() {
   return (
     <main className="min-h-screen bg-notion-bg text-notion-text">
-      <header className="sticky top-0 z-20 h-16 border-b border-notion-line bg-white/85 backdrop-blur">
-        <nav className="mx-auto flex h-full max-w-[760px] items-center justify-between gap-6 px-5">
-          <a href="#" className="shrink-0 text-[15px] font-semibold">
+      <header className="sticky top-0 z-20 px-4 py-3 backdrop-blur">
+        <nav className="mx-auto flex h-16 max-w-[1040px] items-center justify-between gap-6 rounded-[22px] border border-notion-line bg-white/82 px-5 shadow-[0_18px_50px_rgba(31,41,55,0.08)]">
+          <a
+            href="#"
+            className="shrink-0 text-[16px] font-semibold tracking-[0.08em]"
+          >
             klay
           </a>
           <div className="flex min-w-0 items-center gap-1 overflow-x-auto text-[14px] text-notion-muted">
@@ -113,7 +116,7 @@ export default function Home() {
               <a
                 key={link.label}
                 href={link.href}
-                className="shrink-0 rounded-md px-3 py-1.5 transition hover:bg-notion-hover hover:text-notion-text"
+                className="shrink-0 rounded-full px-3.5 py-2 transition hover:bg-notion-hover hover:text-notion-text"
               >
                 {link.label}
               </a>
@@ -122,44 +125,46 @@ export default function Home() {
         </nav>
       </header>
 
-      <div className="mx-auto max-w-[760px] px-5 pb-16 pt-[88px]">
-        <section className="mb-14">
-          <p className="mb-3 text-[15px] text-notion-muted">你好，我是</p>
-          <h1 className="mb-5 text-5xl font-semibold leading-tight tracking-normal text-notion-text sm:text-6xl">
+      <div className="mx-auto max-w-[760px] px-5 pb-16 pt-20">
+        <section className="mb-14 text-center">
+          <p className="mb-5 text-[13px] font-semibold uppercase tracking-[0.45em] text-notion-accent">
+            你好，我是
+          </p>
+          <h1 className="mb-5 font-serif text-6xl font-semibold leading-tight tracking-normal text-notion-text sm:text-7xl">
             klay
           </h1>
-          <p className="max-w-2xl text-xl leading-relaxed text-notion-text">
+          <p className="mx-auto max-w-2xl text-[21px] leading-relaxed text-notion-muted">
             Java 后端开发工程师，专注微服务架构、高并发系统与 AI 工作流自动化。
           </p>
-          <p className="mt-5 max-w-2xl text-[16px] leading-relaxedBody text-notion-muted">
+          <p className="mx-auto mt-5 max-w-2xl text-[16px] leading-relaxedBody text-notion-muted">
             我正在构建自己的技术作品集：用博客沉淀技术认知，用项目 Demo
             展示工程能力，用持续输出证明成长轨迹。
           </p>
-          <div className="mt-8 flex flex-wrap gap-2 text-[14px]">
+          <div className="mt-8 flex flex-wrap justify-center gap-2 text-[14px]">
             <a
               href={links.blog}
-              className="rounded-md border border-notion-line px-3.5 py-2 transition hover:bg-notion-hover"
+              className="rounded-full border border-notion-accent bg-notion-accent px-4 py-2 font-medium text-white transition hover:bg-[#1f735d]"
             >
               访问博客
             </a>
             <a
               href={links.lab}
-              className="rounded-md border border-notion-line px-3.5 py-2 transition hover:bg-notion-hover"
+              className="rounded-full border border-notion-line bg-white/76 px-4 py-2 transition hover:bg-notion-hover"
             >
               查看项目
             </a>
             <a
               href={links.email}
-              className="rounded-md border border-notion-line px-3.5 py-2 transition hover:bg-notion-hover"
+              className="rounded-full border border-notion-line bg-white/76 px-4 py-2 transition hover:bg-notion-hover"
             >
               联系我
             </a>
           </div>
         </section>
 
-        <div className="space-y-14">
+        <div className="space-y-14 rounded-[24px] border border-notion-line bg-notion-paper/92 px-5 py-8 sm:px-8">
           <Section id="status" title="当前状态">
-            <div className="border-l border-notion-line pl-5 text-[15px] leading-relaxedBody text-notion-muted">
+            <div className="border-l-4 border-notion-accent bg-notion-hover/65 py-1 pl-5 text-[15px] leading-relaxedBody text-notion-muted">
               <p>
                 正在系统化整理 Java 后端、微服务、AI 工作流相关内容，并持续构建个人项目
                 Demo。
@@ -177,7 +182,7 @@ export default function Home() {
                   key={skill.label}
                   className="grid gap-2 py-4 text-[15px] leading-relaxed sm:grid-cols-[150px_1fr]"
                 >
-                  <div className="font-medium text-notion-text">
+                  <div className="font-semibold text-notion-accent">
                     {skill.label}
                   </div>
                   <div className="text-notion-muted">{skill.items}</div>
@@ -204,7 +209,7 @@ export default function Home() {
                     </div>
                     <a
                       href={project.href}
-                      className="shrink-0 rounded-md px-2 py-1 text-[14px] text-notion-muted transition hover:bg-notion-hover hover:text-notion-text"
+                      className="shrink-0 rounded-full px-3 py-1 text-[14px] font-medium text-notion-accent transition hover:bg-notion-accentSoft"
                     >
                       {project.cta}
                     </a>
@@ -227,7 +232,7 @@ export default function Home() {
             </div>
             <a
               href={links.blog}
-              className="mt-4 inline-flex rounded-md px-2 py-1 text-[14px] text-notion-muted transition hover:bg-notion-hover hover:text-notion-text"
+              className="mt-4 inline-flex rounded-full px-3 py-1 text-[14px] font-medium text-notion-accent transition hover:bg-notion-accentSoft"
             >
               查看全部博客 →
             </a>
@@ -236,7 +241,7 @@ export default function Home() {
           <Section id="experience" title="工作经历">
             <ul className="space-y-4 text-[15px] leading-relaxedBody text-notion-muted">
               {experience.map((item) => (
-                <li key={item} className="border-l border-notion-line pl-5">
+                <li key={item} className="border-l-4 border-notion-line pl-5">
                   {item}
                 </li>
               ))}
@@ -249,7 +254,7 @@ export default function Home() {
                 <a
                   key={link.label}
                   href={link.href}
-                  className="rounded-md px-2 py-2 text-notion-muted transition hover:bg-notion-hover hover:text-notion-text"
+                  className="rounded-full px-3 py-2 text-notion-muted transition hover:bg-notion-hover hover:text-notion-text"
                 >
                   {link.label}
                 </a>
@@ -259,7 +264,7 @@ export default function Home() {
         </div>
       </div>
 
-      <footer className="border-t border-notion-line">
+      <footer className="border-t border-notion-line/70 bg-white/35">
         <div className="mx-auto flex max-w-[760px] flex-col gap-4 px-5 py-8 text-[13px] text-notion-faint sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 klay</p>
           <div className="flex flex-wrap gap-1">
@@ -267,7 +272,7 @@ export default function Home() {
               <a
                 key={link.label}
                 href={link.href}
-                className="rounded-md px-2 py-1 transition hover:bg-notion-hover hover:text-notion-text"
+                className="rounded-full px-3 py-1 transition hover:bg-notion-hover hover:text-notion-text"
               >
                 {link.label}
               </a>

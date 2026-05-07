@@ -6,12 +6,15 @@ const config: Config = {
     extend: {
       colors: {
         notion: {
-          bg: "#ffffff",
-          text: "#37352f",
-          muted: "#787774",
-          faint: "#9b9a97",
-          line: "#eeeeec",
-          hover: "#efefed"
+          bg: "#edf3f8",
+          paper: "#fbfcfd",
+          text: "#1f2937",
+          muted: "#66748a",
+          faint: "#93a0b2",
+          line: "#d8e2ed",
+          hover: "#eef4f8",
+          accent: "#24866b",
+          accentSoft: "#e6f2ee"
         }
       },
       fontFamily: {
