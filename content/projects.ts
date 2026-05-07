@@ -1,0 +1,38 @@
+import type { Project } from "./types";
+
+export type { ProjectStatus } from "./types";
+
+export const projects: Project[] = [
+  {
+    title: "Signal Blob",
+    slug: "signal-blob",
+    description: "基于 Markdown 的个人博客系统。",
+    longDescription: "用于沉淀 Java、微服务、AI 工具链相关内容。",
+    stack: ["Next.js", "TypeScript", "Markdown", "Tailwind CSS"],
+    category: "Personal Site",
+    cover: "/images/projects/signal-blob.png",
+    github: "https://github.com/klaybloom/signal-blob",
+    demo: "/blog",
+    date: "2026-05-07",
+    updated: "2026-05-08",
+    status: "building",
+    featured: true,
+    pinned: true
+  },
+  {
+    title: "Signal Atlas",
+    slug: "signal-atlas",
+    description: "个人项目导航与作品集展示系统。",
+    longDescription: "用于展示个人项目、Demo、工具和实验性作品。",
+    stack: ["React", "TypeScript", "Vite", "Cloudflare D1"],
+    category: "Personal Site",
+    cover: "/images/projects/signal-atlas.png",
+    github: "https://github.com/klaybloom/signal-atlas",
+    demo: "/projects",
+    date: "2026-05-07",
+    updated: "2026-05-08",
+    status: "building",
+    featured: true,
+    pinned: true
+  }
+];
