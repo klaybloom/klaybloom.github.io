@@ -1,7 +1,7 @@
 import type { Profile } from "./types";
 
 export const profile: Profile = {
-  name: "师方旭",
+  name: "klay",
   nickname: "klay",
   title: "Java Backend Engineer",
   summary: "Java 后端开发工程师，专注微服务架构、高并发系统与 AI 工作流自动化。",
