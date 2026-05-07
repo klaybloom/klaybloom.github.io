@@ -13,6 +13,6 @@ export const profile: Profile = {
     github: "https://github.com/klaybloom",
     blog: "/blog",
     projects: "/projects",
-    email: "mailto:your-email@example.com"
+    email: "mailto:klaybloom@gmail.com"
   }
 };
