@@ -8,8 +8,8 @@ export const siteConfig: SiteConfig = {
   url: "https://klaybloom.github.io",
   nav: [
     { label: "Blog", href: "/blog" },
-    { label: "Project Lab", href: "/projects" },
+    { label: "Project", href: "/projects" },
     { label: "GitHub", href: "https://github.com/klaybloom" },
-    { label: "Email", href: "mailto:your-email@example.com" }
+    { label: "Email", href: "mailto:klaybloom@gmail.com" }
   ]
 };

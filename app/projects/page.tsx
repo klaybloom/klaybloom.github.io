@@ -20,7 +20,7 @@ export default function ProjectsPage() {
       <section className="mx-auto max-w-[900px] px-5 pb-20 pt-16">
         <div className="mb-12 text-center">
           <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.35em] text-notion-accent">
-            Project Lab
+            Projects
           </p>
           <h1 className="font-serif text-5xl font-semibold leading-tight text-notion-text sm:text-6xl">
             Projects
