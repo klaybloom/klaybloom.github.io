@@ -120,6 +120,9 @@ export default function AdminDashboard() {
   // Image Uploading state
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+
   // Checks environment & localStorage token on mount
   useEffect(() => {
     const isDev = process.env.NODE_ENV === "development";
@@ -1777,6 +1780,82 @@ export default function AdminDashboard() {
         setPosts(updated);
       };
 
+      const insertImageAtCursor = (url: string) => {
+        const textarea = textareaRef.current;
+        const content = post?.content || "";
+        const imageMarkdown = `\n![图片描述](${url})\n`;
+
+        if (textarea) {
+          const startPos = textarea.selectionStart;
+          const endPos = textarea.selectionEnd;
+          
+          const newContent = 
+            content.substring(0, startPos) + 
+            imageMarkdown + 
+            content.substring(endPos);
+          
+          handleContentChange(newContent);
+          
+          // Focus back and set selection
+          setTimeout(() => {
+            textarea.focus();
+            const cursorPosition = startPos + imageMarkdown.length;
+            textarea.setSelectionRange(cursorPosition, cursorPosition);
+          }, 50);
+        } else {
+          handleContentChange(content ? `${content}\n${imageMarkdown}` : imageMarkdown);
+        }
+      };
+
+      const handleEditorPaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+        const items = e.clipboardData?.items;
+        if (!items) return;
+
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].type.indexOf("image") !== -1) {
+            const file = items[i].getAsFile();
+            if (!file) continue;
+
+            e.preventDefault(); // Stop default text paste
+            
+            let uploadedUrl: string | null = null;
+            if (isLocal) {
+              uploadedUrl = await uploadLocalImage(file);
+            } else {
+              uploadedUrl = await uploadOnlineImage(file);
+            }
+
+            if (uploadedUrl) {
+              insertImageAtCursor(uploadedUrl);
+            }
+            break;
+          }
+        }
+      };
+
+      const handleEditorDrop = async (e: React.DragEvent<HTMLTextAreaElement>) => {
+        const files = e.dataTransfer?.files;
+        if (!files || files.length === 0) return;
+
+        for (let i = 0; i < files.length; i++) {
+          if (files[i].type.indexOf("image") !== -1) {
+            e.preventDefault();
+            
+            let uploadedUrl: string | null = null;
+            if (isLocal) {
+              uploadedUrl = await uploadLocalImage(files[i]);
+            } else {
+              uploadedUrl = await uploadOnlineImage(files[i]);
+            }
+
+            if (uploadedUrl) {
+              insertImageAtCursor(uploadedUrl);
+            }
+            break;
+          }
+        }
+      };
+
       const handleTagsChange = (val: string) => {
         const tagsList = val.split(",").map((s) => s.trim()).filter(Boolean);
         handleFieldChange("tags", tagsList);
@@ -1940,14 +2019,37 @@ export default function AdminDashboard() {
             {/* Editor Textarea */}
             <div className="flex flex-col h-full bg-notion-paper border border-notion-line rounded-xl overflow-hidden shadow-sm">
               <div className="px-4 py-2 bg-notion-bg border-b border-notion-line flex justify-between items-center">
-                <span className="text-xs font-semibold text-notion-muted">Markdown 编辑器</span>
-                <span className="text-[10px] text-notion-faint">支持标准 MD 格式</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-semibold text-notion-muted">Markdown 编辑器</span>
+                  <div className="relative flex items-center justify-center">
+                    <button
+                      type="button"
+                      disabled={isUploading}
+                      className="px-2.5 py-1 bg-notion-paper hover:bg-notion-hover border border-notion-line rounded-lg text-xs font-semibold text-notion-text flex items-center gap-1.5 transition shadow-sm"
+                    >
+                      <span>📷</span>
+                      <span>{isUploading ? "正在上传..." : "插入图片"}</span>
+                    </button>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      disabled={isUploading}
+                      onChange={(e) => handleImageUploadClick(e, insertImageAtCursor)}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full"
+                    />
+                  </div>
+                </div>
+                <span className="text-[10px] text-notion-faint">支持拖拽、截图粘贴或标准 MD 格式</span>
               </div>
               <textarea
+                ref={textareaRef}
                 value={post?.content || ""}
                 onChange={(e) => handleContentChange(e.target.value)}
+                onPaste={handleEditorPaste}
+                onDrop={handleEditorDrop}
+                onDragOver={(e) => e.preventDefault()}
                 className="flex-1 w-full p-4 bg-transparent resize-none font-mono text-sm focus:outline-none text-notion-text overflow-y-auto leading-relaxed"
-                placeholder="在此处开始使用 Markdown 编写你的高质量技术文章内容..."
+                placeholder="在此处开始使用 Markdown 编写你的高质量技术文章内容... (支持截图粘贴或拖拽图片到此处上传)"
               />
             </div>
 
