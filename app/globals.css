@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #37352f;
+  --background: #f7f5f0;
+  --foreground: #1a1a1a;
 }
 
 * {
@@ -19,7 +21,7 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Inter, system-ui, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-family: "IBM Plex Sans", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
@@ -30,7 +32,68 @@ a {
 }
 
 ::selection {
-  background: #efefed;
+  background: #d4e8da;
+}
+
+/* Scroll animation base */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-1 { transition-delay: 0.05s; }
+.stagger-2 { transition-delay: 0.12s; }
+.stagger-3 { transition-delay: 0.19s; }
+.stagger-4 { transition-delay: 0.26s; }
+.stagger-5 { transition-delay: 0.33s; }
+
+/* Click ripple */
+.click-ripple {
+  position: fixed;
+  border-radius: 50%;
+  border: 2px solid #2d5a3d;
+  pointer-events: none;
+  z-index: 9997;
+  animation: rippleExpand 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes rippleExpand {
+  from {
+    width: 0; height: 0;
+    opacity: 0.6;
+    transform: translate(-50%, -50%);
+  }
+  to {
+    width: 80px; height: 80px;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Cursor dot */
+.cursor-dot {
+  position: fixed;
+  top: 0; left: 0;
+  width: 6px; height: 6px;
+  background: #2d5a3d;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  filter: blur(0.5px);
+}
+
+/* Magnetic hover */
+.magnetic {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .markdown-body {
@@ -47,7 +110,7 @@ a {
 .markdown-body h2,
 .markdown-body h3,
 .markdown-body h4 {
-  color: #1f2937;
+  color: #1a1a1a;
   font-weight: 700;
   line-height: 1.35;
   scroll-margin-top: 96px;
@@ -60,7 +123,7 @@ a {
 .markdown-body h2 {
   margin-top: 2.2rem;
   padding-left: 0.75rem;
-  border-left: 4px solid #24866b;
+  border-left: 4px solid #2d5a3d;
   font-size: 1.45rem;
 }
 
@@ -70,7 +133,7 @@ a {
 }
 
 .markdown-body a {
-  color: #24866b;
+  color: #2d5a3d;
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -87,8 +150,8 @@ a {
 
 .markdown-body blockquote {
   padding: 0.2rem 0 0.2rem 1rem;
-  color: #66748a;
-  border-left: 4px solid #d8e2ed;
+  color: #555555;
+  border-left: 4px solid #e0dbd3;
 }
 
 .markdown-body table {
@@ -102,26 +165,26 @@ a {
 .markdown-body th,
 .markdown-body td {
   padding: 0.7rem 0.8rem;
-  border: 1px solid #d8e2ed;
+  border: 1px solid #e0dbd3;
 }
 
 .markdown-body th {
-  background: #eef4f8;
-  color: #1f2937;
+  background: #f0ece4;
+  color: #1a1a1a;
   font-weight: 700;
 }
 
 .markdown-body img {
   max-width: 100%;
   height: auto;
-  border: 1px solid #d8e2ed;
+  border: 1px solid #e0dbd3;
   border-radius: 8px;
 }
 
 .markdown-body code {
   padding: 0.12rem 0.35rem;
-  color: #1f2937;
-  background: #eef4f8;
+  color: #1a1a1a;
+  background: #f0ece4;
   border-radius: 6px;
   font-size: 0.9em;
 }
@@ -129,7 +192,7 @@ a {
 .markdown-body pre {
   overflow-x: auto;
   padding: 1rem;
-  background: #1f2937;
+  background: #1a1a1a;
   border-radius: 8px;
 }
 
@@ -141,5 +204,5 @@ a {
 
 .markdown-body hr {
   border: 0;
-  border-top: 1px solid #d8e2ed;
+  border-top: 1px solid #e0dbd3;
 }

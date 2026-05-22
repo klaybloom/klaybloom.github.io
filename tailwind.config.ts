@@ -11,24 +11,36 @@ const config: Config = {
     extend: {
       colors: {
         notion: {
-          bg: "#edf3f8",
-          paper: "#fbfcfd",
-          text: "#1f2937",
-          muted: "#66748a",
-          faint: "#93a0b2",
-          line: "#d8e2ed",
-          hover: "#eef4f8",
-          accent: "#24866b",
-          accentSoft: "#e6f2ee"
+          bg: "#f7f5f0",
+          paper: "#fffdf8",
+          text: "#1a1a1a",
+          muted: "#555555",
+          faint: "#888888",
+          line: "#e0dbd3",
+          hover: "#f0ece4",
+          accent: "#2d5a3d",
+          accentSoft: "#e8f0eb"
         }
       },
       fontFamily: {
         sans: [
-          "Inter",
-          "system-ui",
+          "IBM Plex Sans",
           "PingFang SC",
           "Microsoft YaHei",
+          "system-ui",
           "sans-serif"
+        ],
+        serif: [
+          "Playfair Display",
+          "Source Han Serif SC",
+          "Songti SC",
+          "Georgia",
+          "serif"
+        ],
+        mono: [
+          "IBM Plex Mono",
+          "Menlo",
+          "monospace"
         ]
       },
       lineHeight: {

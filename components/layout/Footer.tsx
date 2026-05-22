@@ -7,16 +7,18 @@ type FooterProps = {
 
 export function Footer({ nav }: FooterProps) {
   return (
-    <footer className="border-t border-notion-line/70 bg-white/35">
-      <div className="mx-auto flex max-w-[760px] flex-col gap-4 px-5 py-8 text-[13px] text-notion-faint sm:flex-row sm:items-center sm:justify-between">
-        <p>© 2026 klay</p>
-        <div className="flex flex-wrap gap-1">
+    <footer className="border-t border-notion-line">
+      <div className="mx-auto flex max-w-[1080px] items-center justify-between px-5 py-10">
+        <span className="font-mono text-[12px] text-notion-faint">
+          &copy; 2026 Klay&apos;s Studio
+        </span>
+        <div className="flex gap-6">
           {nav.map((link) =>
             link.href.startsWith("/") ? (
               <Link
                 key={link.label}
                 href={link.href}
-                className="rounded-full px-3 py-1 transition hover:bg-notion-hover hover:text-notion-text"
+                className="text-[13px] text-notion-faint transition hover:text-notion-accent"
               >
                 {link.label}
               </Link>
@@ -24,7 +26,7 @@ export function Footer({ nav }: FooterProps) {
               <a
                 key={link.label}
                 href={link.href}
-                className="rounded-full px-3 py-1 transition hover:bg-notion-hover hover:text-notion-text"
+                className="text-[13px] text-notion-faint transition hover:text-notion-accent"
               >
                 {link.label}
               </a>

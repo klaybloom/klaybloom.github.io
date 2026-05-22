@@ -9,30 +9,40 @@ type LatestPostsProps = {
 
 export function LatestPosts({ posts }: LatestPostsProps) {
   return (
-    <Section id="articles" title="技术文章">
-      <div className="divide-y divide-notion-line border-y border-notion-line">
+    <Section id="articles" number="03" title="技术文章">
+      <div>
         {posts.map((post) => (
-          <article key={post.slug} className="py-5">
-            <p className="mb-2 text-[12px] text-notion-faint">
+          <Link
+            key={post.slug}
+            href={`/blog/${post.slug}`}
+            className="group grid grid-cols-[120px_1fr] items-start gap-8 border-b border-notion-line py-5 transition-all hover:pl-2 first:border-t [&:first-child]:border-t"
+          >
+            <span className="font-mono text-[12px] text-notion-faint">
               {formatDate(post.date)}
-              {post.category ? ` · ${post.category}` : ""}
-            </p>
-            <h3 className="text-[16px] font-medium">
-              <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-            </h3>
-            {post.description ? (
-              <p className="mt-2 text-[15px] leading-relaxedBody text-notion-muted">
-                {post.description}
-              </p>
-            ) : null}
-          </article>
+            </span>
+            <div>
+              <h3 className="text-[15px] font-medium transition-colors group-hover:text-notion-accent">
+                {post.title}
+              </h3>
+              {post.description ? (
+                <p className="mt-1 text-[13px] leading-relaxed text-notion-faint">
+                  {post.description}
+                </p>
+              ) : null}
+              {post.category ? (
+                <span className="mt-2 inline-block font-mono text-[11px] text-notion-accent">
+                  {post.category}
+                </span>
+              ) : null}
+            </div>
+          </Link>
         ))}
       </div>
       <Link
         href="/blog"
-        className="mt-4 inline-flex rounded-full px-3 py-1 text-[14px] font-medium text-notion-accent transition hover:bg-notion-accentSoft"
+        className="mt-6 inline-flex items-center gap-2 rounded-md border border-notion-accent px-4 py-2 font-mono text-[13px] font-medium text-notion-accent transition-all hover:bg-notion-accent hover:text-white"
       >
-        查看全部博客 →
+        View All Articles &rarr;
       </Link>
     </Section>
   );

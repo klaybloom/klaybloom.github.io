@@ -8,21 +8,21 @@ type HeaderProps = {
 
 export function Header({ name, nav }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-20 px-4 py-3 backdrop-blur">
-      <nav className="mx-auto flex h-16 max-w-[1040px] items-center justify-between gap-6 rounded-[22px] border border-notion-line bg-white/82 px-5 shadow-[0_18px_50px_rgba(31,41,55,0.08)]">
+    <header className="sticky top-0 z-20 border-b border-notion-line bg-notion-bg/85 backdrop-blur">
+      <nav className="mx-auto flex h-16 max-w-[1080px] items-center justify-between gap-6 px-5">
         <Link
           href="/"
-          className="shrink-0 text-[16px] font-semibold tracking-[0.08em]"
+          className="shrink-0 font-serif text-[1.15rem] font-semibold tracking-wide text-notion-text transition hover:text-notion-accent"
         >
           {name}
         </Link>
-        <div className="flex min-w-0 items-center gap-1 overflow-x-auto text-[14px] text-notion-muted">
+        <div className="flex min-w-0 items-center gap-1 overflow-x-auto text-[14px] font-medium text-notion-muted">
           {nav.map((link) =>
             link.href.startsWith("/") ? (
               <Link
                 key={link.label}
                 href={link.href}
-                className="shrink-0 rounded-full px-3.5 py-2 transition hover:bg-notion-hover hover:text-notion-text"
+                className="relative shrink-0 px-3.5 py-2 transition hover:text-notion-text [&:hover::after]:scale-x-100 after:absolute after:bottom-[6px] after:left-[14px] after:right-[14px] after:h-[1.5px] after:origin-left after:scale-x-0 after:bg-notion-accent after:transition-transform after:duration-300"
               >
                 {link.label}
               </Link>
@@ -30,7 +30,7 @@ export function Header({ name, nav }: HeaderProps) {
               <a
                 key={link.label}
                 href={link.href}
-                className="shrink-0 rounded-full px-3.5 py-2 transition hover:bg-notion-hover hover:text-notion-text"
+                className="relative shrink-0 px-3.5 py-2 transition hover:text-notion-text [&:hover::after]:scale-x-100 after:absolute after:bottom-[6px] after:left-[14px] after:right-[14px] after:h-[1.5px] after:origin-left after:scale-x-0 after:bg-notion-accent after:transition-transform after:duration-300"
               >
                 {link.label}
               </a>

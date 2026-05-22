@@ -1,7 +1,7 @@
+import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { Experience } from "@/components/home/Experience";
 import { Hero } from "@/components/home/Hero";
-import { Highlights } from "@/components/home/Highlights";
 import { LatestPosts } from "@/components/home/LatestPosts";
 import { LatestProjects } from "@/components/home/LatestProjects";
 import { Skills } from "@/components/home/Skills";
@@ -10,6 +10,7 @@ import { highlights } from "@/content/highlights";
 import { profile } from "@/content/profile";
 import { siteConfig } from "@/content/site";
 import { skills } from "@/content/skills";
+import { Interactions } from "@/components/Interactions";
 import { getLatestPosts } from "@/lib/posts";
 import { getLatestProjects } from "@/lib/projects";
 
@@ -19,19 +20,21 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-notion-bg text-notion-text">
+      <Interactions />
       <Header name={siteConfig.name} nav={siteConfig.nav} />
 
-      <div className="mx-auto max-w-[760px] px-5 pb-16 pt-20">
-        <Hero profile={profile} />
+      <div className="mx-auto max-w-[1080px] px-5 pb-20 pt-10">
+        <Hero profile={profile} highlights={highlights} />
 
-        <div className="space-y-14 rounded-[24px] border border-notion-line bg-notion-paper/92 px-5 py-8 sm:px-8">
-          <Highlights items={highlights} />
+        <div className="space-y-20">
           <Skills skills={skills} />
           <LatestProjects projects={latestProjects} />
           <LatestPosts posts={latestPosts} />
           <Experience items={experience} />
         </div>
       </div>
+
+      <Footer nav={siteConfig.nav} />
     </main>
   );
 }

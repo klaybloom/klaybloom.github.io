@@ -7,17 +7,19 @@ type SkillsProps = {
 
 export function Skills({ skills }: SkillsProps) {
   return (
-    <Section id="skills" title="技术能力">
-      <div className="divide-y divide-notion-line border-y border-notion-line">
+    <Section id="skills" number="01" title="技术能力">
+      <div className="grid gap-px overflow-hidden rounded-xl border border-notion-line bg-notion-line sm:grid-cols-2">
         {skills.map((skill) => (
           <div
             key={skill.group}
-            className="grid gap-2 py-4 text-[15px] leading-relaxed sm:grid-cols-[150px_1fr]"
+            className="bg-notion-paper p-6 transition-colors hover:bg-notion-hover"
           >
-            <div className="font-semibold text-notion-accent">
+            <div className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-notion-accent">
               {skill.group}
             </div>
-            <div className="text-notion-muted">{skill.items.join(", ")}</div>
+            <div className="text-[14px] leading-relaxed text-notion-muted">
+              {skill.items.join(", ")}
+            </div>
           </div>
         ))}
       </div>
