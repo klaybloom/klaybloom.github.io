@@ -6,7 +6,7 @@ const pagesBasePath = process.env.PAGES_BASE_PATH ?? "";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
+  output: process.env.NODE_ENV === "production" ? "export" : undefined,
   trailingSlash: true,
   basePath: pagesBasePath,
   assetPrefix: pagesBasePath ? `${pagesBasePath}/` : "",
