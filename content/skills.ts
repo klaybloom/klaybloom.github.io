@@ -1,20 +1,4 @@
 import type { SkillGroup } from "./types";
+import skillsData from "./skills.json";
 
-export const skills: SkillGroup[] = [
-  {
-    group: "Backend",
-    items: ["Java", "Spring Boot", "Spring Cloud", "MyBatis Plus", "JPA", "OAuth2"]
-  },
-  {
-    group: "Microservices",
-    items: ["Nacos", "Gateway", "Redis", "RabbitMQ", "Docker", "Linux", "Nginx"]
-  },
-  {
-    group: "Database",
-    items: ["MySQL", "SQL Optimization", "Transaction", "Index", "ORM Mapping"]
-  },
-  {
-    group: "AI Workflow",
-    items: ["Dify", "n8n", "Coze", "AI Agent", "Automation"]
-  }
-];
+export const skills: SkillGroup[] = skillsData.skills;

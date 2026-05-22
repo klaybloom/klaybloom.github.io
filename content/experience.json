@@ -1,0 +1,14 @@
+{
+  "experience": [
+    {
+      "period": "2022 - Now",
+      "title": "Java Backend Engineer",
+      "company": "Software Company",
+      "description": [
+        "4 年 Java 后端开发经验，长期参与业务系统开发、接口设计、权限控制、服务部署与问题排查。",
+        "熟悉从需求开发、接口联调、数据库设计到线上部署 the complete backend development workflow.",
+        "关注稳定、可维护的后端服务设计，清晰的权限与数据边界，以及自动化工具提升开发效率。"
+      ]
+    }
+  ]
+}

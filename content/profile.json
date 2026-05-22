@@ -1,0 +1,15 @@
+{
+  "name": "方圆",
+  "nickname": "方圆",
+  "title": "Java开发工程师",
+  "summary": "微服务，AI Agent",
+  "bio": [
+    "我长期参与业务系统开发、接口设计、数据库设计和线上问题排查。"
+  ],
+  "links": {
+    "github": "https://github.com/klaybloom",
+    "blog": "/blog",
+    "projects": "/projects",
+    "email": "mailto:klaybloom@gmail.com"
+  }
+}
