@@ -1,0 +1,32 @@
+backend:
+  name: github
+  repo: klaybloom/klaybloom.github.io
+  branch: main
+  site_domain: klaybloom.github.io
+
+# 允许本地开发联调 (本地启动 Next 并配合 npx decap-cms-proxy-server 调试)
+local_backend: true
+
+publish_mode: simple
+
+# 图片上传存储目录（对应 Next.js 的 public 路径）
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "posts"
+    label: "技术文章 (Blog Posts)"
+    folder: "content/posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "文章标题", name: "title", widget: "string" }
+      - { label: "创建日期", name: "date", widget: "date", format: "YYYY-MM-DD" }
+      - { label: "更新日期", name: "updated", widget: "date", format: "YYYY-MM-DD", required: false }
+      - { label: "文章简介 (Description)", name: "description", widget: "text" }
+      - { label: "分类 (Category)", name: "category", widget: "string", required: false }
+      - { label: "标签 (Tags)", name: "tags", widget: "list", default: ["Backend"] }
+      - { label: "封面图片", name: "cover", widget: "image", required: false }
+      - { label: "是否发布", name: "published", widget: "boolean", default: true }
+      - { label: "是否推荐", name: "featured", widget: "boolean", default: false }
+      - { label: "文章内容 (Markdown)", name: "body", widget: "markdown" }

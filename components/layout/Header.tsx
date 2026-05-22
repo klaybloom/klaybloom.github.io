@@ -22,7 +22,7 @@ export function Header({ name, nav }: HeaderProps) {
               <Link
                 key={link.label}
                 href={link.href}
-                className="relative shrink-0 px-3.5 py-2 transition hover:text-notion-text [&:hover::after]:scale-x-100 after:absolute after:bottom-[6px] after:left-[14px] after:right-[14px] after:h-[1.5px] after:origin-left after:scale-x-0 after:bg-notion-accent after:transition-transform after:duration-300"
+                className="magnetic relative shrink-0 px-3.5 py-2 transition hover:text-notion-text [&:hover::after]:scale-x-100 after:absolute after:bottom-[6px] after:left-[14px] after:right-[14px] after:h-[1.5px] after:origin-left after:scale-x-0 after:bg-notion-accent after:transition-transform after:duration-300"
               >
                 {link.label}
               </Link>
@@ -30,7 +30,7 @@ export function Header({ name, nav }: HeaderProps) {
               <a
                 key={link.label}
                 href={link.href}
-                className="relative shrink-0 px-3.5 py-2 transition hover:text-notion-text [&:hover::after]:scale-x-100 after:absolute after:bottom-[6px] after:left-[14px] after:right-[14px] after:h-[1.5px] after:origin-left after:scale-x-0 after:bg-notion-accent after:transition-transform after:duration-300"
+                className="magnetic relative shrink-0 px-3.5 py-2 transition hover:text-notion-text [&:hover::after]:scale-x-100 after:absolute after:bottom-[6px] after:left-[14px] after:right-[14px] after:h-[1.5px] after:origin-left after:scale-x-0 after:bg-notion-accent after:transition-transform after:duration-300"
               >
                 {link.label}
               </a>

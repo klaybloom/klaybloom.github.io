@@ -8,7 +8,7 @@ type HeroProps = {
 export function Hero({ profile, highlights }: HeroProps) {
   return (
     <section className="mb-16 grid items-start gap-16 pt-4 lg:mb-20 lg:grid-cols-[1fr_300px]">
-      <div>
+      <div className="animate-on-scroll stagger-1">
         <p className="mb-5 font-mono text-[13px] font-medium uppercase tracking-[0.15em] text-notion-accent">
           Hello, I&apos;m
         </p>
@@ -27,7 +27,7 @@ export function Hero({ profile, highlights }: HeroProps) {
         </div>
       </div>
 
-      <aside className="lg:sticky lg:top-24">
+      <aside className="lg:sticky lg:top-24 animate-on-scroll stagger-2">
         <div className="rounded-xl border border-notion-line bg-notion-paper p-6 text-[14px] leading-relaxed text-notion-muted">
           <div className="mb-3 flex items-center gap-2 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-notion-accent">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400" />

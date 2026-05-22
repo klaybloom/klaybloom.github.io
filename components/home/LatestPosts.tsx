@@ -11,11 +11,11 @@ export function LatestPosts({ posts }: LatestPostsProps) {
   return (
     <Section id="articles" number="03" title="技术文章">
       <div>
-        {posts.map((post) => (
+        {posts.map((post, index) => (
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="group grid grid-cols-[120px_1fr] items-start gap-8 border-b border-notion-line py-5 transition-all hover:pl-2 first:border-t [&:first-child]:border-t"
+            className={`group grid grid-cols-[120px_1fr] items-start gap-8 border-b border-notion-line py-5 transition-all hover:pl-3 first:border-t [&:first-child]:border-t animate-on-scroll stagger-${(index % 4) + 1}`}
           >
             <span className="font-mono text-[12px] text-notion-faint">
               {formatDate(post.date)}
