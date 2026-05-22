@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { PostSummary } from "@/lib/posts";
+import type { PostSummary } from "@/lib/post-types";
 import { PostList } from "./PostList";
 
 type BlogFilterProps = {

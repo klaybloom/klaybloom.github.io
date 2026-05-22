@@ -81,6 +81,16 @@ export default async function PostPage({ params }: PostPageProps) {
           ) : null}
         </header>
 
+        {post.cover ? (
+          <div className="group relative mb-12 overflow-hidden rounded-2xl border border-notion-line shadow-sm transition-all hover:shadow-md">
+            <img
+              src={post.cover}
+              alt={post.title}
+              className="w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] aspect-[16/9] md:aspect-[21/9]"
+            />
+          </div>
+        ) : null}
+
         <div
           className="markdown-body"
           dangerouslySetInnerHTML={{ __html: html }}

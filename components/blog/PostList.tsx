@@ -1,4 +1,4 @@
-import type { PostSummary } from "@/lib/posts";
+import type { PostSummary } from "@/lib/posts-types";
 import { PostCard } from "./PostCard";
 
 type PostListProps = {

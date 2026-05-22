@@ -2,28 +2,14 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { formatDate } from "./date";
+import type { Post, PostSummary } from "./post-types";
+
+export type { Post, PostSummary };
 
 export const DEFAULT_COVER = "/images/default-cover.jpg";
 
 const postsDirectory = path.join(process.cwd(), "content/posts");
 
-export type Post = {
-  slug: string;
-  title: string;
-  date: string;
-  updated?: string;
-  description: string;
-  tags: string[];
-  category?: string;
-  cover?: string;
-  published: boolean;
-  featured: boolean;
-  content: string;
-};
-
-export type PostSummary = Omit<Post, "content"> & {
-  searchText: string;
-};
 
 type FrontMatter = {
   title?: unknown;

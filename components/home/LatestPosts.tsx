@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { formatDate } from "@/lib/date";
-import type { PostSummary } from "@/lib/posts";
+import type { PostSummary } from "@/lib/posts-types";
 import { Section } from "./Section";
 
 type LatestPostsProps = {

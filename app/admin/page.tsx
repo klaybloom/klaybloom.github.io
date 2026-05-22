@@ -25,6 +25,7 @@ interface ExperienceItem {
   title: string;
   company: string;
   description: string[];
+  isNewExp?: boolean;
 }
 
 interface ProjectItem {
@@ -42,6 +43,7 @@ interface ProjectItem {
   status: "planning" | "building" | "launched";
   featured: boolean;
   pinned: boolean;
+  isNewProj?: boolean;
 }
 
 interface SkillGroup {
@@ -67,6 +69,7 @@ interface PostItem {
   content: string;
   sha?: string; // used for GitHub API updates
   isNewPost?: boolean;
+  originalSlug?: string;
 }
 
 // ==========================================
@@ -209,9 +212,6 @@ export default function AdminDashboard() {
       if (!res.ok) throw new Error(result.error || "保存失败");
       
       setAlert({ type: "success", msg: `本地保存成功！${result.message || ""}` });
-      
-      // Reload to ensure sync
-      await loadLocalData();
       return true;
     } catch (e: any) {
       setAlert({ type: "error", msg: `保存错误: ${e.message}` });
@@ -472,7 +472,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const saveOnlineFile = async (path: string, contentStr: string, shaKey: "profile" | "experience" | "projects" | "skills" | string, sha?: string) => {
+  const saveOnlineFile = async (path: string, contentStr: string, shaKey: "profile" | "experience" | "projects" | "skills" | string, sha?: string): Promise<string | null> => {
     setIsSaving(true);
     try {
       const currentSha = sha || shas[shaKey as keyof typeof shas] || undefined;
@@ -484,13 +484,10 @@ export default function AdminDashboard() {
       }
       
       setAlert({ type: "success", msg: `已提交更改至 GitHub 仓库: ${path}，GitHub Actions 正在自动构建部署！` });
-      
-      // Trigger data reload
-      await loadOnlineData();
-      return true;
+      return newSha;
     } catch (e: any) {
       setAlert({ type: "error", msg: `GitHub 提交失败: ${e.message}` });
-      return false;
+      return null;
     } finally {
       setIsSaving(false);
     }
@@ -520,7 +517,6 @@ export default function AdminDashboard() {
       if (!res.ok) throw new Error(result.message || "Failed to delete post from GitHub");
       
       setAlert({ type: "success", msg: `文章已从 GitHub 仓库删除！` });
-      await loadOnlineData();
       return true;
     } catch (e: any) {
       setAlert({ type: "error", msg: `删除失败: ${e.message}` });
@@ -645,8 +641,11 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleExperienceSave = async () => {
-    const payload = { experience: experiences };
+  const handleExperienceSave = async (customExpList?: ExperienceItem[]) => {
+    const targetList = customExpList || experiences;
+    const cleaned = targetList.map(({ isNewExp, ...rest }) => rest);
+    setExperiences(cleaned);
+    const payload = { experience: cleaned };
     if (isLocal) {
       await saveLocalData("experience", payload);
     } else {
@@ -656,8 +655,11 @@ export default function AdminDashboard() {
     setSelectedExpIndex(null);
   };
 
-  const handleProjectsSave = async () => {
-    const payload = { projects };
+  const handleProjectsSave = async (customProjList?: ProjectItem[]) => {
+    const targetList = customProjList || projects;
+    const cleaned = targetList.map(({ isNewProj, ...rest }) => rest);
+    setProjects(cleaned);
+    const payload = { projects: cleaned };
     if (isLocal) {
       await saveLocalData("projects", payload);
     } else {
@@ -677,9 +679,23 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleEditPost = (idx: number) => {
+    const postToEdit = posts[idx];
+    postToEdit.originalSlug = postToEdit.slug;
+    setSelectedPostIndex(idx);
+  };
+
   const handlePostSave = async (post: PostItem) => {
     if (!post.slug.trim()) {
       setAlert({ type: "error", msg: "文章的 Slug (路径) 不能为空！" });
+      return;
+    }
+
+    // 网页路径排重校验 (Collision Protection)
+    const targetSlug = post.slug.trim().toLowerCase();
+    const isDuplicate = posts.some((p, idx) => idx !== selectedPostIndex && p.slug.trim().toLowerCase() === targetSlug);
+    if (isDuplicate) {
+      setAlert({ type: "error", msg: `❌ 保存失败：网页路径 "/posts/${post.slug}.md" 已被其他文章占用，请使用其他路径！` });
       return;
     }
     
@@ -708,12 +724,54 @@ export default function AdminDashboard() {
 
     const fullContent = `${frontmatterLines.join("\n")}\n${post.content || ""}`;
 
+    const isRename = post.originalSlug && post.originalSlug !== post.slug;
+    const isNew = selectedPostIndex === posts.length || !!post.isNewPost;
+
+    const savedItem: PostItem = {
+      slug: targetSlug,
+      frontmatter: fm,
+      content: post.content,
+      originalSlug: targetSlug,
+    };
+
     if (isLocal) {
+      if (isRename) {
+        await saveLocalData("delete-post", null, post.originalSlug);
+      }
       const success = await saveLocalData("post", { frontmatter: fm, content: post.content }, post.slug);
-      if (success) setSelectedPostIndex(null);
+      if (success) {
+        // 乐观 UI 更新
+        const updatedPosts = [...posts];
+        if (isNew) {
+          updatedPosts.unshift(savedItem);
+        } else {
+          updatedPosts[selectedPostIndex!] = savedItem;
+        }
+        setPosts(updatedPosts);
+        setSelectedPostIndex(null);
+      }
     } else {
-      const success = await saveOnlineFile(`content/posts/${post.slug}.md`, fullContent, post.slug, post.sha);
-      if (success) setSelectedPostIndex(null);
+      if (isRename) {
+        try {
+          await deleteOnlinePostFile(post.originalSlug!, post.sha);
+        } catch (_) {}
+      }
+      const newSha = await saveOnlineFile(`content/posts/${post.slug}.md`, fullContent, post.slug, isRename ? undefined : post.sha);
+      if (newSha) {
+        const savedItemOnline: PostItem = {
+          ...savedItem,
+          sha: newSha,
+        };
+        // 乐观 UI 更新
+        const updatedPosts = [...posts];
+        if (isNew) {
+          updatedPosts.unshift(savedItemOnline);
+        } else {
+          updatedPosts[selectedPostIndex!] = savedItemOnline;
+        }
+        setPosts(updatedPosts);
+        setSelectedPostIndex(null);
+      }
     }
   };
 
@@ -724,10 +782,18 @@ export default function AdminDashboard() {
     
     if (isLocal) {
       const success = await saveLocalData("delete-post", null, post.slug);
-      if (success) setSelectedPostIndex(null);
+      if (success) {
+        // 乐观 UI 更新
+        setPosts(posts.filter((_, idx) => idx !== selectedPostIndex));
+        setSelectedPostIndex(null);
+      }
     } else {
       const success = await deleteOnlinePostFile(post.slug, post.sha);
-      if (success) setSelectedPostIndex(null);
+      if (success) {
+        // 乐观 UI 更新
+        setPosts(posts.filter((_, idx) => idx !== selectedPostIndex));
+        setSelectedPostIndex(null);
+      }
     }
   };
 
@@ -924,7 +990,7 @@ export default function AdminDashboard() {
     // Render list view or editing view
     if (selectedExpIndex !== null) {
       const exp = experiences[selectedExpIndex];
-      const isNew = selectedExpIndex === experiences.length; // placeholder for new
+      const isNew = !!exp?.isNewExp;
       
       const handleSave = () => {
         handleExperienceSave();
@@ -1090,7 +1156,7 @@ export default function AdminDashboard() {
     };
 
     const handleAddNew = () => {
-      const newExp: ExperienceItem = { period: "", title: "", company: "", description: [] };
+      const newExp: ExperienceItem = { period: "", title: "", company: "", description: [], isNewExp: true };
       setExperiences([...experiences, newExp]);
       setSelectedExpIndex(experiences.length); // edit the newly appended index
     };
@@ -1211,7 +1277,7 @@ export default function AdminDashboard() {
   const renderProjectsTab = () => {
     if (selectedProjIndex !== null) {
       const proj = projects[selectedProjIndex];
-      const isNew = selectedProjIndex === projects.length;
+      const isNew = !!proj?.isNewProj;
 
       const handleSave = () => {
         handleProjectsSave();
@@ -1467,6 +1533,7 @@ export default function AdminDashboard() {
         status: "building",
         featured: true,
         pinned: false,
+        isNewProj: true,
       };
       setProjects([...projects, newProj]);
       setSelectedProjIndex(projects.length);
@@ -1741,7 +1808,7 @@ export default function AdminDashboard() {
               <button
                 onClick={() => {
                   if (isNew) {
-                    setPosts(posts.slice(0, -1));
+                    setPosts(posts.filter((_, idx) => idx !== selectedPostIndex));
                   }
                   setSelectedPostIndex(null);
                 }}
@@ -1772,7 +1839,7 @@ export default function AdminDashboard() {
                   type="text"
                   value={post?.slug || ""}
                   onChange={(e) => handleSlugChange(e.target.value)}
-                  disabled={!isNew}
+                  disabled={false}
                   className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm font-mono disabled:opacity-50"
                   placeholder="java-high-concurrency"
                 />
@@ -1921,7 +1988,7 @@ export default function AdminDashboard() {
             <button
               onClick={() => {
                 if (isNew) {
-                  setPosts(posts.slice(0, -1));
+                  setPosts(posts.filter((_, idx) => idx !== selectedPostIndex));
                 }
                 setSelectedPostIndex(null);
               }}
@@ -1946,19 +2013,19 @@ export default function AdminDashboard() {
       const yyyy = today.getFullYear();
       const mm = String(today.getMonth() + 1).padStart(2, "0");
       const dd = String(today.getDate()).padStart(2, "0");
-      const dateStr = `${yyyy}${mm}${dd}`; // e.g. "20260522"
+      const targetDateStr = `${yyyy}-${mm}-${dd}`;
 
       // Count how many existing posts on the same date (both published and drafts)
-      const sameDayPosts = posts.filter((p) => p.slug && p.slug.startsWith(dateStr));
+      const sameDayPosts = posts.filter((p) => p.frontmatter?.date && p.frontmatter.date.startsWith(targetDateStr));
       const seq = String(sameDayPosts.length + 1).padStart(2, "0");
-      const autoSlug = `${dateStr}${seq}`;
+      const autoSlug = `${yyyy}${mm}${dd}${seq}`;
 
       const newPost: PostItem = {
         slug: autoSlug,
         isNewPost: true,
         frontmatter: {
           title: "",
-          date: `${yyyy}-${mm}-${dd}`,
+          date: targetDateStr,
           description: "",
           tags: ["Backend"],
           published: true,
@@ -1976,12 +2043,26 @@ export default function AdminDashboard() {
           <h3 className="text-xl font-bold text-notion-text flex items-center gap-2">
             <span>✍️</span> 博文文章管理
           </h3>
-          <button
-            onClick={handleAddNew}
-            className="px-4 py-2 text-sm font-semibold text-white bg-notion-accent rounded-lg hover:bg-opacity-90 transition shadow-sm"
-          >
-            ➕ 撰写新博文
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                if (isLocal) {
+                  loadLocalData();
+                } else {
+                  loadOnlineData();
+                }
+              }}
+              className="px-4 py-2 text-sm font-semibold text-notion-muted bg-notion-bg border border-notion-line rounded-lg hover:text-notion-text hover:bg-notion-accentSoft transition shadow-sm flex items-center gap-1.5"
+            >
+              🔄 刷新同步
+            </button>
+            <button
+              onClick={handleAddNew}
+              className="px-4 py-2 text-sm font-semibold text-white bg-notion-accent rounded-lg hover:bg-opacity-90 transition shadow-sm"
+            >
+              ➕ 撰写新博文
+            </button>
+          </div>
         </div>
 
         <div className="bg-notion-paper border border-notion-line rounded-xl overflow-hidden shadow-sm">
@@ -2015,7 +2096,7 @@ export default function AdminDashboard() {
                   </td>
                   <td className="p-4 text-right pr-6">
                     <button
-                      onClick={() => setSelectedPostIndex(idx)}
+                      onClick={() => handleEditPost(idx)}
                       className="px-3 py-1 bg-notion-accentSoft text-notion-accent font-semibold rounded hover:bg-opacity-80 transition text-xs"
                     >
                       编辑
