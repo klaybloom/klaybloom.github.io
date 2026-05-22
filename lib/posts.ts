@@ -54,11 +54,26 @@ function readPostFile(fileName: string): Post | null {
   const { data, content } = matter(fileContents);
   const frontMatter = data as FrontMatter;
   const slug = fileName.replace(/\.md$/, "");
-  const title = String(frontMatter.title ?? "").trim();
-  const date = String(frontMatter.date ?? "").trim();
+  let title = String(frontMatter.title ?? "").trim();
+  if (!title) {
+    title = slug;
+  }
 
-  if (!title || !date) {
-    throw new Error(`Post "${fileName}" must include title and date front matter.`);
+  let date = String(frontMatter.date ?? "").trim();
+  if (!date) {
+    // Try to extract date from filename prefix YYYY-MM-DD
+    const dateMatch = fileName.match(/^(\d{4}-\d{2}-\d{2})/);
+    if (dateMatch) {
+      date = dateMatch[1];
+    } else {
+      // Fallback to file modification time or today's date
+      try {
+        const stats = fs.statSync(fullPath);
+        date = stats.mtime.toISOString().split("T")[0];
+      } catch {
+        date = new Date().toISOString().split("T")[0];
+      }
+    }
   }
 
   const published = frontMatter.published !== false;

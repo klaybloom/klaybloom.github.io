@@ -645,7 +645,14 @@ export default function AdminDashboard() {
     }
     
     // Frontmatter formatter helper
-    const fm = post.frontmatter;
+    const fm = { ...post.frontmatter };
+    if (!fm.date) {
+      fm.date = new Date().toISOString().split("T")[0];
+    }
+    if (!fm.title) {
+      fm.title = post.slug;
+    }
+
     const frontmatterLines = [
       "---",
       `title: "${fm.title.replace(/"/g, '\\"')}"`,
