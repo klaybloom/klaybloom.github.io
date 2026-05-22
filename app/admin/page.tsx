@@ -75,7 +75,7 @@ interface PostItem {
 
 export default function AdminDashboard() {
   // Environment & Auth States
-  const [isLocal, setIsLocal] = useState<boolean>(true);
+  const [isLocal, setIsLocal] = useState<boolean>(false);
   const [githubPat, setGithubPat] = useState<string>("");
   const [githubRepo, setGithubRepo] = useState<string>("klaybloom/klaybloom.github.io");
   const [githubBranch, setGithubBranch] = useState<string>("main");
@@ -256,10 +256,10 @@ export default function AdminDashboard() {
   const fetchGithubFile = async (path: string) => {
     const url = `https://api.github.com/repos/${githubRepo}/contents/${path}?ref=${githubBranch}`;
     const res = await fetch(url, {
+      cache: "no-store",
       headers: {
         Authorization: `token ${githubPat}`,
         Accept: "application/vnd.github.v3+json",
-        "Cache-Control": "no-cache",
       },
     });
     if (res.status === 404) return null;
@@ -334,10 +334,10 @@ export default function AdminDashboard() {
       // 5. Posts (Read list of files under content/posts)
       const postsUrl = `https://api.github.com/repos/${githubRepo}/contents/content/posts?ref=${githubBranch}`;
       const postsRes = await fetch(postsUrl, {
+        cache: "no-store",
         headers: {
           Authorization: `token ${githubPat}`,
           Accept: "application/vnd.github.v3+json",
-          "Cache-Control": "no-cache",
         },
       });
       
