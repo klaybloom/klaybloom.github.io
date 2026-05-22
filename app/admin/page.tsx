@@ -253,6 +253,30 @@ export default function AdminDashboard() {
   // Online GitHub API Calls
   // ==========================================
 
+  const getFileSha = async (path: string): Promise<string | undefined> => {
+    try {
+      const lastSlashIdx = path.lastIndexOf("/");
+      const dirPath = lastSlashIdx !== -1 ? path.slice(0, lastSlashIdx) : "";
+      const fileName = lastSlashIdx !== -1 ? path.slice(lastSlashIdx + 1) : path;
+      
+      const url = `https://api.github.com/repos/${githubRepo}/contents/${dirPath}?ref=${githubBranch}`;
+      const res = await fetch(url, {
+        cache: "no-store",
+        headers: {
+          Authorization: `token ${githubPat}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+      });
+      if (!res.ok) return undefined;
+      const items = await res.json();
+      if (Array.isArray(items)) {
+        const match = items.find((item) => item.name === fileName);
+        if (match) return match.sha;
+      }
+    } catch (_) {}
+    return undefined;
+  };
+
   const fetchGithubFile = async (path: string) => {
     const url = `https://api.github.com/repos/${githubRepo}/contents/${path}?ref=${githubBranch}`;
     const res = await fetch(url, {
@@ -265,23 +289,42 @@ export default function AdminDashboard() {
     if (res.status === 404) return null;
     if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
     const data = await res.json();
+    
+    let decodedContent = "";
+    try {
+      decodedContent = decodeURIComponent(escape(atob(data.content.replace(/\s/g, ""))));
+    } catch (_) {
+      decodedContent = data.content; // If binary (e.g. image), fallback to raw base64
+    }
+    
     return {
-      content: decodeURIComponent(escape(atob(data.content.replace(/\s/g, "")))),
+      content: decodedContent,
       sha: data.sha,
     };
   };
 
-  const commitGithubFile = async (path: string, contentStr: string, sha?: string, message?: string) => {
+  const commitGithubFile = async (path: string, contentStr: string, sha?: string, message?: string, isBase64?: boolean) => {
     const url = `https://api.github.com/repos/${githubRepo}/contents/${path}`;
-    const utf8Content = unescape(encodeURIComponent(contentStr));
-    const base64Content = btoa(utf8Content);
+    
+    let base64Content = "";
+    if (isBase64) {
+      base64Content = contentStr;
+    } else {
+      const utf8Content = unescape(encodeURIComponent(contentStr));
+      base64Content = btoa(utf8Content);
+    }
+
+    let fileSha = sha;
+    if (!fileSha) {
+      fileSha = await getFileSha(path);
+    }
 
     const body: any = {
       message: message || `admin: update ${path}`,
       content: base64Content,
       branch: githubBranch,
     };
-    if (sha) body.sha = sha;
+    if (fileSha) body.sha = fileSha;
 
     const res = await fetch(url, {
       method: "PUT",
@@ -429,10 +472,10 @@ export default function AdminDashboard() {
     }
   };
 
-  const saveOnlineFile = async (path: string, contentStr: string, shaKey: "profile" | "experience" | "projects" | "skills" | string) => {
+  const saveOnlineFile = async (path: string, contentStr: string, shaKey: "profile" | "experience" | "projects" | "skills" | string, sha?: string) => {
     setIsSaving(true);
     try {
-      const currentSha = shas[shaKey as keyof typeof shas] || undefined;
+      const currentSha = sha || shas[shaKey as keyof typeof shas] || undefined;
       const newSha = await commitGithubFile(path, contentStr, currentSha);
       
       // Update SHA tracker
@@ -499,14 +542,10 @@ export default function AdminDashboard() {
 
       const path = `public/images/uploads/${file.name}`;
       
-      // Check if file already exists to get SHA (best-effort)
-      let fileSha: string | undefined = undefined;
-      try {
-        const existFile = await fetchGithubFile(path);
-        if (existFile) fileSha = existFile.sha;
-      } catch (_) {}
+      // Check if file already exists to get SHA (best-effort using our robust check)
+      const fileSha = await getFileSha(path);
 
-      await commitGithubFile(path, atob(base64Data), fileSha, `admin: upload image ${file.name}`);
+      await commitGithubFile(path, base64Data, fileSha, `admin: upload image ${file.name}`, true);
 
       const publicPath = `/images/uploads/${file.name}`;
       setAlert({ type: "success", msg: `图片已上传并保存至 GitHub 仓库: ${publicPath}` });
@@ -673,7 +712,7 @@ export default function AdminDashboard() {
       const success = await saveLocalData("post", { frontmatter: fm, content: post.content }, post.slug);
       if (success) setSelectedPostIndex(null);
     } else {
-      const success = await saveOnlineFile(`content/posts/${post.slug}.md`, fullContent, post.slug);
+      const success = await saveOnlineFile(`content/posts/${post.slug}.md`, fullContent, post.slug, post.sha);
       if (success) setSelectedPostIndex(null);
     }
   };
@@ -1663,17 +1702,6 @@ export default function AdminDashboard() {
           frontmatter: { ...post.frontmatter, [field]: val },
         };
 
-        // Auto-slugify for new post if slug has not been manually customized or is empty
-        if (isNew && field === "title") {
-          const autoSlug = val
-            .toLowerCase()
-            .replace(/[^a-z0-9\s-_]/g, "") // strip special chars but keep space/hyphen
-            .trim()
-            .replace(/\s+/g, "-")
-            .replace(/-+/g, "-");
-          updatedPost.slug = autoSlug;
-        }
-
         updated[selectedPostIndex] = updatedPost;
         setPosts(updated);
       };
@@ -1914,12 +1942,23 @@ export default function AdminDashboard() {
     }
 
     const handleAddNew = () => {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
+      const dd = String(today.getDate()).padStart(2, "0");
+      const dateStr = `${yyyy}${mm}${dd}`; // e.g. "20260522"
+
+      // Count how many existing posts on the same date (both published and drafts)
+      const sameDayPosts = posts.filter((p) => p.slug && p.slug.startsWith(dateStr));
+      const seq = String(sameDayPosts.length + 1).padStart(2, "0");
+      const autoSlug = `${dateStr}${seq}`;
+
       const newPost: PostItem = {
-        slug: "",
+        slug: autoSlug,
         isNewPost: true,
         frontmatter: {
           title: "",
-          date: new Date().toISOString().split("T")[0],
+          date: `${yyyy}-${mm}-${dd}`,
           description: "",
           tags: ["Backend"],
           published: true,
