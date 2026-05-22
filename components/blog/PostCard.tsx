@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { PostSummary } from "@/lib/posts-types";
+import type { PostSummary } from "@/lib/post-types";
 import { formatDate } from "@/lib/date";
 
 const DEFAULT_COVER = "/images/default-cover.jpg";

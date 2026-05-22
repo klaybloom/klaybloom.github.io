@@ -742,11 +742,7 @@ export default function AdminDashboard() {
       if (success) {
         // 乐观 UI 更新
         const updatedPosts = [...posts];
-        if (isNew) {
-          updatedPosts.unshift(savedItem);
-        } else {
-          updatedPosts[selectedPostIndex!] = savedItem;
-        }
+        updatedPosts[selectedPostIndex!] = savedItem;
         setPosts(updatedPosts);
         setSelectedPostIndex(null);
       }
@@ -764,11 +760,7 @@ export default function AdminDashboard() {
         };
         // 乐观 UI 更新
         const updatedPosts = [...posts];
-        if (isNew) {
-          updatedPosts.unshift(savedItemOnline);
-        } else {
-          updatedPosts[selectedPostIndex!] = savedItemOnline;
-        }
+        updatedPosts[selectedPostIndex!] = savedItemOnline;
         setPosts(updatedPosts);
         setSelectedPostIndex(null);
       }
