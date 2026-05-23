@@ -834,7 +834,7 @@ export default function AdminDashboard() {
 
   const renderProfileForm = () => {
     return (
-      <form onSubmit={handleProfileSave} className="space-y-6 max-w-3xl">
+      <form onSubmit={handleProfileSave} className="space-y-6 max-w-4xl">
         <div className="bg-notion-paper border border-notion-line rounded-xl p-6 shadow-sm space-y-4">
           <h3 className="text-lg font-semibold text-notion-text pb-2 border-b border-notion-line flex items-center gap-2">
             <span>👤</span> 基本信息
@@ -1019,7 +1019,7 @@ export default function AdminDashboard() {
       };
 
       return (
-        <div className="space-y-6 max-w-3xl bg-notion-paper border border-notion-line rounded-xl p-6 shadow-sm animate-on-scroll visible">
+        <div className="space-y-6 max-w-4xl bg-notion-paper border border-notion-line rounded-xl p-6 shadow-sm animate-on-scroll visible">
           <div className="flex justify-between items-center pb-2 border-b border-notion-line">
             <h3 className="text-lg font-bold text-notion-text">
               {isNew ? "➕ 添加工作经历" : "✏️ 编辑工作经历"}
@@ -1178,7 +1178,7 @@ export default function AdminDashboard() {
     };
 
     return (
-      <div className="space-y-6 max-w-4xl">
+      <div className="space-y-6 max-w-5xl">
         <div className="flex justify-between items-center">
           <h3 className="text-xl font-bold text-notion-text flex items-center gap-2">
             <span>💼</span> 简历与经历时间轴
@@ -1290,7 +1290,7 @@ export default function AdminDashboard() {
       };
 
       return (
-        <div className="space-y-6 max-w-4xl bg-notion-paper border border-notion-line rounded-xl p-6 shadow-sm">
+        <div className="space-y-6 max-w-5xl bg-notion-paper border border-notion-line rounded-xl p-6 shadow-sm">
           <div className="flex justify-between items-center pb-2 border-b border-notion-line">
             <h3 className="text-lg font-bold text-notion-text">
               {isNew ? "➕ 上传与创建新项目" : "✏️ 编辑项目详情"}
@@ -1556,7 +1556,7 @@ export default function AdminDashboard() {
     };
 
     return (
-      <div className="space-y-6 max-w-5xl animate-on-scroll visible">
+      <div className="space-y-6 max-w-full animate-on-scroll visible">
         <div className="flex justify-between items-center">
           <h3 className="text-xl font-bold text-notion-text flex items-center gap-2">
             <span>🚀</span> 技术项目管理与上传
@@ -1678,7 +1678,7 @@ export default function AdminDashboard() {
     };
 
     return (
-      <div className="space-y-6 max-w-3xl">
+      <div className="space-y-6 max-w-4xl">
         <div className="flex justify-between items-center pb-2 border-b border-notion-line">
           <h3 className="text-xl font-bold text-notion-text flex items-center gap-2">
             <span>🧠</span> 专业技能分类管理
@@ -2132,7 +2132,7 @@ export default function AdminDashboard() {
     };
 
     return (
-      <div className="space-y-6 max-w-5xl animate-on-scroll visible">
+      <div className="space-y-6 max-w-full animate-on-scroll visible">
         <div className="flex justify-between items-center">
           <h3 className="text-xl font-bold text-notion-text flex items-center gap-2">
             <span>✍️</span> 博文文章管理
@@ -2160,7 +2160,14 @@ export default function AdminDashboard() {
         </div>
 
         <div className="bg-notion-paper border border-notion-line rounded-xl overflow-hidden shadow-sm">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse table-fixed">
+            <colgroup>
+              <col style={{ width: '35%' }} />
+              <col style={{ width: '30%' }} />
+              <col style={{ width: '12%' }} />
+              <col style={{ width: '10%' }} />
+              <col style={{ width: '13%' }} />
+            </colgroup>
             <thead>
               <tr className="bg-notion-bg text-notion-muted border-b border-notion-line font-medium text-xs">
                 <th className="p-4 pl-6">文章标题</th>
@@ -2176,10 +2183,10 @@ export default function AdminDashboard() {
                   key={idx}
                   className="border-b border-notion-line last:border-0 hover:bg-notion-hover transition text-sm"
                 >
-                  <td className="p-4 pl-6 font-semibold text-notion-text">
+                  <td className="p-4 pl-6 font-semibold text-notion-text truncate" title={post.frontmatter?.title || "未命名博文"}>
                     {post.frontmatter?.title || "未命名博文"}
                   </td>
-                  <td className="p-4 font-mono text-xs text-notion-faint">/{post.slug}.md</td>
+                  <td className="p-4 font-mono text-xs text-notion-faint truncate" title={`/${post.slug}.md`}>/{post.slug}.md</td>
                   <td className="p-4 text-xs text-notion-muted">{post.frontmatter?.date}</td>
                   <td className="p-4">
                     <span className={`px-2 py-0.5 text-xs font-semibold rounded ${
