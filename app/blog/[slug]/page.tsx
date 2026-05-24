@@ -57,17 +57,16 @@ export default async function PostPage({ params }: PostPageProps) {
     <main className="min-h-screen bg-notion-bg text-notion-text">
       <Header name={siteConfig.name} nav={siteConfig.nav} />
       {headings.length ? (
-        <aside className="group fixed left-4 top-32 z-40 hidden max-h-[calc(100vh-10rem)] w-16 overflow-hidden rounded-r-2xl border border-l-0 border-notion-line bg-notion-paper/95 shadow-sm transition-all duration-200 hover:w-72 focus-within:w-72 lg:block">
-          <div className="flex h-full min-h-24">
-            <div className="flex w-16 shrink-0 flex-col items-center justify-center gap-2 border-r border-notion-line px-2 py-4 text-notion-accent">
-              <span className="font-mono text-[12px] font-semibold [writing-mode:vertical-rl]">
-                目录
-              </span>
-              <span className="text-[13px] transition-transform group-hover:rotate-180 group-focus-within:rotate-180">
-                →
-              </span>
-            </div>
-            <nav className="min-w-0 flex-1 overflow-y-auto p-4 opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100">
+        <aside className="group fixed left-4 top-32 z-40 hidden lg:block">
+          <button
+            type="button"
+            aria-label="展开文章目录"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-notion-line bg-notion-paper/95 font-mono text-[18px] font-semibold text-notion-accent shadow-sm transition hover:border-notion-accent hover:bg-white"
+          >
+            ≡
+          </button>
+          <div className="pointer-events-none absolute left-10 top-0 w-72 opacity-0 transition-opacity duration-150 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
+            <nav className="max-h-[calc(100vh-9rem)] overflow-y-auto rounded-2xl border border-notion-line bg-notion-paper/98 p-4 shadow-lg">
               <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.24em] text-notion-accent">
                 文章目录
               </p>
@@ -76,8 +75,8 @@ export default async function PostPage({ params }: PostPageProps) {
                   <a
                     key={heading.id}
                     href={`#${heading.id}`}
-                    className={`text-[13px] leading-snug text-notion-muted transition hover:text-notion-accent ${
-                      heading.level === 3 ? "pl-4" : ""
+                    className={`block rounded-md px-2 py-1 text-[13px] leading-snug text-notion-muted transition hover:bg-notion-hover hover:text-notion-accent ${
+                      heading.level === 3 ? "ml-3" : ""
                     }`}
                   >
                     {heading.text}
