@@ -3,7 +3,7 @@
     {
       "id": "hero",
       "type": "hero",
-      "enabled": true,
+      "enabled": false,
       "params": {}
     },
     {
