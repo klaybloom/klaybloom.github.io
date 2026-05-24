@@ -5,7 +5,12 @@ import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { siteConfig } from "@/content/site";
 import { markdownToHtml } from "@/lib/markdown";
-import { formatPostDate, getAllPostSlugs, getPostBySlug } from "@/lib/posts";
+import {
+  formatPostDate,
+  getAllPostSlugs,
+  getPostBySlug,
+  getPublishedPosts,
+} from "@/lib/posts";
 
 type PostPageProps = {
   params: Promise<{
@@ -42,6 +47,11 @@ export default async function PostPage({ params }: PostPageProps) {
   }
 
   const html = await markdownToHtml(post.content);
+  const headings = extractHeadings(html);
+  const posts = getPublishedPosts();
+  const currentIndex = posts.findIndex((item) => item.slug === slug);
+  const newerPost = currentIndex > 0 ? posts[currentIndex - 1] : null;
+  const olderPost = currentIndex >= 0 && currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
 
   return (
     <main className="min-h-screen bg-notion-bg text-notion-text">
@@ -95,8 +105,72 @@ export default async function PostPage({ params }: PostPageProps) {
           className="markdown-body"
           dangerouslySetInnerHTML={{ __html: html }}
         />
+
+        {headings.length ? (
+          <nav className="mt-14 border-t border-notion-line pt-8">
+            <h2 className="mb-4 text-[13px] font-semibold uppercase tracking-[0.24em] text-notion-accent">
+              文章目录
+            </h2>
+            <div className="grid gap-2">
+              {headings.map((heading) => (
+                <a
+                  key={heading.id}
+                  href={`#${heading.id}`}
+                  className={`text-[14px] text-notion-muted transition hover:text-notion-accent ${
+                    heading.level === 3 ? "pl-4" : ""
+                  }`}
+                >
+                  {heading.text}
+                </a>
+              ))}
+            </div>
+          </nav>
+        ) : null}
+
+        {(newerPost || olderPost) ? (
+          <nav className="mt-12 grid gap-3 border-t border-notion-line pt-8 sm:grid-cols-2">
+            {newerPost ? (
+              <Link
+                className="rounded-xl border border-notion-line bg-notion-paper px-4 py-3 transition hover:border-notion-accent"
+                href={`/blog/${newerPost.slug}`}
+              >
+                <span className="block text-[12px] text-notion-faint">上一篇</span>
+                <span className="mt-1 block text-[14px] font-medium text-notion-text">{newerPost.title}</span>
+              </Link>
+            ) : <div />}
+            {olderPost ? (
+              <Link
+                className="rounded-xl border border-notion-line bg-notion-paper px-4 py-3 text-right transition hover:border-notion-accent"
+                href={`/blog/${olderPost.slug}`}
+              >
+                <span className="block text-[12px] text-notion-faint">下一篇</span>
+                <span className="mt-1 block text-[14px] font-medium text-notion-text">{olderPost.title}</span>
+              </Link>
+            ) : null}
+          </nav>
+        ) : null}
       </article>
       <Footer nav={siteConfig.nav} />
     </main>
   );
+}
+
+function extractHeadings(html: string) {
+  const headings: Array<{ id: string; level: number; text: string }> = [];
+  const pattern = /<h([23]) id="([^"]+)">([\s\S]*?)<\/h\1>/g;
+  let match: RegExpExecArray | null;
+
+  while ((match = pattern.exec(html)) !== null) {
+    headings.push({
+      level: Number(match[1]),
+      id: match[2],
+      text: stripHtml(match[3]),
+    });
+  }
+
+  return headings;
+}
+
+function stripHtml(value: string) {
+  return value.replace(/<[^>]+>/g, "").trim();
 }

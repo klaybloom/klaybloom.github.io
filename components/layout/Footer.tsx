@@ -32,6 +32,12 @@ export function Footer({ nav }: FooterProps) {
               </a>
             )
           )}
+          <Link
+            href="/rss.xml"
+            className="text-[13px] text-notion-faint transition hover:text-notion-accent"
+          >
+            RSS
+          </Link>
         </div>
       </div>
     </footer>

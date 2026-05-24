@@ -413,7 +413,7 @@ public/images/uploads/
 
 - `/sitemap.xml`：包含首页、博客列表、项目列表、文章详情和项目详情。
 - `/robots.txt`：允许抓取公开页面，排除 `/admin/`。
-- `/rss.xml`：输出已发布文章的 RSS 订阅。
+- `/rss.xml`：输出已发布文章的 RSS 订阅，页面底部也提供 RSS 入口。
 
 这些文件的数据来源是 `content/site.ts`、`content/posts/*.md` 和 `content/projects.json`。如果修改站点域名，请同步更新 `content/site.ts` 里的 `url`。
 
@@ -488,6 +488,7 @@ git status --short
 - `published` 是否符合预期。
 - 项目 `slug` 是否唯一。
 - 首页区块的 `type` 是否来自 `lib/home-sections.ts`。
+- 后台保存文章时会运行发布前检查；如果有 warning，请确认它们符合预期再保存。
 
 ## 更多内容维护说明
 

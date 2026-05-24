@@ -45,6 +45,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     notFound();
   }
 
+  const statusDescription = getProjectStatusDescription(project.status);
+
   return (
     <main className="min-h-screen bg-notion-bg text-notion-text">
       <Header name={siteConfig.name} nav={siteConfig.nav} />
@@ -62,7 +64,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               {getProjectStatusLabel(project.status)}
             </span>
             <span className="rounded-full border border-notion-line bg-white/72 px-2.5 py-1">
-              {formatProjectDate(project.date)}
+              创建于 {formatProjectDate(project.date)}
+            </span>
+            <span className="rounded-full border border-notion-line bg-white/72 px-2.5 py-1">
+              更新于 {formatProjectDate(project.updated)}
             </span>
             <span className="rounded-full border border-notion-line bg-white/72 px-2.5 py-1">
               {project.category}
@@ -76,6 +81,16 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </p>
         </header>
 
+        {project.cover ? (
+          <div className="mb-10 overflow-hidden rounded-2xl border border-notion-line bg-notion-paper shadow-sm">
+            <img
+              src={project.cover}
+              alt={project.title}
+              className="aspect-[16/9] w-full object-cover"
+            />
+          </div>
+        ) : null}
+
         <div className="space-y-10 rounded-[24px] border border-notion-line bg-notion-paper/92 px-5 py-8 sm:px-8">
           <section>
             <h2 className="mb-4 border-l-4 border-notion-accent pl-3 text-[15px] font-semibold">
@@ -83,6 +98,15 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </h2>
             <p className="text-[15px] leading-relaxedBody text-notion-muted">
               {project.longDescription}
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 border-l-4 border-notion-accent pl-3 text-[15px] font-semibold">
+              当前状态
+            </h2>
+            <p className="text-[15px] leading-relaxedBody text-notion-muted">
+              {statusDescription}
             </p>
           </section>
 
@@ -135,4 +159,16 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <Footer nav={siteConfig.nav} />
     </main>
   );
+}
+
+function getProjectStatusDescription(status: string) {
+  const descriptions: Record<string, string> = {
+    planning: "项目仍在规划中，功能边界和技术路线还会继续调整。",
+    building: "项目正在建设和迭代中，当前版本可用于了解方向和阶段性成果。",
+    launched: "项目已经上线，可通过预览链接查看当前可用版本。",
+    paused: "项目暂时暂停维护，后续是否继续取决于实际需求。",
+    archived: "项目已归档，主要作为历史记录和作品展示保留。",
+  };
+
+  return descriptions[status] ?? "项目状态待补充。";
 }
