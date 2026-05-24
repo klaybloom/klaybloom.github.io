@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import {
   BLOCK_TYPES,
@@ -79,6 +80,30 @@ interface PostItem {
   originalSlug?: string;
 }
 
+const IMAGE_EXTENSIONS = new Set(["png", "jpg", "jpeg", "webp", "gif"]);
+
+function isSafePostSlug(value: string) {
+  return /^[a-z0-9][a-z0-9-_]*$/.test(value);
+}
+
+function getSafeImageFileName(file: File) {
+  const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
+  if (!IMAGE_EXTENSIONS.has(extension)) return null;
+
+  const rawName = file.name.slice(0, Math.max(0, file.name.length - extension.length - 1));
+  const safeName = rawName
+    .toLowerCase()
+    .replace(/[^a-z0-9-_]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80) || "upload";
+
+  return `${Date.now()}-${safeName}.${extension}`;
+}
+
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : String(error);
+}
+
 // ==========================================
 // Main Component
 // ==========================================
@@ -93,7 +118,7 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"profile" | "experience" | "projects" | "skills" | "posts" | "home">("profile");
 
   // Loaders & Alerts
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [alert, setAlert] = useState<{ type: "success" | "error" | "info"; msg: string } | null>(null);
 
@@ -141,7 +166,7 @@ export default function AdminDashboard() {
       window.location.hostname === "127.0.0.1"
     );
     
-    setIsLocal(isDev && isLocalhost);
+    queueMicrotask(() => setIsLocal(isDev && isLocalhost));
 
     if (typeof window !== "undefined") {
       const storedPat = localStorage.getItem("klay_admin_pat");
@@ -149,28 +174,19 @@ export default function AdminDashboard() {
       const storedBranch = localStorage.getItem("klay_admin_branch") || "main";
       
       if (storedPat) {
-        setGithubPat(storedPat);
-        setGithubRepo(storedRepo);
-        setGithubBranch(storedBranch);
-        
-        if (!(isDev && isLocalhost)) {
-          // If online and we have a PAT, authorize
-          setIsAuthorized(true);
-        }
+        queueMicrotask(() => {
+          setGithubPat(storedPat);
+          setGithubRepo(storedRepo);
+          setGithubBranch(storedBranch);
+          
+          if (!(isDev && isLocalhost)) {
+            // If online and we have a PAT, authorize
+            setIsAuthorized(true);
+          }
+        });
       }
     }
   }, []);
-
-  // Fetch all data
-  useEffect(() => {
-    if (isLocal) {
-      loadLocalData();
-    } else if (isAuthorized && githubPat) {
-      loadOnlineData();
-    } else {
-      setIsLoading(false);
-    }
-  }, [isLocal, isAuthorized]);
 
   // Alert self-diminish
   useEffect(() => {
@@ -210,14 +226,14 @@ export default function AdminDashboard() {
       }
       
       setAlert({ type: "success", msg: "成功加载本地文件数据" });
-    } catch (e: any) {
-      setAlert({ type: "error", msg: `本地数据加载失败: ${e.message}` });
+    } catch (e: unknown) {
+      setAlert({ type: "error", msg: `本地数据加载失败: ${getErrorMessage(e)}` });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const saveLocalData = async (type: "profile" | "experience" | "projects" | "skills" | "post" | "delete-post" | "home-sections", payload: any, slug?: string) => {
+  const saveLocalData = async (type: "profile" | "experience" | "projects" | "skills" | "post" | "delete-post" | "home-sections", payload: unknown, slug?: string) => {
     setIsSaving(true);
     try {
       const res = await fetch("http://localhost:8081/api/admin/save", {
@@ -230,8 +246,8 @@ export default function AdminDashboard() {
       
       setAlert({ type: "success", msg: `本地保存成功！${result.message || ""}` });
       return true;
-    } catch (e: any) {
-      setAlert({ type: "error", msg: `保存错误: ${e.message}` });
+    } catch (e: unknown) {
+      setAlert({ type: "error", msg: `保存错误: ${getErrorMessage(e)}` });
       return false;
     } finally {
       setIsSaving(false);
@@ -258,8 +274,8 @@ export default function AdminDashboard() {
       
       setAlert({ type: "success", msg: `图片已上传至本地: ${result.url}` });
       return result.url;
-    } catch (e: any) {
-      setAlert({ type: "error", msg: `图片上传错误: ${e.message}` });
+    } catch (e: unknown) {
+      setAlert({ type: "error", msg: `图片上传错误: ${getErrorMessage(e)}` });
       return null;
     } finally {
       setIsUploading(false);
@@ -290,7 +306,7 @@ export default function AdminDashboard() {
         const match = items.find((item) => item.name === fileName);
         if (match) return match.sha;
       }
-    } catch (_) {}
+    } catch {}
     return undefined;
   };
 
@@ -310,7 +326,7 @@ export default function AdminDashboard() {
     let decodedContent = "";
     try {
       decodedContent = decodeURIComponent(escape(atob(data.content.replace(/\s/g, ""))));
-    } catch (_) {
+    } catch {
       decodedContent = data.content; // If binary (e.g. image), fallback to raw base64
     }
     
@@ -336,7 +352,7 @@ export default function AdminDashboard() {
       fileSha = await getFileSha(path);
     }
 
-    const body: any = {
+    const body: { message: string; content: string; branch: string; sha?: string } = {
       message: message || `admin: update ${path}`,
       content: base64Content,
       branch: githubBranch,
@@ -405,7 +421,7 @@ export default function AdminDashboard() {
         } else {
           setHomeSections(DEFAULT_SECTIONS);
         }
-      } catch (_) {
+      } catch {
         setHomeSections(DEFAULT_SECTIONS);
       }
 
@@ -435,7 +451,7 @@ export default function AdminDashboard() {
               
               // Parse frontmatter
               const match = raw.match(/^---\r?\n([\s\S]+?)\r?\n---\r?\n([\s\S]*)$/);
-              let frontmatter: PostFrontmatter = {
+              const frontmatter: PostFrontmatter = {
                 title: slug,
                 date: new Date().toISOString().split("T")[0],
                 description: "",
@@ -475,7 +491,7 @@ export default function AdminDashboard() {
                         } else {
                           frontmatter.tags = val.split(",").map(s => s.trim());
                         }
-                      } catch (_) {
+                      } catch {
                         frontmatter.tags = [val];
                       }
                     }
@@ -500,8 +516,8 @@ export default function AdminDashboard() {
       }
 
       setAlert({ type: "success", msg: "成功从 GitHub 仓库加载数据" });
-    } catch (e: any) {
-      setAlert({ type: "error", msg: `GitHub 数据加载失败: ${e.message}` });
+    } catch (e: unknown) {
+      setAlert({ type: "error", msg: `GitHub 数据加载失败: ${getErrorMessage(e)}` });
     } finally {
       setIsLoading(false);
     }
@@ -520,8 +536,8 @@ export default function AdminDashboard() {
       
       setAlert({ type: "success", msg: `已提交更改至 GitHub 仓库: ${path}，GitHub Actions 正在自动构建部署！` });
       return newSha;
-    } catch (e: any) {
-      setAlert({ type: "error", msg: `GitHub 提交失败: ${e.message}` });
+    } catch (e: unknown) {
+      setAlert({ type: "error", msg: `GitHub 提交失败: ${getErrorMessage(e)}` });
       return null;
     } finally {
       setIsSaving(false);
@@ -553,8 +569,8 @@ export default function AdminDashboard() {
       
       setAlert({ type: "success", msg: `文章已从 GitHub 仓库删除！` });
       return true;
-    } catch (e: any) {
-      setAlert({ type: "error", msg: `删除失败: ${e.message}` });
+    } catch (e: unknown) {
+      setAlert({ type: "error", msg: `删除失败: ${getErrorMessage(e)}` });
       return false;
     } finally {
       setIsSaving(false);
@@ -564,30 +580,55 @@ export default function AdminDashboard() {
   const uploadOnlineImage = async (file: File): Promise<string | null> => {
     setIsUploading(true);
     try {
+      const safeFileName = getSafeImageFileName(file);
+      if (!safeFileName) {
+        throw new Error("仅支持 png、jpg、jpeg、webp、gif 图片");
+      }
+
       const reader = new FileReader();
       const base64Promise = new Promise<string>((resolve) => {
         reader.onloadend = () => resolve(reader.result as string);
         reader.readAsDataURL(file);
       });
-      const base64Data = (await base64Promise).replace(/^data:image\/\w+;base64,/, "");
+      const fileData = await base64Promise;
+      const match = /^data:image\/(png|jpe?g|webp|gif);base64,([A-Za-z0-9+/=]+)$/i.exec(fileData);
+      if (!match) {
+        throw new Error("图片数据格式无效");
+      }
+      const base64Data = match[2];
 
-      const path = `public/images/uploads/${file.name}`;
+      const path = `public/images/uploads/${safeFileName}`;
       
       // Check if file already exists to get SHA (best-effort using our robust check)
       const fileSha = await getFileSha(path);
 
-      await commitGithubFile(path, base64Data, fileSha, `admin: upload image ${file.name}`, true);
+      await commitGithubFile(path, base64Data, fileSha, `admin: upload image ${safeFileName}`, true);
 
-      const publicPath = `/images/uploads/${file.name}`;
+      const publicPath = `/images/uploads/${safeFileName}`;
       setAlert({ type: "success", msg: `图片已上传并保存至 GitHub 仓库: ${publicPath}` });
       return publicPath;
-    } catch (e: any) {
-      setAlert({ type: "error", msg: `图片上传错误: ${e.message}` });
+    } catch (e: unknown) {
+      setAlert({ type: "error", msg: `图片上传错误: ${getErrorMessage(e)}` });
       return null;
     } finally {
       setIsUploading(false);
     }
   };
+
+  // Fetch all data
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      if (isLocal) {
+        void loadLocalData();
+      } else if (isAuthorized && githubPat) {
+        void loadOnlineData();
+      }
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+    // loadLocalData/loadOnlineData are event-style loaders that intentionally read current state.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLocal, isAuthorized, githubPat]);
 
   // ==========================================
   // Auth Form Handlers
@@ -678,7 +719,12 @@ export default function AdminDashboard() {
 
   const handleExperienceSave = async (customExpList?: ExperienceItem[]) => {
     const targetList = customExpList || experiences;
-    const cleaned = targetList.map(({ isNewExp, ...rest }) => rest);
+    const cleaned = targetList.map(({ period, title, company, description }) => ({
+      period,
+      title,
+      company,
+      description,
+    }));
     setExperiences(cleaned);
     const payload = { experience: cleaned };
     if (isLocal) {
@@ -692,7 +738,22 @@ export default function AdminDashboard() {
 
   const handleProjectsSave = async (customProjList?: ProjectItem[]) => {
     const targetList = customProjList || projects;
-    const cleaned = targetList.map(({ isNewProj, ...rest }) => rest);
+    const cleaned = targetList.map((project) => ({
+      title: project.title,
+      slug: project.slug,
+      description: project.description,
+      longDescription: project.longDescription,
+      stack: project.stack,
+      category: project.category,
+      cover: project.cover,
+      github: project.github,
+      demo: project.demo,
+      date: project.date,
+      updated: project.updated,
+      status: project.status,
+      featured: project.featured,
+      pinned: project.pinned,
+    }));
     setProjects(cleaned);
     const payload = { projects: cleaned };
     if (isLocal) {
@@ -725,8 +786,11 @@ export default function AdminDashboard() {
   };
 
   const handleEditPost = (idx: number) => {
-    const postToEdit = posts[idx];
-    postToEdit.originalSlug = postToEdit.slug;
+    setPosts((current) =>
+      current.map((item, itemIdx) =>
+        itemIdx === idx ? { ...item, originalSlug: item.slug } : item
+      )
+    );
     setSelectedPostIndex(idx);
   };
 
@@ -738,6 +802,11 @@ export default function AdminDashboard() {
 
     // 网页路径排重校验 (Collision Protection)
     const targetSlug = post.slug.trim().toLowerCase();
+    if (!isSafePostSlug(targetSlug)) {
+      setAlert({ type: "error", msg: "Slug 只能使用小写字母、数字、连字符或下划线，并且必须以字母或数字开头" });
+      return;
+    }
+
     const isDuplicate = posts.some((p, idx) => idx !== selectedPostIndex && p.slug.trim().toLowerCase() === targetSlug);
     if (isDuplicate) {
       setAlert({ type: "error", msg: `❌ 保存失败：网页路径 "/posts/${post.slug}.md" 已被其他文章占用，请使用其他路径！` });
@@ -769,8 +838,7 @@ export default function AdminDashboard() {
 
     const fullContent = `${frontmatterLines.join("\n")}\n${post.content || ""}`;
 
-    const isRename = post.originalSlug && post.originalSlug !== post.slug;
-    const isNew = selectedPostIndex === posts.length || !!post.isNewPost;
+    const isRename = post.originalSlug && post.originalSlug !== targetSlug;
 
     const savedItem: PostItem = {
       slug: targetSlug,
@@ -783,7 +851,7 @@ export default function AdminDashboard() {
       if (isRename) {
         await saveLocalData("delete-post", null, post.originalSlug);
       }
-      const success = await saveLocalData("post", { frontmatter: fm, content: post.content }, post.slug);
+      const success = await saveLocalData("post", { frontmatter: fm, content: post.content }, targetSlug);
       if (success) {
         // 乐观 UI 更新
         const updatedPosts = [...posts];
@@ -795,9 +863,9 @@ export default function AdminDashboard() {
       if (isRename) {
         try {
           await deleteOnlinePostFile(post.originalSlug!, post.sha);
-        } catch (_) {}
+        } catch {}
       }
-      const newSha = await saveOnlineFile(`content/posts/${post.slug}.md`, fullContent, post.slug, isRename ? undefined : post.sha);
+      const newSha = await saveOnlineFile(`content/posts/${targetSlug}.md`, fullContent, targetSlug, isRename ? undefined : post.sha);
       if (newSha) {
         const savedItemOnline: PostItem = {
           ...savedItem,
@@ -1041,7 +1109,10 @@ export default function AdminDashboard() {
         handleExperienceSave();
       };
 
-      const handleFieldChange = (field: keyof ExperienceItem, val: any) => {
+      const handleFieldChange = <K extends keyof Omit<ExperienceItem, "isNewExp">>(
+        field: K,
+        val: ExperienceItem[K]
+      ) => {
         const updated = [...experiences];
         updated[selectedExpIndex] = { ...exp, [field]: val };
         setExperiences(updated);
@@ -1328,7 +1399,10 @@ export default function AdminDashboard() {
         handleProjectsSave();
       };
 
-      const handleFieldChange = (field: keyof ProjectItem, val: any) => {
+      const handleFieldChange = <K extends keyof Omit<ProjectItem, "isNewProj">>(
+        field: K,
+        val: ProjectItem[K]
+      ) => {
         const updated = [...projects];
         updated[selectedProjIndex] = { ...proj, [field]: val };
         setProjects(updated);
@@ -1409,7 +1483,7 @@ export default function AdminDashboard() {
                   <label className="block text-sm font-medium text-notion-muted mb-1">项目状态</label>
                   <select
                     value={proj?.status || "building"}
-                    onChange={(e) => handleFieldChange("status", e.target.value)}
+                    onChange={(e) => handleFieldChange("status", e.target.value as ProjectItem["status"])}
                     className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
                   >
                     <option value="planning">规划中 (Planning)</option>
@@ -2015,9 +2089,12 @@ export default function AdminDashboard() {
         handlePostSave(post);
       };
 
-      const handleFieldChange = (field: keyof PostFrontmatter, val: any) => {
+      const handleFieldChange = <K extends keyof PostFrontmatter>(
+        field: K,
+        val: PostFrontmatter[K]
+      ) => {
         const updated = [...posts];
-        let updatedPost = {
+        const updatedPost = {
           ...post,
           frontmatter: { ...post.frontmatter, [field]: val },
         };
@@ -2671,9 +2748,9 @@ export default function AdminDashboard() {
           </div>
 
           <div className="flex justify-between items-center gap-2 pt-1 border-t border-dashed border-notion-line">
-            <a href="/" className="text-[10px] text-notion-accent font-semibold hover:underline">
+            <Link href="/" className="text-[10px] text-notion-accent font-semibold hover:underline">
               🏠 返回网站主页
-            </a>
+            </Link>
             {!isLocal && (
               <button
                 onClick={handleSignOut}

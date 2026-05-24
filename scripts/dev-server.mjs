@@ -4,12 +4,34 @@ import path from "node:path";
 import matter from "gray-matter";
 
 const PORT = 8081;
+const ALLOWED_IMAGE_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".webp", ".gif"]);
 
 // CORS helper
 function setCorsHeaders(res) {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+}
+
+function isSafeSlug(value) {
+  return typeof value === "string" && /^[a-z0-9][a-z0-9-_]*$/i.test(value);
+}
+
+function sanitizeImageFileName(fileName) {
+  if (typeof fileName !== "string") return null;
+
+  const baseName = path.basename(fileName);
+  const ext = path.extname(baseName).toLowerCase();
+  if (!ALLOWED_IMAGE_EXTENSIONS.has(ext)) return null;
+
+  const name = path.basename(baseName, ext)
+    .toLowerCase()
+    .replace(/[^a-z0-9-_]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+
+  const safeName = name || "upload";
+  return `${Date.now()}-${safeName}${ext}`;
 }
 
 const server = http.createServer((req, res) => {
@@ -200,9 +222,9 @@ const server = http.createServer((req, res) => {
         }
 
         if (type === "post") {
-          if (!slug) {
+          if (!isSafeSlug(slug)) {
             res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ error: "Slug is required" }));
+            res.end(JSON.stringify({ error: "Slug must use letters, numbers, hyphens, or underscores only" }));
             return;
           }
           const filePath = path.join(postsDir, `${slug}.md`);
@@ -216,9 +238,9 @@ const server = http.createServer((req, res) => {
         }
 
         if (type === "delete-post") {
-          if (!slug) {
+          if (!isSafeSlug(slug)) {
             res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ error: "Slug is required" }));
+            res.end(JSON.stringify({ error: "Slug must use letters, numbers, hyphens, or underscores only" }));
             return;
           }
           const filePath = path.join(postsDir, `${slug}.md`);
@@ -266,11 +288,25 @@ const server = http.createServer((req, res) => {
           fs.mkdirSync(uploadsDir, { recursive: true });
         }
 
-        const filePath = path.join(uploadsDir, fileName);
-        const base64Data = fileData.replace(/^data:image\/\w+;base64,/, "");
+        const safeFileName = sanitizeImageFileName(fileName);
+        if (!safeFileName) {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Unsupported or unsafe image file name" }));
+          return;
+        }
+
+        const match = /^data:image\/(png|jpe?g|webp|gif);base64,([A-Za-z0-9+/=]+)$/i.exec(fileData);
+        if (!match) {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Invalid image payload" }));
+          return;
+        }
+
+        const filePath = path.join(uploadsDir, safeFileName);
+        const base64Data = match[2];
         
         fs.writeFileSync(filePath, Buffer.from(base64Data, "base64"));
-        const publicPath = `/images/uploads/${fileName}`;
+        const publicPath = `/images/uploads/${safeFileName}`;
 
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({

@@ -11,7 +11,7 @@ export async function markdownToHtml(markdown: string) {
   const result = await unified()
     .use(remarkParse)
     .use(remarkGfm)
-    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(remarkRehype)
     .use(rehypeSlug)
     .use(rehypeAutolinkHeadings, {
       behavior: "wrap",
@@ -20,7 +20,7 @@ export async function markdownToHtml(markdown: string) {
       }
     })
     .use(rehypeHighlight)
-    .use(rehypeStringify, { allowDangerousHtml: true })
+    .use(rehypeStringify)
     .process(markdown);
 
   return result.toString();
