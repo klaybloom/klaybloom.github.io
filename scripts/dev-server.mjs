@@ -59,13 +59,15 @@ const server = http.createServer((req, res) => {
       const experience = readJsonFile("experience.json", { experience: [] });
       const projects = readJsonFile("projects.json", { projects: [] });
       const skills = readJsonFile("skills.json", { skills: [] });
+      const homeSectionsRaw = readJsonFile("home-sections.json", null);
 
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({
         profile,
         experience: experience.experience || [],
         projects: projects.projects || [],
-        skills: skills.skills || []
+        skills: skills.skills || [],
+        homeSections: homeSectionsRaw && Array.isArray(homeSectionsRaw.sections) ? homeSectionsRaw.sections : null
       }));
     } catch (error) {
       res.writeHead(500, { "Content-Type": "application/json" });
@@ -186,6 +188,14 @@ const server = http.createServer((req, res) => {
           fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
           res.writeHead(200, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ success: true, message: "Skills saved successfully" }));
+          return;
+        }
+
+        if (type === "home-sections") {
+          const filePath = path.join(contentDir, "home-sections.json");
+          fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ success: true, message: "Home sections saved successfully" }));
           return;
         }
 

@@ -1,6 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import {
+  BLOCK_TYPES,
+  DEFAULT_SECTIONS,
+  getBlockType,
+  type HomeSection,
+  type HomeSectionType,
+} from "@/lib/home-sections";
 
 // ==========================================
 // Types
@@ -83,7 +90,7 @@ export default function AdminDashboard() {
   const [githubRepo, setGithubRepo] = useState<string>("klaybloom/klaybloom.github.io");
   const [githubBranch, setGithubBranch] = useState<string>("main");
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<"profile" | "experience" | "projects" | "skills" | "posts">("profile");
+  const [activeTab, setActiveTab] = useState<"profile" | "experience" | "projects" | "skills" | "posts" | "home">("profile");
 
   // Loaders & Alerts
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -103,6 +110,7 @@ export default function AdminDashboard() {
   const [projects, setProjects] = useState<ProjectItem[]>([]);
   const [skills, setSkills] = useState<SkillGroup[]>([]);
   const [posts, setPosts] = useState<PostItem[]>([]);
+  const [homeSections, setHomeSections] = useState<HomeSection[]>(DEFAULT_SECTIONS);
 
   // SHAs for GitHub tracking
   const [shas, setShas] = useState<{
@@ -110,6 +118,7 @@ export default function AdminDashboard() {
     experience?: string;
     projects?: string;
     skills?: string;
+    home?: string;
   }>({});
 
   // Active editors state
@@ -187,6 +196,11 @@ export default function AdminDashboard() {
       setExperiences(data.experience);
       setProjects(data.projects);
       setSkills(data.skills);
+      if (Array.isArray(data.homeSections) && data.homeSections.length > 0) {
+        setHomeSections(data.homeSections);
+      } else {
+        setHomeSections(DEFAULT_SECTIONS);
+      }
 
       // Fetch posts
       const postsRes = await fetch("http://localhost:8081/api/admin/list-posts");
@@ -203,7 +217,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const saveLocalData = async (type: "profile" | "experience" | "projects" | "skills" | "post" | "delete-post", payload: any, slug?: string) => {
+  const saveLocalData = async (type: "profile" | "experience" | "projects" | "skills" | "post" | "delete-post" | "home-sections", payload: any, slug?: string) => {
     setIsSaving(true);
     try {
       const res = await fetch("http://localhost:8081/api/admin/save", {
@@ -377,6 +391,24 @@ export default function AdminDashboard() {
         setShas((prev) => ({ ...prev, skills: skillFile.sha }));
       }
 
+      // 4b. Home Sections (optional file)
+      try {
+        const homeFile = await fetchGithubFile("content/home-sections.json");
+        if (homeFile) {
+          const parsed = JSON.parse(homeFile.content);
+          if (parsed && Array.isArray(parsed.sections) && parsed.sections.length > 0) {
+            setHomeSections(parsed.sections);
+          } else {
+            setHomeSections(DEFAULT_SECTIONS);
+          }
+          setShas((prev) => ({ ...prev, home: homeFile.sha }));
+        } else {
+          setHomeSections(DEFAULT_SECTIONS);
+        }
+      } catch (_) {
+        setHomeSections(DEFAULT_SECTIONS);
+      }
+
       // 5. Posts (Read list of files under content/posts)
       const postsUrl = `https://api.github.com/repos/${githubRepo}/contents/content/posts?ref=${githubBranch}`;
       const postsRes = await fetch(postsUrl, {
@@ -482,7 +514,7 @@ export default function AdminDashboard() {
       const newSha = await commitGithubFile(path, contentStr, currentSha);
       
       // Update SHA tracker
-      if (["profile", "experience", "projects", "skills"].includes(shaKey)) {
+      if (["profile", "experience", "projects", "skills", "home"].includes(shaKey)) {
         setShas((prev) => ({ ...prev, [shaKey]: newSha }));
       }
       
@@ -682,6 +714,16 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleHomeSectionsSave = async () => {
+    const payload = { sections: homeSections };
+    if (isLocal) {
+      await saveLocalData("home-sections", payload);
+    } else {
+      const contentStr = JSON.stringify(payload, null, 2);
+      await saveOnlineFile("content/home-sections.json", contentStr, "home");
+    }
+  };
+
   const handleEditPost = (idx: number) => {
     const postToEdit = posts[idx];
     postToEdit.originalSlug = postToEdit.slug;
@@ -774,20 +816,28 @@ export default function AdminDashboard() {
     if (!window.confirm(`确定要删除文章 "${post.frontmatter.title || post.slug}" 吗？此操作无法撤销！`)) {
       return;
     }
+
+    const targetSlug = post.originalSlug || post.slug;
+    const removeDeletedPost = () => {
+      setPosts((current) => {
+        if (selectedPostIndex !== null) {
+          return current.filter((_, idx) => idx !== selectedPostIndex);
+        }
+
+        return current.filter((item) => item.slug !== targetSlug);
+      });
+      setSelectedPostIndex(null);
+    };
     
     if (isLocal) {
-      const success = await saveLocalData("delete-post", null, post.slug);
+      const success = await saveLocalData("delete-post", null, targetSlug);
       if (success) {
-        // 乐观 UI 更新
-        setPosts(posts.filter((_, idx) => idx !== selectedPostIndex));
-        setSelectedPostIndex(null);
+        removeDeletedPost();
       }
     } else {
-      const success = await deleteOnlinePostFile(post.slug, post.sha);
+      const success = await deleteOnlinePostFile(targetSlug, post.sha);
       if (success) {
-        // 乐观 UI 更新
-        setPosts(posts.filter((_, idx) => idx !== selectedPostIndex));
-        setSelectedPostIndex(null);
+        removeDeletedPost();
       }
     }
   };
@@ -1747,6 +1797,214 @@ export default function AdminDashboard() {
     );
   };
 
+  const renderHomeSectionsTab = () => {
+    const updateSection = (idx: number, patch: Partial<HomeSection>) => {
+      const updated = [...homeSections];
+      updated[idx] = { ...updated[idx], ...patch };
+      setHomeSections(updated);
+    };
+
+    const updateParams = (idx: number, paramPatch: Record<string, unknown>) => {
+      const updated = [...homeSections];
+      updated[idx] = {
+        ...updated[idx],
+        params: { ...(updated[idx].params || {}), ...paramPatch },
+      };
+      setHomeSections(updated);
+    };
+
+    const moveSection = (idx: number, direction: "up" | "down") => {
+      const targetIndex = direction === "up" ? idx - 1 : idx + 1;
+      if (targetIndex < 0 || targetIndex >= homeSections.length) return;
+      const updated = [...homeSections];
+      const tmp = updated[idx];
+      updated[idx] = updated[targetIndex];
+      updated[targetIndex] = tmp;
+      setHomeSections(updated);
+    };
+
+    const removeSection = (idx: number) => {
+      const target = homeSections[idx];
+      const def = getBlockType(target.type);
+      if (def?.singleton) {
+        setAlert({ type: "info", msg: "预设块不可删除，可改成「关闭」隐藏它" });
+        return;
+      }
+      if (!window.confirm("确定要删除这个自由块吗？")) return;
+      setHomeSections(homeSections.filter((_, i) => i !== idx));
+    };
+
+    const enabledTypes = new Set(homeSections.map((s) => s.type));
+    const availableToAdd = BLOCK_TYPES.filter((def) => !def.singleton || !enabledTypes.has(def.type));
+
+    const addBlock = (type: HomeSectionType) => {
+      const def = getBlockType(type);
+      if (!def) return;
+      const newSection: HomeSection = {
+        id: def.singleton ? def.type : `custom-${Date.now()}`,
+        type: def.type,
+        enabled: true,
+        params: { ...def.defaultParams },
+      };
+      setHomeSections([...homeSections, newSection]);
+    };
+
+    return (
+      <div className="space-y-6 max-w-4xl">
+        <div className="flex justify-between items-center pb-2 border-b border-notion-line">
+          <h3 className="text-xl font-bold text-notion-text flex items-center gap-2">
+            <span>🏠</span> 首页布局配置
+          </h3>
+          <div className="flex items-center gap-2">
+            {availableToAdd.length > 0 && (
+              <select
+                onChange={(e) => {
+                  if (e.target.value) {
+                    addBlock(e.target.value as HomeSectionType);
+                    e.target.value = "";
+                  }
+                }}
+                defaultValue=""
+                className="px-3 py-1.5 text-xs font-medium text-notion-accent bg-notion-accentSoft border border-notion-line rounded-lg cursor-pointer hover:bg-opacity-80 transition"
+              >
+                <option value="" disabled>
+                  ➕ 添加新区块
+                </option>
+                {availableToAdd.map((def) => (
+                  <option key={def.type} value={def.type}>
+                    {def.label}
+                  </option>
+                ))}
+              </select>
+            )}
+            <button
+              onClick={handleHomeSectionsSave}
+              disabled={isSaving}
+              className="px-4 py-1.5 text-xs font-semibold text-white bg-notion-accent rounded-lg hover:bg-opacity-90 transition shadow-sm disabled:opacity-50"
+            >
+              {isSaving ? "正在保存..." : "💾 保存首页布局"}
+            </button>
+          </div>
+        </div>
+
+        <p className="text-xs text-notion-faint -mt-2">
+          顺序、开关、参数都在这里控制。预设块只能关闭不能删除；自由块可任意添加和删除。
+        </p>
+
+        <div className="space-y-3">
+          {homeSections.map((section, idx) => {
+            const def = getBlockType(section.type);
+            if (!def) return null;
+            const isCustom = !def.singleton;
+
+            return (
+              <div
+                key={section.id}
+                className={`bg-notion-paper border rounded-xl p-4 shadow-sm transition ${
+                  section.enabled ? "border-notion-line" : "border-dashed border-notion-line opacity-60"
+                }`}
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="font-mono text-xs text-notion-faint w-6 text-center">
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={section.enabled}
+                      onChange={(e) => updateSection(idx, { enabled: e.target.checked })}
+                      className="w-4 h-4 text-notion-accent bg-notion-bg border-notion-line rounded focus:ring-notion-accent"
+                    />
+                    <span className="text-sm font-semibold text-notion-text">{def.label}</span>
+                  </label>
+                  <span className="font-mono text-[10px] text-notion-faint">/{section.id}</span>
+                  <div className="flex-1" />
+                  <button
+                    onClick={() => moveSection(idx, "up")}
+                    disabled={idx === 0}
+                    className="p-1 text-xs bg-notion-hover border border-notion-line rounded hover:bg-opacity-80 disabled:opacity-30"
+                    title="上移"
+                  >
+                    ▲
+                  </button>
+                  <button
+                    onClick={() => moveSection(idx, "down")}
+                    disabled={idx === homeSections.length - 1}
+                    className="p-1 text-xs bg-notion-hover border border-notion-line rounded hover:bg-opacity-80 disabled:opacity-30"
+                    title="下移"
+                  >
+                    ▼
+                  </button>
+                  {isCustom && (
+                    <button
+                      onClick={() => removeSection(idx)}
+                      className="px-2 py-1 text-xs bg-red-50 text-red-600 font-semibold rounded hover:bg-red-100 transition"
+                    >
+                      🗑️ 删除
+                    </button>
+                  )}
+                </div>
+
+                {def.paramFields.length === 0 ? (
+                  <p className="pl-9 text-xs text-notion-faint italic">此区块无可调参数</p>
+                ) : (
+                  <div className="pl-9 space-y-3">
+                    {def.paramFields.includes("title") && (
+                      <div>
+                        <label className="block text-xs font-medium text-notion-muted mb-1">区块标题</label>
+                        <input
+                          type="text"
+                          value={(section.params?.title as string) ?? ""}
+                          onChange={(e) => updateParams(idx, { title: e.target.value })}
+                          placeholder={def.defaultParams.title as string}
+                          className="w-full max-w-md px-3 py-1.5 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                        />
+                      </div>
+                    )}
+                    {def.paramFields.includes("count") && (
+                      <div>
+                        <label className="block text-xs font-medium text-notion-muted mb-1">展示条数</label>
+                        <input
+                          type="number"
+                          min={1}
+                          max={20}
+                          value={(section.params?.count as number) ?? (def.defaultParams.count as number) ?? 3}
+                          onChange={(e) => {
+                            const n = parseInt(e.target.value, 10);
+                            updateParams(idx, { count: Number.isFinite(n) ? Math.max(1, n) : 3 });
+                          }}
+                          className="w-24 px-3 py-1.5 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                        />
+                      </div>
+                    )}
+                    {def.paramFields.includes("body") && (
+                      <div>
+                        <label className="block text-xs font-medium text-notion-muted mb-1">内容（Markdown，支持 GFM、代码高亮）</label>
+                        <textarea
+                          value={(section.params?.body as string) ?? ""}
+                          onChange={(e) => updateParams(idx, { body: e.target.value })}
+                          rows={6}
+                          className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text font-mono text-xs leading-relaxed"
+                          placeholder="## 子标题&#10;&#10;支持 markdown 语法、链接、列表、代码块..."
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {homeSections.length === 0 && (
+            <div className="text-center py-10 bg-notion-paper border border-dashed border-notion-line rounded-xl text-notion-faint">
+              📭 没有任何区块。从右上角下拉菜单添加。
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   const renderPostsTab = () => {
     // Article editor or list
     if (selectedPostIndex !== null) {
@@ -2162,11 +2420,11 @@ export default function AdminDashboard() {
         <div className="bg-notion-paper border border-notion-line rounded-xl overflow-hidden shadow-sm">
           <table className="w-full text-left border-collapse table-fixed">
             <colgroup>
-              <col style={{ width: '35%' }} />
-              <col style={{ width: '30%' }} />
-              <col style={{ width: '12%' }} />
+              <col style={{ width: '33%' }} />
+              <col style={{ width: '27%' }} />
+              <col style={{ width: '11%' }} />
               <col style={{ width: '10%' }} />
-              <col style={{ width: '13%' }} />
+              <col style={{ width: '19%' }} />
             </colgroup>
             <thead>
               <tr className="bg-notion-bg text-notion-muted border-b border-notion-line font-medium text-xs">
@@ -2196,12 +2454,20 @@ export default function AdminDashboard() {
                     </span>
                   </td>
                   <td className="p-4 text-right pr-6">
-                    <button
-                      onClick={() => handleEditPost(idx)}
-                      className="px-3 py-1 bg-notion-accentSoft text-notion-accent font-semibold rounded hover:bg-opacity-80 transition text-xs"
-                    >
-                      编辑
-                    </button>
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => handleEditPost(idx)}
+                        className="px-3 py-1 bg-notion-accentSoft text-notion-accent font-semibold rounded hover:bg-opacity-80 transition text-xs"
+                      >
+                        编辑
+                      </button>
+                      <button
+                        onClick={() => handlePostDelete(post)}
+                        className="px-3 py-1 bg-red-50 text-red-600 font-semibold rounded hover:bg-red-100 transition text-xs"
+                      >
+                        删除
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -2333,6 +2599,14 @@ export default function AdminDashboard() {
 
           <nav className="space-y-1">
             <button
+              onClick={() => { setActiveTab("home"); setSelectedPostIndex(null); setSelectedProjIndex(null); setSelectedExpIndex(null); }}
+              className={`w-full text-left px-3 py-2 rounded-lg font-medium text-sm flex items-center gap-2.5 transition ${
+                activeTab === "home" ? "bg-notion-accentSoft text-notion-accent font-semibold" : "text-notion-muted hover:bg-notion-hover"
+              }`}
+            >
+              <span>🏠</span> 首页布局
+            </button>
+            <button
               onClick={() => { setActiveTab("profile"); setSelectedPostIndex(null); setSelectedProjIndex(null); setSelectedExpIndex(null); }}
               className={`w-full text-left px-3 py-2 rounded-lg font-medium text-sm flex items-center gap-2.5 transition ${
                 activeTab === "profile" ? "bg-notion-accentSoft text-notion-accent font-semibold" : "text-notion-muted hover:bg-notion-hover"
@@ -2426,6 +2700,7 @@ export default function AdminDashboard() {
             {activeTab === "projects" && renderProjectsTab()}
             {activeTab === "skills" && renderSkillsTab()}
             {activeTab === "posts" && renderPostsTab()}
+            {activeTab === "home" && renderHomeSectionsTab()}
           </div>
         )}
       </main>

@@ -3,11 +3,13 @@ import { Section } from "./Section";
 
 type ExperienceProps = {
   items: ExperienceItem[];
+  title?: string;
+  number?: string;
 };
 
-export function Experience({ items }: ExperienceProps) {
+export function Experience({ items, title = "工作经历", number = "04" }: ExperienceProps) {
   return (
-    <Section id="experience" number="04" title="工作经历">
+    <Section id="experience" number={number} title={title}>
       <div className="relative border-l border-notion-line pl-6 ml-3 space-y-12">
         {items.map((item) => (
           <div

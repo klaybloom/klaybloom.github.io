@@ -5,11 +5,13 @@ import { Section } from "./Section";
 
 type LatestPostsProps = {
   posts: PostSummary[];
+  title?: string;
+  number?: string;
 };
 
-export function LatestPosts({ posts }: LatestPostsProps) {
+export function LatestPosts({ posts, title = "技术文章", number = "03" }: LatestPostsProps) {
   return (
-    <Section id="articles" number="03" title="技术文章">
+    <Section id="articles" number={number} title={title}>
       <div>
         {posts.map((post, index) => (
           <Link

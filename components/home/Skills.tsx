@@ -3,11 +3,13 @@ import { Section } from "./Section";
 
 type SkillsProps = {
   skills: SkillGroup[];
+  title?: string;
+  number?: string;
 };
 
-export function Skills({ skills }: SkillsProps) {
+export function Skills({ skills, title = "技术能力", number = "01" }: SkillsProps) {
   return (
-    <Section id="skills" number="01" title="技术能力">
+    <Section id="skills" number={number} title={title}>
       <div className="grid gap-px overflow-hidden rounded-xl border border-notion-line bg-notion-line sm:grid-cols-2">
         {skills.map((skill, index) => (
           <div

@@ -4,11 +4,13 @@ import { Section } from "./Section";
 
 type LatestProjectsProps = {
   projects: Project[];
+  title?: string;
+  number?: string;
 };
 
-export function LatestProjects({ projects }: LatestProjectsProps) {
+export function LatestProjects({ projects, title = "精选项目", number = "02" }: LatestProjectsProps) {
   return (
-    <Section id="projects" number="02" title="精选项目">
+    <Section id="projects" number={number} title={title}>
       <div className="flex flex-col gap-5">
         {projects.map((project, index) => {
           const staggerClass = `stagger-${(index % 4) + 1}`;

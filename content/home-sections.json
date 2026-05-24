@@ -1,0 +1,44 @@
+{
+  "sections": [
+    {
+      "id": "hero",
+      "type": "hero",
+      "enabled": true,
+      "params": {}
+    },
+    {
+      "id": "skills",
+      "type": "skills",
+      "enabled": true,
+      "params": {
+        "title": "技术能力"
+      }
+    },
+    {
+      "id": "latest-projects",
+      "type": "latest-projects",
+      "enabled": true,
+      "params": {
+        "title": "精选项目",
+        "count": 3
+      }
+    },
+    {
+      "id": "latest-posts",
+      "type": "latest-posts",
+      "enabled": true,
+      "params": {
+        "title": "技术文章",
+        "count": 3
+      }
+    },
+    {
+      "id": "experience",
+      "type": "experience",
+      "enabled": true,
+      "params": {
+        "title": "工作经历"
+      }
+    }
+  ]
+}
