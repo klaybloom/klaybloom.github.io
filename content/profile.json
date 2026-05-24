@@ -1,11 +1,9 @@
 {
-  "name": "王梦梦",
-  "nickname": "王梦梦一",
-  "title": "金融经理",
-  "summary": "投资数学",
-  "bio": [
-    "我长期参与业务系统开发、接口设计、数据库设计和线上问题排查。"
-  ],
+  "name": "师方旭",
+  "nickname": "klay",
+  "title": "Java开发工程师,AI Agent重度使用",
+  "summary": "没有AI不会干活",
+  "bio": [],
   "links": {
     "github": "https://github.com/klaybloom",
     "blog": "/blog",
