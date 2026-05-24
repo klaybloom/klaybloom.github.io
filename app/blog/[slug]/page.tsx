@@ -56,29 +56,40 @@ export default async function PostPage({ params }: PostPageProps) {
   return (
     <main className="min-h-screen bg-notion-bg text-notion-text">
       <Header name={siteConfig.name} nav={siteConfig.nav} />
-      <div className="mx-auto grid max-w-[1120px] gap-10 px-5 pb-20 pt-16 lg:grid-cols-[minmax(0,760px)_240px] lg:items-start">
-        {headings.length ? (
-          <aside className="order-first rounded-2xl border border-notion-line bg-notion-paper/80 p-4 lg:order-last lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
-            <p className="mb-4 text-[12px] font-semibold uppercase tracking-[0.24em] text-notion-accent">
-              文章目录
-            </p>
-            <nav className="grid gap-2">
-              {headings.map((heading) => (
-                <a
-                  key={heading.id}
-                  href={`#${heading.id}`}
-                  className={`text-[14px] text-notion-muted transition hover:text-notion-accent ${
-                    heading.level === 3 ? "pl-4" : ""
-                  }`}
-                >
-                  {heading.text}
-                </a>
-              ))}
+      {headings.length ? (
+        <aside className="group fixed left-4 top-32 z-40 hidden max-h-[calc(100vh-10rem)] w-16 overflow-hidden rounded-r-2xl border border-l-0 border-notion-line bg-notion-paper/95 shadow-sm transition-all duration-200 hover:w-72 focus-within:w-72 lg:block">
+          <div className="flex h-full min-h-24">
+            <div className="flex w-16 shrink-0 flex-col items-center justify-center gap-2 border-r border-notion-line px-2 py-4 text-notion-accent">
+              <span className="font-mono text-[12px] font-semibold [writing-mode:vertical-rl]">
+                目录
+              </span>
+              <span className="text-[13px] transition-transform group-hover:rotate-180 group-focus-within:rotate-180">
+                →
+              </span>
+            </div>
+            <nav className="min-w-0 flex-1 overflow-y-auto p-4 opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100">
+              <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.24em] text-notion-accent">
+                文章目录
+              </p>
+              <div className="grid gap-2">
+                {headings.map((heading) => (
+                  <a
+                    key={heading.id}
+                    href={`#${heading.id}`}
+                    className={`text-[13px] leading-snug text-notion-muted transition hover:text-notion-accent ${
+                      heading.level === 3 ? "pl-4" : ""
+                    }`}
+                  >
+                    {heading.text}
+                  </a>
+                ))}
+              </div>
             </nav>
-          </aside>
-        ) : null}
+          </div>
+        </aside>
+      ) : null}
 
-        <article>
+      <article className="mx-auto max-w-[760px] px-5 pb-20 pt-16">
           <Link
             className="mb-10 inline-flex rounded-full px-3 py-1 text-[14px] font-medium text-notion-accent transition hover:bg-notion-accentSoft"
             href="/blog"
@@ -150,8 +161,7 @@ export default async function PostPage({ params }: PostPageProps) {
               ) : null}
             </nav>
           ) : null}
-        </article>
-      </div>
+      </article>
       <Footer nav={siteConfig.nav} />
     </main>
   );
