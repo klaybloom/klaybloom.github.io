@@ -4,7 +4,12 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: siteConfig.title,
-  description: siteConfig.description
+  description: siteConfig.description,
+  alternates: {
+    types: {
+      "application/rss+xml": `${siteConfig.url}/rss.xml`,
+    },
+  },
 };
 
 export default function RootLayout({
