@@ -179,6 +179,8 @@ export default function AdminDashboard() {
   const [selectedExpIndex, setSelectedExpIndex] = useState<number | null>(null);
   const [selectedProjIndex, setSelectedProjIndex] = useState<number | null>(null);
   const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
+  const [pendingDeletePost, setPendingDeletePost] = useState<{ post: PostItem; index: number | null } | null>(null);
+  const [deleteConfirmSlug, setDeleteConfirmSlug] = useState("");
   
   // Image Uploading state
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -913,20 +915,34 @@ export default function AdminDashboard() {
     }
   };
 
-  const handlePostDelete = async (post: PostItem) => {
-    if (!window.confirm(`确定要删除文章 "${post.frontmatter.title || post.slug}" 吗？此操作无法撤销！`)) {
+  const handlePostDelete = (post: PostItem, index: number | null = selectedPostIndex) => {
+    setPendingDeletePost({ post, index });
+    setDeleteConfirmSlug("");
+  };
+
+  const cancelPostDelete = () => {
+    setPendingDeletePost(null);
+    setDeleteConfirmSlug("");
+  };
+
+  const confirmPostDelete = async () => {
+    if (!pendingDeletePost) return;
+    const { post, index } = pendingDeletePost;
+    const targetSlug = post.originalSlug || post.slug;
+    if (deleteConfirmSlug.trim() !== targetSlug) {
+      setAlert({ type: "error", msg: "请输入完整 slug 后再删除" });
       return;
     }
 
-    const targetSlug = post.originalSlug || post.slug;
     const removeDeletedPost = () => {
       setPosts((current) => {
-        if (selectedPostIndex !== null) {
-          return current.filter((_, idx) => idx !== selectedPostIndex);
+        if (index !== null) {
+          return current.filter((_, idx) => idx !== index);
         }
 
         return current.filter((item) => item.slug !== targetSlug);
       });
+      cancelPostDelete();
       setSelectedPostIndex(null);
     };
     
@@ -2238,7 +2254,7 @@ export default function AdminDashboard() {
             <div className="flex items-center gap-3">
               {!isNew && (
                 <button
-                  onClick={() => handlePostDelete(post)}
+                  onClick={() => handlePostDelete(post, selectedPostIndex)}
                   className="px-3 py-1.5 text-xs text-red-600 bg-red-50 hover:bg-red-100 rounded-md font-semibold transition"
                 >
                   🗑️ 删除文章
@@ -2572,7 +2588,7 @@ export default function AdminDashboard() {
                         编辑
                       </button>
                       <button
-                        onClick={() => handlePostDelete(post)}
+                        onClick={() => handlePostDelete(post, idx)}
                         className="px-3 py-1 bg-red-50 text-red-600 font-semibold rounded hover:bg-red-100 transition text-xs"
                       >
                         删除
@@ -2694,6 +2710,50 @@ export default function AdminDashboard() {
         }`}>
           <span>{alert.type === "success" ? "✅" : alert.type === "error" ? "❌" : "ℹ️"}</span>
           <span className="font-medium">{alert.msg}</span>
+        </div>
+      )}
+
+      {pendingDeletePost && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-4">
+          <div className="w-full max-w-md rounded-2xl border border-red-100 bg-white p-6 shadow-xl">
+            <div className="mb-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-red-500">删除文章</p>
+              <h2 className="mt-2 text-xl font-bold text-notion-text">
+                {pendingDeletePost.post.frontmatter.title || pendingDeletePost.post.slug}
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-notion-muted">
+                删除后会移除对应 Markdown 文件。请再次确认，并输入文章 slug：
+                <span className="ml-1 font-mono font-semibold text-red-600">
+                  {pendingDeletePost.post.originalSlug || pendingDeletePost.post.slug}
+                </span>
+              </p>
+            </div>
+
+            <input
+              value={deleteConfirmSlug}
+              onChange={(event) => setDeleteConfirmSlug(event.target.value)}
+              className="w-full rounded-lg border border-notion-line bg-notion-bg px-3 py-2 font-mono text-sm text-notion-text outline-none focus:border-red-400"
+              placeholder="输入文章 slug"
+              autoFocus
+            />
+
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                onClick={cancelPostDelete}
+                disabled={isSaving}
+                className="rounded-lg border border-notion-line px-4 py-2 text-sm font-medium text-notion-muted transition hover:text-notion-text disabled:opacity-50"
+              >
+                取消
+              </button>
+              <button
+                onClick={confirmPostDelete}
+                disabled={isSaving || deleteConfirmSlug.trim() !== (pendingDeletePost.post.originalSlug || pendingDeletePost.post.slug)}
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-45"
+              >
+                {isSaving ? "正在删除..." : "确认删除"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
