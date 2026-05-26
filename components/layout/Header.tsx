@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { NavItem } from "@/content/types";
-import { ThemeToggle } from "./ThemeToggle";
+import { TahoeModeToggle } from "./TahoeModeToggle";
 
 type HeaderProps = {
   name: string;
@@ -9,39 +9,26 @@ type HeaderProps = {
 
 export function Header({ name, nav }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-20 border-b border-notion-line bg-notion-bg/85 backdrop-blur">
-      <nav className="mx-auto flex h-16 max-w-[1080px] items-center justify-between gap-6 px-5">
-        <Link
-          href="/"
-          className="shrink-0 font-serif text-[1.15rem] font-semibold tracking-wide text-notion-text transition hover:text-notion-accent"
-        >
-          {name}
-        </Link>
-        <div className="flex min-w-0 items-center gap-1 text-[14px] font-medium text-notion-muted">
-          <div className="flex min-w-0 items-center gap-1 overflow-x-auto">
-            {nav.map((link) =>
-              link.href.startsWith("/") ? (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="magnetic relative shrink-0 px-3.5 py-2 transition hover:text-notion-text [&:hover::after]:scale-x-100 after:absolute after:bottom-[6px] after:left-[14px] after:right-[14px] after:h-[1.5px] after:origin-left after:scale-x-0 after:bg-notion-accent after:transition-transform after:duration-300"
-                >
-                  {link.label}
-                </Link>
-              ) : (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="magnetic relative shrink-0 px-3.5 py-2 transition hover:text-notion-text [&:hover::after]:scale-x-100 after:absolute after:bottom-[6px] after:left-[14px] after:right-[14px] after:h-[1.5px] after:origin-left after:scale-x-0 after:bg-notion-accent after:transition-transform after:duration-300"
-                >
-                  {link.label}
-                </a>
-              )
-            )}
-          </div>
-          <ThemeToggle />
-        </div>
-      </nav>
+    <header className="tahoe-menubar flex items-center justify-between gap-4 px-4 py-2.5 sm:px-5">
+      <Link href="/" className="tahoe-brand" aria-label="返回首页">
+        <span className="tahoe-brand-mark">K</span>
+        <span>{name}</span>
+      </Link>
+      <div className="tahoe-banner-nav">
+        {nav.map((link) =>
+          link.href.startsWith("/") ? (
+            <Link href={link.href} key={link.label}>
+              {link.label}
+            </Link>
+          ) : (
+            <a href={link.href} key={link.label}>
+              {link.label}
+            </a>
+          )
+        )}
+        <Link href="/rss.xml">RSS</Link>
+        <TahoeModeToggle iconOnly />
+      </div>
     </header>
   );
 }
