@@ -2935,13 +2935,13 @@ export default function AdminDashboard() {
       <aside
         className="fixed left-4 top-4 bottom-4 z-50 flex flex-col select-none transition-all duration-300"
         style={{
-          width: sidebarCollapsed ? "48px" : "220px",
-          background: "var(--tahoe-glass)",
-          border: "1px solid var(--tahoe-border)",
+          width: sidebarCollapsed ? "48px" : "200px",
+          background: "rgba(255,255,255,0.45)",
+          border: "1px solid rgba(255,255,255,0.55)",
           borderRadius: "22px",
-          boxShadow: "inset 0 1px 0 var(--tahoe-highlight), inset 0 0 0 1px rgba(255,255,255,0.08), 0 22px 64px -24px var(--tahoe-shadow)",
-          backdropFilter: "blur(28px) saturate(180%)",
-          WebkitBackdropFilter: "blur(28px) saturate(180%)",
+          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.92), 0 8px 32px -12px rgba(0,0,0,0.12)",
+          backdropFilter: "blur(32px) saturate(200%)",
+          WebkitBackdropFilter: "blur(32px) saturate(200%)",
         }}
       >
         {/* Header / Collapse Toggle */}
@@ -2996,27 +2996,24 @@ export default function AdminDashboard() {
         </nav>
 
         {/* Footer */}
-        <div className="p-3 shrink-0" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
+        <div className="p-3 shrink-0" style={{ borderTop: "1px solid rgba(255,255,255,0.4)" }}>
           {!sidebarCollapsed ? (
             <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isLocal ? "bg-blue-500" : "bg-green-500"}`} />
-                <span className="text-[11px] font-semibold" style={{ color: "var(--tahoe-text)" }}>
-                  {isLocal ? "本地开发" : "线上运行"}
-                </span>
-              </div>
-              <div className="flex items-center justify-between gap-1 pt-1" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
-                <Link href="/" className="text-xs font-semibold hover:underline" style={{ color: "var(--tahoe-accent)" }}>
-                  🏠 主页
-                </Link>
+              <Link href="/" className="text-xs font-semibold hover:underline block" style={{ color: "var(--tahoe-accent)" }}>
+                🏠 主页
+              </Link>
+              <div className="flex items-center justify-between gap-1 pt-1" style={{ borderTop: "1px solid rgba(255,255,255,0.4)" }}>
+                <div className="flex items-center gap-1.5">
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isLocal ? "bg-blue-500" : "bg-green-500"}`} />
+                  <span className="text-[11px] font-semibold" style={{ color: "var(--tahoe-text)" }}>
+                    {isLocal ? "本地" : "线上"}
+                  </span>
+                </div>
                 <div style={{ transform: "scale(1.1)", transformOrigin: "center" }}>
                   <TahoeModeToggle iconOnly />
                 </div>
                 {!isLocal && (
-                  <button
-                    onClick={handleSignOut}
-                    className="text-xs text-red-500 font-semibold hover:underline"
-                  >
+                  <button onClick={handleSignOut} className="text-[11px] text-red-500 font-semibold hover:underline">
                     退出
                   </button>
                 )}
@@ -3032,7 +3029,7 @@ export default function AdminDashboard() {
               </div>
               <span
                 className={`w-1.5 h-1.5 rounded-full shrink-0 ${isLocal ? "bg-blue-500" : "bg-green-500"}`}
-                title={isLocal ? "本地开发" : "线上运行"}
+                title={isLocal ? "本地" : "线上"}
               />
               {!isLocal && (
                 <button onClick={handleSignOut} className="text-sm text-red-500 hover:underline" title="退出登录">
@@ -3045,7 +3042,10 @@ export default function AdminDashboard() {
       </aside>
 
       {/* Main Workspace Area */}
-      <main className="min-h-screen p-6">
+      <main
+        className="min-h-screen p-6 transition-all duration-300"
+        style={{ paddingLeft: sidebarCollapsed ? "80px" : "232px" }}
+      >
         <div className="max-w-4xl mx-auto">
         {isLoading ? (
           <div className="h-full w-full flex flex-col justify-center items-center space-y-3">
