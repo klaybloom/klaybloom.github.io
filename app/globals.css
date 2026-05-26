@@ -73,11 +73,37 @@
 }
 
 /* Page wrapper transparent so wallpaper shows through */
-[data-theme="glass"] main.bg-notion-bg {
+[data-theme="glass"] main.bg-notion-bg,
+[data-theme="glass"] .bg-notion-bg {
   background-color: transparent;
 }
 
-/* Cards become glass material */
+/* ---------- Floating header ---------- */
+[data-theme="glass"] header.sticky {
+  top: 12px;
+  max-width: calc(1080px + 3rem);
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgba(255, 255, 255, 0.52);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  border-radius: 22px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.03),
+    0 8px 28px -8px rgba(15, 23, 42, 0.22);
+}
+
+/* Revert dynamic shadow-sm added by JS scroll handler */
+[data-theme="glass"] header.sticky.shadow-sm {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.03),
+    0 8px 28px -8px rgba(15, 23, 42, 0.2);
+}
+
+/* ---------- Cards / paper = glass material ---------- */
 [data-theme="glass"] .bg-notion-paper {
   background-color: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(22px) saturate(180%);
@@ -88,32 +114,50 @@
     0 8px 28px -8px rgba(15, 23, 42, 0.16);
 }
 
-/* Borders → translucent white hairline (the "rim" of the glass) */
-[data-theme="glass"] .border-notion-line {
-  border-color: rgba(255, 255, 255, 0.6);
+/* Kill competing Tailwind shadow on glass cards */
+[data-theme="glass"] .bg-notion-paper.shadow-sm,
+[data-theme="glass"] .bg-notion-paper.shadow-md {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.025),
+    0 8px 28px -8px rgba(15, 23, 42, 0.16);
 }
 
-/* Hover state on cards — brighter glass */
+/* ---------- Hover: brighter glass ---------- */
 [data-theme="glass"] .hover\:bg-notion-hover:hover,
 [data-theme="glass"] .bg-notion-hover {
-  background-color: rgba(255, 255, 255, 0.78);
+  background-color: rgba(255, 255, 255, 0.72);
 }
 
-/* Header: wall-paper-reveal translucent, not opaque */
-[data-theme="glass"] header.sticky {
-  background-color: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-color: rgba(255, 255, 255, 0.55);
+/* ---------- Borders → translucent white hairline ---------- */
+[data-theme="glass"] .border-notion-line,
+[data-theme="glass"] .divide-notion-line>* {
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Hover shadow tint — strip the green tint from both patterns */
+[data-theme="glass"] .border-notion-line.border-y,
+[data-theme="glass"] .border-y.border-notion-line {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* ---------- Footer transparent ---------- */
+[data-theme="glass"] footer {
+  background-color: transparent;
+}
+
+/* ---------- Strip green tint from hover shadows ---------- */
 [data-theme="glass"] .hover\:shadow-\[0_8px_30px_rgba\(45\,90\,61\,0\.06\)\]:hover {
   box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.22);
 }
 
 [data-theme="glass"] .hover\:shadow-\[0_0_0_4px_rgba\(45\,90\,61\,0\.15\)\]:hover {
   box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.12);
+}
+
+/* ---------- Hero card on homepage: lift the aside ---------- */
+[data-theme="glass"] .lg\:sticky.bg-notion-paper {
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
 }
 
 /* ---------- Liquid Glass preview (scoped to /theme-preview) ---------- */
