@@ -2947,8 +2947,8 @@ export default function AdminDashboard() {
         {/* Header / Collapse Toggle */}
         <div className="flex items-center justify-between p-4 pb-2">
           {!sidebarCollapsed && (
-            <h1 className="text-sm font-bold" style={{ color: "var(--tahoe-text)" }}>
-              Studio
+            <h1 className="text-base font-bold" style={{ color: "var(--tahoe-text)" }}>
+              Studio Admin
             </h1>
           )}
           <button
@@ -3000,13 +3000,13 @@ export default function AdminDashboard() {
           {!sidebarCollapsed ? (
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isLocal ? "bg-green-500" : "bg-blue-500"}`} />
+                <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isLocal ? "bg-blue-500" : "bg-green-500"}`} />
                 <span className="text-[11px] font-semibold" style={{ color: "var(--tahoe-text)" }}>
-                  {isLocal ? "本地开发" : "线上模式"}
+                  {isLocal ? "本地开发" : "线上运行"}
                 </span>
               </div>
               <div className="flex items-center justify-between gap-1 pt-1" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
-                <Link href="/" className="text-[11px] font-semibold hover:underline" style={{ color: "var(--tahoe-accent)" }}>
+                <Link href="/" className="text-xs font-semibold hover:underline" style={{ color: "var(--tahoe-accent)" }}>
                   🏠 主页
                 </Link>
                 <div style={{ transform: "scale(1.1)", transformOrigin: "center" }}>
@@ -3015,7 +3015,7 @@ export default function AdminDashboard() {
                 {!isLocal && (
                   <button
                     onClick={handleSignOut}
-                    className="text-[11px] text-red-500 font-semibold hover:underline"
+                    className="text-xs text-red-500 font-semibold hover:underline"
                   >
                     退出
                   </button>
@@ -3024,14 +3024,18 @@ export default function AdminDashboard() {
             </div>
           ) : (
             <div className="flex flex-col items-center gap-2">
-              <Link href="/" className="text-xs hover:underline" style={{ color: "var(--tahoe-accent)" }} title="返回主页">
+              <Link href="/" className="text-sm hover:underline" style={{ color: "var(--tahoe-accent)" }} title="返回主页">
                 🏠
               </Link>
               <div style={{ transform: "scale(1.1)", transformOrigin: "center" }}>
                 <TahoeModeToggle iconOnly />
               </div>
+              <span
+                className={`w-1.5 h-1.5 rounded-full shrink-0 ${isLocal ? "bg-blue-500" : "bg-green-500"}`}
+                title={isLocal ? "本地开发" : "线上运行"}
+              />
               {!isLocal && (
-                <button onClick={handleSignOut} className="text-xs text-red-500 hover:underline" title="退出登录">
+                <button onClick={handleSignOut} className="text-sm text-red-500 hover:underline" title="退出登录">
                   🔒
                 </button>
               )}
