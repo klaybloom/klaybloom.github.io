@@ -15,6 +15,14 @@
       }
     },
     {
+      "id": "experience",
+      "type": "experience",
+      "enabled": true,
+      "params": {
+        "title": "工作经历"
+      }
+    },
+    {
       "id": "latest-projects",
       "type": "latest-projects",
       "enabled": true,
@@ -30,14 +38,6 @@
       "params": {
         "title": "技术文章",
         "count": 3
-      }
-    },
-    {
-      "id": "experience",
-      "type": "experience",
-      "enabled": true,
-      "params": {
-        "title": "工作经历"
       }
     }
   ]

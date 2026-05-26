@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type Theme = "light" | "dark" | "glass";
 
@@ -24,13 +24,7 @@ function applyTheme(t: Theme) {
 }
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("light");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setTheme(getInitialTheme());
-    setMounted(true);
-  }, []);
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
   function cycle() {
     const idx = ORDER.indexOf(theme);
@@ -58,7 +52,7 @@ export function ThemeToggle() {
       className="magnetic relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-notion-muted transition hover:bg-notion-hover hover:text-notion-text"
     >
       <span suppressHydrationWarning className="block h-[18px] w-[18px]">
-        {mounted ? <ThemeIcon theme={theme} /> : <SunIcon />}
+        <ThemeIcon theme={theme} />
       </span>
     </button>
   );

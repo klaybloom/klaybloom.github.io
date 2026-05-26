@@ -1,21 +1,26 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import type { ReactNode } from "react";
 import { experience } from "@/content/experience";
 import { highlights } from "@/content/highlights";
 import { profile } from "@/content/profile";
 import { siteConfig } from "@/content/site";
 import { skills } from "@/content/skills";
 import homeSectionsData from "@/content/home-sections.json";
-import type { ExperienceItem, Highlight, NavItem, Profile, Project, SkillGroup } from "@/content/types";
-import { TahoeModeToggle } from "@/components/layout/TahoeModeToggle";
+import type { ExperienceItem, Highlight, Profile, Project, SkillGroup } from "@/content/types";
 import { formatDate } from "@/lib/date";
-import { resolveHomeSections, type HomeSection } from "@/lib/home-sections";
 import { markdownToHtml } from "@/lib/markdown";
 import { getLatestPosts } from "@/lib/posts";
 import type { PostSummary } from "@/lib/post-types";
 import { getLatestProjects } from "@/lib/projects";
+import { resolveHomeSections, type HomeSection } from "@/lib/home-sections";
+import { TahoeModeToggle } from "./TahoeSideNav";
 
-export default async function Home() {
+export const metadata: Metadata = {
+  title: "主题预览 2 · Tahoe Liquid Glass",
+  description: "第二套 macOS Tahoe / Liquid Glass 风格预览方案",
+};
+
+export default async function ThemePreview2Page() {
   const sections = resolveHomeSections(homeSectionsData).filter((section) => section.enabled);
   const customHtml = new Map<string, string>();
 
@@ -34,8 +39,23 @@ export default async function Home() {
   return (
     <main data-tahoe-preview className="tahoe-shell min-h-screen overflow-x-hidden">
       <div className="tahoe-bg-fixed" aria-hidden />
-      <TahoeHomeHeader name={siteConfig.name} nav={siteConfig.nav} />
-      <TahoeSectionRail />
+
+      <header className="tahoe-menubar flex items-center justify-between gap-4 px-4 py-2.5 sm:px-5">
+        <Link href="/" className="tahoe-brand" aria-label="返回首页">
+          <span className="tahoe-brand-mark">K</span>
+          <span>{siteConfig.name}</span>
+        </Link>
+        <div className="tahoe-banner-nav">
+          <a href="#skills">技术</a>
+          <a href="#projects">项目</a>
+          <a href="#articles">文章</a>
+          <a href="#experience">经历</a>
+          <TahoeModeToggle />
+          <Link href="/theme-preview" className="tahoe-mini-button">
+            对比方案 1
+          </Link>
+        </div>
+      </header>
 
       <div className="relative z-10 mx-auto max-w-[1080px] px-4 pb-20 pt-28 sm:px-6">
         <div className="space-y-20">
@@ -44,54 +64,7 @@ export default async function Home() {
           )}
         </div>
       </div>
-
-      <TahoeFooter />
     </main>
-  );
-}
-
-function TahoeHomeHeader({ name, nav }: { name: string; nav: NavItem[] }) {
-  return (
-    <header className="tahoe-menubar flex items-center justify-between gap-4 px-4 py-2.5 sm:px-5">
-      <Link href="/" className="tahoe-brand" aria-label="返回首页">
-        <span className="tahoe-brand-mark">K</span>
-        <span>{name}</span>
-      </Link>
-      <div className="tahoe-banner-nav">
-        {nav.map((link) =>
-          link.href.startsWith("/") ? (
-            <Link href={link.href} key={link.label}>
-              {link.label}
-            </Link>
-          ) : (
-            <a href={link.href} key={link.label}>
-              {link.label}
-            </a>
-          )
-        )}
-        <Link href="/rss.xml">RSS</Link>
-        <TahoeModeToggle iconOnly />
-      </div>
-    </header>
-  );
-}
-
-function TahoeSectionRail() {
-  const items = [
-    { href: "#skills", label: "技术" },
-    { href: "#projects", label: "项目" },
-    { href: "#articles", label: "文章" },
-    { href: "#experience", label: "经历" },
-  ];
-
-  return (
-    <nav aria-label="页面段落" className="tahoe-section-rail">
-      {items.map((item) => (
-        <a href={item.href} key={item.href}>
-          {item.label}
-        </a>
-      ))}
-    </nav>
   );
 }
 
@@ -345,28 +318,31 @@ function TahoeExperience({
 }) {
   return (
     <TahoeSection id="experience" number={number} title={title}>
-      <div className="tahoe-experience-grid">
+      <div className="tahoe-timeline">
         {items.map((item) => (
-          <article className="tahoe-experience-card" key={`${item.company}-${item.title}`}>
-            <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="tahoe-timeline-item" key={`${item.company}-${item.title}`}>
+            <span className="tahoe-timeline-dot" aria-hidden />
+            <div className="grid gap-2 sm:grid-cols-[160px_1fr]">
+              <div className="text-[13px] font-semibold text-[color:var(--tahoe-accent)]">
+                {item.period}
+              </div>
               <div>
-                <h3 className="text-[20px] font-semibold leading-snug text-[color:var(--tahoe-text)]">
+                <h3 className="text-[1.1rem] font-semibold text-[color:var(--tahoe-text)]">
                   {item.title}
                 </h3>
-                <p className="mt-1 text-[13px] font-medium text-[color:var(--tahoe-faint)]">
+                <div className="mt-1 text-[12px] text-[color:var(--tahoe-faint)]">
                   {item.company}
-                </p>
+                </div>
+                <ul className="mt-3 list-disc space-y-1.5 pl-4 text-[14px] leading-7 text-[color:var(--tahoe-muted)]">
+                  {item.description.map((desc) => (
+                    <li className="pl-1" key={desc}>
+                      {desc}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <span className="tahoe-status">{item.period}</span>
             </div>
-            <ul className="mt-6 grid gap-3 text-[14px] leading-7 text-[color:var(--tahoe-muted)]">
-              {item.description.map((desc) => (
-                <li className="tahoe-experience-point" key={desc}>
-                  {desc}
-                </li>
-              ))}
-            </ul>
-          </article>
+          </div>
         ))}
       </div>
     </TahoeSection>
@@ -407,10 +383,10 @@ function TahoeSection({
   id: string;
   number: string;
   title: string;
-  children: ReactNode;
+  children: React.ReactNode;
 }) {
   return (
-    <section id={id}>
+    <section id={id} className="scroll-mt-24">
       <div className="tahoe-section-head">
         <div className="flex min-w-0 items-baseline gap-4">
           <span className="text-[13px] font-semibold tracking-normal text-[color:var(--tahoe-faint)]">
@@ -428,18 +404,6 @@ function TahoeSection({
       </div>
       {children}
     </section>
-  );
-}
-
-function TahoeFooter() {
-  return (
-    <footer className="relative z-10 mx-auto max-w-[1080px] px-4 pb-12 sm:px-6">
-      <div className="tahoe-contact-bar flex items-center justify-center px-5 py-4">
-        <span className="text-[12px] font-semibold text-[color:var(--tahoe-faint)]">
-          &copy; 2026 Klay&apos;s Studio
-        </span>
-      </div>
-    </footer>
   );
 }
 
