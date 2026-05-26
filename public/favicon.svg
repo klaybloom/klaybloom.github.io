@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00C6FF" />
+      <stop offset="50%" stop-color="#0072FF" />
+      <stop offset="100%" stop-color="#7000FF" />
+    </linearGradient>
+    
+    <!-- Letter K Gradient -->
+    <linearGradient id="k-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#E2E8F0" />
+    </linearGradient>
+    
+    <!-- Specular Light Rim Gradient -->
+    <linearGradient id="rim-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.1" />
+    </linearGradient>
+
+    <!-- Drop Shadow for macOS feel -->
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#0F172A" flood-opacity="0.3" />
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- App Icon Base (Rounded Square like macOS Big Sur / Tahoe) -->
+  <rect x="32" y="32" width="448" height="448" rx="108" fill="url(#bg-grad)" filter="url(#shadow)" />
+
+  <!-- Specular Light Rim (Top border highlight) -->
+  <rect x="33" y="33" width="446" height="446" rx="107" fill="none" stroke="url(#rim-grad)" stroke-width="3" />
+  
+  <!-- Subtle inner dark line for depth -->
+  <rect x="34" y="34" width="444" height="444" rx="106" fill="none" stroke="#000000" stroke-opacity="0.08" stroke-width="1.5" />
+
+  <!-- Center Brand Mark Letter K (Modern Geometric) -->
+  <path d="M196 140 C196 128.954 204.954 120 216 120 L236 120 C247.046 120 256 128.954 256 140 L256 372 C256 383.046 247.046 392 236 392 L216 392 C204.954 392 196 383.046 196 372 Z" fill="url(#k-grad)" opacity="0.95" />
+  <path d="M246.5 240.2 L320.1 146.4 C327.3 137.2 338.4 132 350.1 132 L369.2 132 C386.1 132 393.9 153.2 380.8 163.9 L297.2 232.1 C290.1 237.9 290.1 248.8 297.2 254.6 L382.0 323.7 C395.0 334.3 387.4 356 370.4 356 L350.1 356 C338.5 356 327.5 350.7 320.3 341.4 L246.5 247.1 Z" fill="url(#k-grad)" opacity="0.95" />
+
+  <!-- Glass reflection light sweep -->
+  <path d="M32 140 C32 108 58 32 140 32 L372 32 C454 32 480 108 480 140 C480 180 32 240 32 140 Z" fill="#FFFFFF" opacity="0.12" />
+</svg>

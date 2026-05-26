@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -31,9 +32,25 @@ export async function generateMetadata({
     return {};
   }
 
+  const fullUrl = `${siteConfig.url}/projects/${slug}/`;
+  const imageUrl = project.cover ? `${siteConfig.url}${project.cover}` : `${siteConfig.url}/images/default-cover.jpg`;
+
   return {
     title: `${project.title} | ${siteConfig.title}`,
-    description: project.description
+    description: project.description,
+    openGraph: {
+      title: project.title,
+      description: project.description,
+      type: "website",
+      url: fullUrl,
+      images: [{ url: imageUrl, alt: project.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.title,
+      description: project.description,
+      images: [imageUrl],
+    }
   };
 }
 
@@ -86,9 +103,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
           {project.cover ? (
             <div className="tahoe-system-card mb-10 overflow-hidden !p-0">
-              <img
+              <Image
                 src={project.cover}
                 alt={project.title}
+                width={1200}
+                height={675}
+                priority={true}
                 className="aspect-[16/9] w-full object-cover"
               />
             </div>

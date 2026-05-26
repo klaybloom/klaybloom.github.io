@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { TOCScrollActive } from "@/components/blog/TOCScrollActive";
 import { siteConfig } from "@/content/site";
 import { markdownToHtml } from "@/lib/markdown";
 import {
@@ -32,9 +34,26 @@ export async function generateMetadata({
     return {};
   }
 
+  const fullUrl = `${siteConfig.url}/blog/${slug}/`;
+  const imageUrl = post.cover ? `${siteConfig.url}${post.cover}` : `${siteConfig.url}/images/default-cover.jpg`;
+
   return {
     title: `${post.title} | ${siteConfig.title}`,
-    description: post.description
+    description: post.description,
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      type: "article",
+      url: fullUrl,
+      images: [{ url: imageUrl, alt: post.title }],
+      publishedTime: post.date,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+      images: [imageUrl],
+    }
   };
 }
 
@@ -57,6 +76,7 @@ export default async function PostPage({ params }: PostPageProps) {
     <main data-tahoe-preview className="tahoe-shell min-h-screen overflow-x-hidden">
       <div className="tahoe-bg-fixed" aria-hidden />
       <Header name={siteConfig.name} nav={siteConfig.nav} />
+      <TOCScrollActive />
 
       {headings.length ? (
         <aside className="group fixed left-4 top-32 z-40 hidden lg:block">
@@ -133,9 +153,12 @@ export default async function PostPage({ params }: PostPageProps) {
 
           {post.cover ? (
             <div className="tahoe-system-card group relative mb-12 overflow-hidden !p-0">
-              <img
+              <Image
                 src={post.cover}
                 alt={post.title}
+                width={1200}
+                height={630}
+                priority={true}
                 className="w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] aspect-[16/9] md:aspect-[21/9]"
               />
             </div>
