@@ -9,6 +9,7 @@ import {
   type HomeSection,
   type HomeSectionType,
 } from "@/lib/home-sections";
+import { TahoeModeToggle } from "@/components/layout/TahoeModeToggle";
 
 // ==========================================
 // Types
@@ -2907,6 +2908,7 @@ export default function AdminDashboard() {
             <Link href="/" className="text-[10px] font-semibold hover:underline" style={{ color: "var(--tahoe-accent)" }}>
               🏠 返回网站主页
             </Link>
+            <TahoeModeToggle iconOnly />
             {!isLocal && (
               <button
                 onClick={handleSignOut}
