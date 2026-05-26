@@ -181,6 +181,8 @@ export default function AdminDashboard() {
   const [selectedProjIndex, setSelectedProjIndex] = useState<number | null>(null);
   const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
   const [pendingDeletePost, setPendingDeletePost] = useState<{ post: PostItem; index: number | null } | null>(null);
+  const [pendingDeleteSkill, setPendingDeleteSkill] = useState<{ index: number; groupName: string } | null>(null);
+  const [pendingConfirm, setPendingConfirm] = useState<{ title: string; message: string; onConfirm: () => void } | null>(null);
   const [deleteConfirmSlug, setDeleteConfirmSlug] = useState("");
   
   // Image Uploading state
@@ -1329,17 +1331,22 @@ export default function AdminDashboard() {
     }
 
     const handleDelete = (index: number) => {
-      if (!window.confirm("确定要删除这条工作经历吗？")) return;
-      const updated = experiences.filter((_, i) => i !== index);
-      setExperiences(updated);
-      // Save changes immediately
-      const payload = { experience: updated };
-      if (isLocal) {
-        saveLocalData("experience", payload);
-      } else {
-        const contentStr = JSON.stringify(payload, null, 2);
-        saveOnlineFile("content/experience.json", contentStr, "experience");
-      }
+      setPendingConfirm({
+        title: "删除工作经历",
+        message: "确定要删除这条工作经历吗？",
+        onConfirm: () => {
+          setPendingConfirm(null);
+          const updated = experiences.filter((_, i) => i !== index);
+          setExperiences(updated);
+          const payload = { experience: updated };
+          if (isLocal) {
+            saveLocalData("experience", payload);
+          } else {
+            const contentStr = JSON.stringify(payload, null, 2);
+            saveOnlineFile("content/experience.json", contentStr, "experience");
+          }
+        },
+      });
     };
 
     const handleAddNew = () => {
@@ -1718,17 +1725,22 @@ export default function AdminDashboard() {
     }
 
     const handleDelete = (index: number) => {
-      if (!window.confirm("确定要删除此项目吗？")) return;
-      const updated = projects.filter((_, i) => i !== index);
-      setProjects(updated);
-      
-      const payload = { projects: updated };
-      if (isLocal) {
-        saveLocalData("projects", payload);
-      } else {
-        const contentStr = JSON.stringify(payload, null, 2);
-        saveOnlineFile("content/projects.json", contentStr, "projects");
-      }
+      setPendingConfirm({
+        title: "删除项目",
+        message: "确定要删除此项目吗？",
+        onConfirm: () => {
+          setPendingConfirm(null);
+          const updated = projects.filter((_, i) => i !== index);
+          setProjects(updated);
+          const payload = { projects: updated };
+          if (isLocal) {
+            saveLocalData("projects", payload);
+          } else {
+            const contentStr = JSON.stringify(payload, null, 2);
+            saveOnlineFile("content/projects.json", contentStr, "projects");
+          }
+        },
+      });
     };
 
     const handleAddNew = () => {
@@ -1883,8 +1895,13 @@ export default function AdminDashboard() {
     };
 
     const handleRemoveGroup = (idx: number) => {
-      if (!window.confirm("确定删除此技能分组吗？")) return;
-      setSkills(skills.filter((_, i) => i !== idx));
+      setPendingDeleteSkill({ index: idx, groupName: skills[idx].group });
+    };
+
+    const confirmSkillDelete = () => {
+      if (pendingDeleteSkill === null) return;
+      setSkills(skills.filter((_, i) => i !== pendingDeleteSkill.index));
+      setPendingDeleteSkill(null);
     };
 
     const handleGroupNameChange = (idx: number, name: string) => {
@@ -2006,8 +2023,14 @@ export default function AdminDashboard() {
         setAlert({ type: "info", msg: "预设块不可删除，可改成「关闭」隐藏它" });
         return;
       }
-      if (!window.confirm("确定要删除这个自由块吗？")) return;
-      setHomeSections(homeSections.filter((_, i) => i !== idx));
+      setPendingConfirm({
+        title: "删除自由块",
+        message: "确定要删除这个自由块吗？",
+        onConfirm: () => {
+          setPendingConfirm(null);
+          setHomeSections(homeSections.filter((_, i) => i !== idx));
+        },
+      });
     };
 
     const enabledTypes = new Set(homeSections.map((s) => s.type));
@@ -2801,6 +2824,65 @@ export default function AdminDashboard() {
         </div>
       )}
 
+      {pendingDeleteSkill && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-4">
+          <div className="w-full max-w-md tahoe-system-card !p-6">
+            <div className="mb-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "var(--tahoe-accent)" }}>删除技能分组</p>
+              <h2 className="mt-2 text-xl font-bold" style={{ color: "var(--tahoe-text)" }}>
+                {pendingDeleteSkill.groupName}
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--tahoe-muted)" }}>
+                删除后将移除该分组及其包含的所有技能标签。是否确认删除？
+              </p>
+            </div>
+
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                onClick={() => setPendingDeleteSkill(null)}
+                className="rounded-lg px-4 py-2 text-sm font-medium transition"
+                style={{ border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-muted)" }}
+              >
+                取消
+              </button>
+              <button
+                onClick={confirmSkillDelete}
+                className="tahoe-button tahoe-button-primary px-4 py-2 text-sm font-semibold"
+                style={{ background: "linear-gradient(180deg, #ef4444, #dc2626)" }}
+              >
+                确认删除
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {pendingConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-4">
+          <div className="w-full max-w-md tahoe-system-card !p-6">
+            <div className="mb-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "var(--tahoe-accent)" }}>{pendingConfirm.title}</p>
+              <p className="mt-3 text-sm leading-relaxed whitespace-pre-wrap" style={{ color: "var(--tahoe-muted)" }}>{pendingConfirm.message}</p>
+            </div>
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                onClick={() => setPendingConfirm(null)}
+                className="rounded-lg px-4 py-2 text-sm font-medium transition"
+                style={{ border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-muted)" }}
+              >
+                取消
+              </button>
+              <button
+                onClick={pendingConfirm.onConfirm}
+                className="tahoe-button tahoe-button-primary px-4 py-2 text-sm font-semibold"
+              >
+                确认删除
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {pendingDeletePost && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-4">
           <div className="w-full max-w-md tahoe-system-card !p-6" style={{ borderColor: "rgba(239, 68, 68, 0.3)" }}>
@@ -2849,8 +2931,17 @@ export default function AdminDashboard() {
       )}
 
       {/* Sidebar navigation */}
-      <aside className="tahoe-system-card w-64 flex flex-col justify-between select-none !rounded-none !border-r !border-l-0 !border-t-0 !border-b-0" style={{ borderColor: "var(--tahoe-card-border)", background: "var(--tahoe-card)" }}>
-        <div className="p-6 space-y-6">
+      <aside
+        className="sticky top-0 h-screen w-60 flex flex-col select-none shrink-0"
+        style={{
+          background: "var(--tahoe-card)",
+          borderRight: "1px solid var(--tahoe-card-border)",
+          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6), 0 16px 44px -26px var(--tahoe-shadow)",
+          backdropFilter: "blur(28px) saturate(180%)",
+          WebkitBackdropFilter: "blur(28px) saturate(180%)",
+        }}
+      >
+        <div className="p-6 space-y-6 flex-1 overflow-y-auto">
           <div className="space-y-1">
             <h1 className="text-lg font-bold flex items-center gap-2" style={{ color: "var(--tahoe-text)" }}>
               <span className="tahoe-brand-mark">K</span> Studio Admin
@@ -2884,7 +2975,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Sidebar Footer with environment info */}
-        <div className="p-4 space-y-3" style={{ borderTop: "1px solid var(--tahoe-card-border)", background: "var(--tahoe-glass)" }}>
+        <div className="p-4 space-y-3 shrink-0" style={{ borderTop: "1px solid var(--tahoe-card-border)", background: "var(--tahoe-glass)" }}>
           <div className="space-y-1">
             <div className="flex items-center gap-1.5 text-xs">
               <span className={`w-2.5 h-2.5 rounded-full ${isLocal ? "bg-green-500" : "bg-blue-500"}`}></span>
@@ -2892,19 +2983,9 @@ export default function AdminDashboard() {
                 {isLocal ? "本地开发模式" : "GitHub 线上模式"}
               </span>
             </div>
-            {isLocal ? (
-              <p className="text-[9px] leading-normal" style={{ color: "var(--tahoe-faint)" }}>
-                📝 保存将立即更新磁盘 JSON/Markdown 文件。<br />
-                📢 提示：推送到线上需要运行 `git push`！
-              </p>
-            ) : (
-              <p className="text-[9px] leading-normal" style={{ color: "var(--tahoe-faint)" }}>
-                🎯 提交修改将自动 Push 并触发 GitHub Actions，数分钟后主页刷新即更新。
-              </p>
-            )}
           </div>
 
-          <div className="flex justify-between items-center gap-2 pt-1" style={{ borderTop: "1px dashed var(--tahoe-card-border)" }}>
+          <div className="flex items-center justify-between gap-2 pt-1" style={{ borderTop: "1px dashed var(--tahoe-card-border)" }}>
             <Link href="/" className="text-[10px] font-semibold hover:underline" style={{ color: "var(--tahoe-accent)" }}>
               🏠 返回网站主页
             </Link>
@@ -2922,7 +3003,7 @@ export default function AdminDashboard() {
       </aside>
 
       {/* Main Workspace Area */}
-      <main className="flex-1 p-10 overflow-y-auto">
+      <main className="flex-1 h-screen overflow-y-auto p-10">
         {isLoading ? (
           <div className="h-full w-full flex flex-col justify-center items-center space-y-3">
             <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: "var(--tahoe-accent)", borderTopColor: "transparent" }}></div>
