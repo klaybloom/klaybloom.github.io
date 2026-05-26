@@ -39,6 +39,15 @@
         "title": "精选项目",
         "count": 1
       }
+    },
+    {
+      "id": "custom-1779805151481",
+      "type": "custom",
+      "enabled": true,
+      "params": {
+        "title": "测试",
+        "body": "## 你好"
+      }
     }
   ]
 }
