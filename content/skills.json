@@ -1,20 +1,47 @@
 {
   "skills": [
     {
-      "group": "Backend",
-      "items": ["Java", "Spring Boot", "Spring Cloud", "MyBatis Plus", "JPA", "OAuth2"]
+      "group": "Java 后端",
+      "items": [
+        "Java",
+        "Spring Boot",
+        "Spring Cloud",
+        "MyBatis Plus",
+        "JPA",
+        "OAuth2"
+      ]
     },
     {
-      "group": "Microservices",
-      "items": ["Nacos", "Gateway", "Redis", "RabbitMQ", "Docker", "Linux", "Nginx"]
+      "group": " SpringCloud",
+      "items": [
+        "Nacos",
+        "Gateway",
+        "Redis",
+        "RabbitMQ",
+        "Docker",
+        "Linux",
+        "Nginx"
+      ]
     },
     {
-      "group": "Database",
-      "items": ["MySQL", "SQL Optimization", "Transaction", "Index", "ORM Mapping"]
+      "group": " 数据库",
+      "items": [
+        "MySQL",
+        "SQL Optimization",
+        "Transaction",
+        "Index",
+        "ORM Mapping"
+      ]
     },
     {
-      "group": "AI Workflow",
-      "items": ["Dify", "n8n", "Coze", "AI Agent", "Automation"]
+      "group": " AI-Agent",
+      "items": [
+        "Dify",
+        "n8n",
+        "Coze",
+        "AI Agent",
+        "Automation"
+      ]
     }
   ]
 }
