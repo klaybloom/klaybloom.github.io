@@ -10,25 +10,27 @@
 
 ## 项目能力
 
-- 首页：展示个人简介、技能、精选项目、最新文章、经历和自定义 Markdown 区块。
-- 博客：读取 `content/posts/*.md`，支持 Front Matter、GFM、代码高亮、标题锚点、标签筛选和文章详情页。
-- 项目页：读取 `content/projects.json`，支持项目列表、技术栈筛选和详情页。
-- 后台管理：访问 `/admin` 可编辑 profile、experience、projects、skills、posts 和首页区块。
-- 本地内容保存：开发环境下后台通过 `scripts/dev-server.mjs` 写入本地文件。
-- 线上内容保存：部署后的后台可用 GitHub PAT 调 GitHub Contents API，把修改提交回仓库。
-- 静态部署：生产构建使用 `output: "export"`，GitHub Actions 将 `out/` 发布到 GitHub Pages。
-- 站点发现：自动生成 `sitemap.xml`、`robots.txt` 和 `rss.xml`。
+- **首页**：基于最新 Tahoe 毛玻璃扁平流体设计，展示个人简介、技能、精选项目、最新文章、经历和自定义 Markdown 区块。
+- **全局高级交互动效**：挂载原生微交互动效引擎，支持自定义跟随光标、点击粒子喷射水波纹、磁性 Hover 悬浮偏移动画、视口滚动渐显以及导航栏随滚动动态加深阴影等极富品质感的视觉特效。
+- **博客**：读取 `content/posts/*.md`，支持 Front Matter、GFM、代码高亮、标题锚点、标签筛选和文章详情页。
+- **项目页**：读取 `content/projects.json`，支持项目列表、技术栈筛选和详情页。
+- **后台管理**：访问 `/admin` 可编辑 profile、experience、projects、skills、posts 和首页区块，支持日夜模式切换。
+- **本地内容保存**：开发环境下后台通过 `scripts/dev-server.mjs` 写入本地文件。
+- **线上内容保存**：部署后的后台可用 GitHub PAT 调 GitHub Contents API，把修改提交回仓库。
+- **静态部署**：生产构建使用 `output: "export"`，GitHub Actions 将 `out/` 发布到 GitHub Pages。
+- **站点发现**：自动生成 `sitemap.xml`、`robots.txt` 和 `rss.xml`。
 
 ## 技术栈
 
 - Next.js App Router
 - React
 - TypeScript
-- Tailwind CSS
+- Tailwind CSS (新版 Tahoe 扁平流体及毛玻璃拟物化设计系统)
 - Markdown + Front Matter
 - `unified` / `remark-gfm` / `rehype-highlight`
 - GitHub Pages
 - GitHub Actions
+- 原生微动效引擎 (`IntersectionObserver` + 磁性物理偏移 + 粒子喷射渲染)
 
 ## 目录结构
 
@@ -45,10 +47,10 @@ app/
   api/admin/*                 # 静态导出占位接口，本地写文件不走这些 route
 
 components/
-  home/                       # 首页区块组件
+  home/                       # 模块化拆分后的首页 Tahoe 区块组件 (Hero, Skills, Projects, Posts, Experience, Section, CustomSection)
   blog/                       # 博客列表和筛选组件
   projects/                   # 项目列表和筛选组件
-  layout/                     # Header / Footer
+  layout/                     # Header / Footer 导航及页脚
 
 content/
   profile.json                # 个人信息

@@ -1890,6 +1890,12 @@ export default function AdminDashboard() {
     );
   };
 
+  const confirmSkillDelete = () => {
+    if (pendingDeleteSkill === null) return;
+    setSkills(skills.filter((_, i) => i !== pendingDeleteSkill.index));
+    setPendingDeleteSkill(null);
+  };
+
   const renderSkillsTab = () => {
     const handleAddGroup = () => {
       setSkills([...skills, { group: "新技能分组", items: ["HTML", "CSS"] }]);
@@ -1897,12 +1903,6 @@ export default function AdminDashboard() {
 
     const handleRemoveGroup = (idx: number) => {
       setPendingDeleteSkill({ index: idx, groupName: skills[idx].group });
-    };
-
-    const confirmSkillDelete = () => {
-      if (pendingDeleteSkill === null) return;
-      setSkills(skills.filter((_, i) => i !== pendingDeleteSkill.index));
-      setPendingDeleteSkill(null);
     };
 
     const handleGroupNameChange = (idx: number, name: string) => {
