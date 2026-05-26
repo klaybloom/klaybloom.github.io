@@ -3,26 +3,30 @@ import { Section } from "./Section";
 
 type SkillsProps = {
   skills: SkillGroup[];
-  title?: string;
-  number?: string;
+  title: string;
+  number: string;
 };
 
-export function Skills({ skills, title = "技术能力", number = "01" }: SkillsProps) {
+export function Skills({ skills, title, number }: SkillsProps) {
   return (
     <Section id="skills" number={number} title={title}>
-      <div className="grid gap-px overflow-hidden rounded-xl border border-notion-line bg-notion-line sm:grid-cols-2">
-        {skills.map((skill, index) => (
-          <div
-            key={skill.group}
-            className={`bg-notion-paper p-6 transition-colors hover:bg-notion-hover animate-on-scroll stagger-${(index % 4) + 1}`}
-          >
-            <div className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[0.15em] text-notion-accent">
-              {skill.group}
+      <div className="tahoe-skill-grid">
+        {skills.map((skill) => (
+          <article className="tahoe-skill-card" key={skill.group}>
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-[18px] font-semibold text-[color:var(--tahoe-text)]">
+                {skill.group}
+              </h3>
+              <span className="tahoe-status">{skill.items.length}</span>
             </div>
-            <div className="text-[14px] leading-relaxed text-notion-muted">
-              {skill.items.join(", ")}
+            <div className="mt-5 flex flex-wrap gap-2">
+              {skill.items.map((item) => (
+                <span className="tahoe-small-tag" key={item}>
+                  {item}
+                </span>
+              ))}
             </div>
-          </div>
+          </article>
         ))}
       </div>
     </Section>

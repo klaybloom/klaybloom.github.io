@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/content/site";
+import { Interactions } from "@/components/Interactions";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -26,7 +27,10 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body>{children}</body>
+      <body>
+        <Interactions />
+        {children}
+      </body>
     </html>
   );
 }

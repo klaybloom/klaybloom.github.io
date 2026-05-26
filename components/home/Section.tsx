@@ -1,26 +1,39 @@
+import Link from "next/link";
+import type { ReactNode } from "react";
+
+type SectionProps = {
+  actionHref?: string;
+  actionLabel?: string;
+  id: string;
+  number: string;
+  title: string;
+  children: ReactNode;
+};
+
 export function Section({
+  actionHref,
+  actionLabel,
   id,
   number,
   title,
-  children
-}: Readonly<{
-  id: string;
-  number?: string;
-  title: string;
-  children: React.ReactNode;
-}>) {
+  children,
+}: SectionProps) {
   return (
-    <section id={id} className="scroll-mt-24">
-      <div className="mb-8 flex items-baseline gap-4 border-b border-notion-line pb-3">
-        {number ? (
-          <span className="font-mono text-[13px] font-medium tracking-wide text-notion-faint">
+    <section id={id}>
+      <div className="tahoe-section-head">
+        <div className="flex min-w-0 items-baseline gap-4">
+          <span className="text-[13px] font-semibold tracking-normal text-[color:var(--tahoe-faint)]">
             {number}
           </span>
+          <h2 className="text-[1.5rem] font-semibold text-[color:var(--tahoe-text)]">
+            {title}
+          </h2>
+        </div>
+        {actionHref && actionLabel ? (
+          <Link href={actionHref} className="tahoe-section-action">
+            {actionLabel}
+          </Link>
         ) : null}
-        <h2 className="font-serif text-[1.5rem] font-semibold text-notion-text">
-          {title}
-        </h2>
-        <span className="h-px flex-1 bg-notion-line" />
       </div>
       {children}
     </section>
