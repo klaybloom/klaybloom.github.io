@@ -2812,7 +2812,19 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div data-tahoe-preview className="min-h-screen font-sans" style={{ color: "var(--tahoe-text)", background: "var(--tahoe-bg)" }}>
+    <div data-tahoe-preview className="min-h-screen font-sans relative" style={{ color: "var(--tahoe-text)", background: "var(--tahoe-bg)" }}>
+      {/* Subtle gradient background for glass blur to work against */}
+      <div
+        className="fixed inset-0 pointer-events-none"
+        aria-hidden
+        style={{
+          background: `
+            radial-gradient(circle at 12% 15%, rgba(255,183,197,0.18), transparent 40%),
+            radial-gradient(circle at 88% 12%, rgba(160,200,255,0.2), transparent 42%),
+            radial-gradient(circle at 75% 85%, rgba(191,145,255,0.14), transparent 45%),
+            radial-gradient(circle at 20% 90%, rgba(165,245,215,0.16), transparent 45%)`,
+        }}
+      />
       {/* Toast Alert */}
       {alert && (
         <div className={`fixed bottom-5 right-5 px-5 py-3 rounded-xl border shadow-lg z-50 flex items-center gap-3 text-sm transition-all duration-300 animate-slide-up ${
