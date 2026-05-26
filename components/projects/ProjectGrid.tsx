@@ -8,16 +8,16 @@ type ProjectGridProps = {
 export function ProjectGrid({ projects }: ProjectGridProps) {
   if (projects.length === 0) {
     return (
-      <div className="border-y border-notion-line py-10 text-center text-[15px] text-notion-muted">
+      <div className="tahoe-system-card py-12 text-center text-[15px] text-[color:var(--tahoe-muted)]">
         没有找到匹配的项目。
       </div>
     );
   }
 
   return (
-    <div className="divide-y divide-notion-line border-y border-notion-line">
-      {projects.map((project) => (
-        <ProjectCard key={project.slug} project={project} />
+    <div className="tahoe-project-grid">
+      {projects.map((project, index) => (
+        <ProjectCard key={project.slug} project={project} index={index} />
       ))}
     </div>
   );

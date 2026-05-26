@@ -48,114 +48,128 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const statusDescription = getProjectStatusDescription(project.status);
 
   return (
-    <main className="min-h-screen bg-notion-bg text-notion-text">
+    <main data-tahoe-preview className="tahoe-shell min-h-screen overflow-x-hidden">
+      <div className="tahoe-bg-fixed" aria-hidden />
       <Header name={siteConfig.name} nav={siteConfig.nav} />
-      <article className="mx-auto max-w-[760px] px-5 pb-20 pt-16">
-        <Link
-          className="mb-10 inline-flex rounded-full px-3 py-1 text-[14px] font-medium text-notion-accent transition hover:bg-notion-accentSoft"
-          href="/projects"
-        >
-          ← 返回项目列表
-        </Link>
 
-        <header className="mb-10">
-          <div className="mb-4 flex flex-wrap gap-2 text-[12px] text-notion-faint">
-            <span className="rounded-full border border-notion-line bg-white/72 px-2.5 py-1">
-              {getProjectStatusLabel(project.status)}
-            </span>
-            <span className="rounded-full border border-notion-line bg-white/72 px-2.5 py-1">
-              创建于 {formatProjectDate(project.date)}
-            </span>
-            <span className="rounded-full border border-notion-line bg-white/72 px-2.5 py-1">
-              更新于 {formatProjectDate(project.updated)}
-            </span>
-            <span className="rounded-full border border-notion-line bg-white/72 px-2.5 py-1">
-              {project.category}
-            </span>
-          </div>
-          <h1 className="font-serif text-5xl font-semibold leading-tight text-notion-text sm:text-6xl">
-            {project.title}
-          </h1>
-          <p className="mt-5 text-[17px] leading-relaxedBody text-notion-muted">
-            {project.description}
-          </p>
-        </header>
+      <div className="relative z-10 mx-auto max-w-[760px] px-4 pb-20 pt-28 sm:px-6">
+        <article>
+          <Link
+            className="tahoe-link-button mb-10 inline-flex"
+            href="/projects"
+          >
+            ← 返回项目列表
+          </Link>
 
-        {project.cover ? (
-          <div className="mb-10 overflow-hidden rounded-2xl border border-notion-line bg-notion-paper shadow-sm">
-            <img
-              src={project.cover}
-              alt={project.title}
-              className="aspect-[16/9] w-full object-cover"
-            />
-          </div>
-        ) : null}
-
-        <div className="space-y-10 rounded-[24px] border border-notion-line bg-notion-paper/92 px-5 py-8 sm:px-8">
-          <section>
-            <h2 className="mb-4 border-l-4 border-notion-accent pl-3 text-[15px] font-semibold">
-              项目说明
-            </h2>
-            <p className="text-[15px] leading-relaxedBody text-notion-muted">
-              {project.longDescription}
-            </p>
-          </section>
-
-          <section>
-            <h2 className="mb-4 border-l-4 border-notion-accent pl-3 text-[15px] font-semibold">
-              当前状态
-            </h2>
-            <p className="text-[15px] leading-relaxedBody text-notion-muted">
-              {statusDescription}
-            </p>
-          </section>
-
-          <section>
-            <h2 className="mb-4 border-l-4 border-notion-accent pl-3 text-[15px] font-semibold">
-              技术栈
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {project.stack.map((item) => (
-                <span
-                  className="rounded-full bg-notion-hover px-3 py-1 text-[13px] text-notion-muted"
-                  key={item}
-                >
-                  {item}
-                </span>
-              ))}
+          <header className="mb-10">
+            <div className="mb-4 flex flex-wrap gap-2 text-[12px]">
+              <span className="tahoe-status">
+                {getProjectStatusLabel(project.status)}
+              </span>
+              <span className="tahoe-small-tag">
+                创建于 {formatProjectDate(project.date)}
+              </span>
+              <span className="tahoe-small-tag">
+                更新于 {formatProjectDate(project.updated)}
+              </span>
+              <span className="tahoe-small-tag">
+                {project.category}
+              </span>
             </div>
-          </section>
+            <h1 className="text-[clamp(2rem,5vw,3rem)] font-semibold leading-tight text-[color:var(--tahoe-text)]">
+              {project.title}
+            </h1>
+            <p className="mt-5 text-[17px] leading-8 text-[color:var(--tahoe-muted)]">
+              {project.description}
+            </p>
+          </header>
 
-          <section>
-            <h2 className="mb-4 border-l-4 border-notion-accent pl-3 text-[15px] font-semibold">
-              链接
-            </h2>
-            <div className="flex flex-wrap gap-2 text-[14px]">
-              <a
-                className="rounded-full border border-notion-accent bg-notion-accent px-4 py-2 font-medium text-white transition hover:bg-[#1f735d]"
-                href={project.github}
+          {project.cover ? (
+            <div className="tahoe-system-card mb-10 overflow-hidden !p-0">
+              <img
+                src={project.cover}
+                alt={project.title}
+                className="aspect-[16/9] w-full object-cover"
+              />
+            </div>
+          ) : null}
+
+          <div className="tahoe-experience-card space-y-10">
+            <section>
+              <h2
+                className="mb-4 border-l-4 pl-3 text-[15px] font-semibold"
+                style={{ borderColor: "var(--tahoe-accent)", color: "var(--tahoe-text)" }}
               >
-                GitHub
-              </a>
-              {project.demo.startsWith("/") ? (
-                <Link
-                  className="rounded-full border border-notion-line bg-white/76 px-4 py-2 transition hover:bg-notion-hover"
-                  href={project.demo}
-                >
-                  在线预览
-                </Link>
-              ) : (
+                项目说明
+              </h2>
+              <p className="text-[15px] leading-8 text-[color:var(--tahoe-muted)]">
+                {project.longDescription}
+              </p>
+            </section>
+
+            <section>
+              <h2
+                className="mb-4 border-l-4 pl-3 text-[15px] font-semibold"
+                style={{ borderColor: "var(--tahoe-accent)", color: "var(--tahoe-text)" }}
+              >
+                当前状态
+              </h2>
+              <p className="text-[15px] leading-8 text-[color:var(--tahoe-muted)]">
+                {statusDescription}
+              </p>
+            </section>
+
+            <section>
+              <h2
+                className="mb-4 border-l-4 pl-3 text-[15px] font-semibold"
+                style={{ borderColor: "var(--tahoe-accent)", color: "var(--tahoe-text)" }}
+              >
+                技术栈
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {project.stack.map((item) => (
+                  <span className="tahoe-small-tag" key={item}>
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </section>
+
+            <section>
+              <h2
+                className="mb-4 border-l-4 pl-3 text-[15px] font-semibold"
+                style={{ borderColor: "var(--tahoe-accent)", color: "var(--tahoe-text)" }}
+              >
+                链接
+              </h2>
+              <div className="flex flex-wrap gap-3 text-[14px]">
                 <a
-                  className="rounded-full border border-notion-line bg-white/76 px-4 py-2 transition hover:bg-notion-hover"
-                  href={project.demo}
+                  className="tahoe-button tahoe-button-primary"
+                  href={project.github}
                 >
-                  在线预览
+                  GitHub
                 </a>
-              )}
-            </div>
-          </section>
-        </div>
-      </article>
+                {project.demo?.startsWith("/") ? (
+                  <Link
+                    className="tahoe-button tahoe-button-glass"
+                    href={project.demo}
+                  >
+                    在线预览
+                  </Link>
+                ) : project.demo ? (
+                  <a
+                    className="tahoe-button tahoe-button-glass"
+                    href={project.demo}
+                  >
+                    在线预览
+                  </a>
+                ) : null}
+              </div>
+            </section>
+          </div>
+        </article>
+      </div>
+
       <Footer nav={siteConfig.nav} />
     </main>
   );

@@ -4,61 +4,42 @@ import { formatProjectDate, getProjectStatusLabel } from "@/lib/projects";
 
 type ProjectCardProps = {
   project: Project;
+  index: number;
 };
 
-export function ProjectCard({ project }: ProjectCardProps) {
-  return (
-    <article className="border-b border-notion-line py-6 last:border-b-0">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="min-w-0">
-          <div className="mb-3 flex flex-wrap items-center gap-2 text-[12px] text-notion-faint">
-            <span className="rounded-full border border-notion-line bg-white/72 px-2.5 py-1">
-              {getProjectStatusLabel(project.status)}
-            </span>
-            <span>{formatProjectDate(project.date)}</span>
-            <span>{project.category}</span>
-          </div>
-          <h2 className="text-[19px] font-semibold text-notion-text">
-            <Link href={`/projects/${project.slug}`}>{project.title}</Link>
-          </h2>
-          <p className="mt-2 text-[15px] leading-relaxedBody text-notion-muted">
-            {project.description}
-          </p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {project.stack.map((item) => (
-              <span
-                className="rounded-full bg-notion-hover px-2.5 py-1 text-[12px] text-notion-muted"
-                key={item}
-              >
-                {item}
-              </span>
-            ))}
-          </div>
+export function ProjectCard({ project, index }: ProjectCardProps) {
+  const card = (
+    <article className="tahoe-project-card h-full">
+      <div className={`tahoe-project-art tahoe-project-art-${(index % 4) + 1}`} />
+      <div className="p-5">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-[12px] text-[color:var(--tahoe-faint)]">
+          <span className="tahoe-status">{getProjectStatusLabel(project.status)}</span>
+          <span>{formatProjectDate(project.date)}</span>
         </div>
-        <div className="flex shrink-0 flex-wrap gap-2 text-[14px]">
-          <a
-            className="rounded-full px-3 py-1 font-medium text-notion-accent transition hover:bg-notion-accentSoft"
-            href={project.github}
-          >
-            GitHub
-          </a>
-          {project.demo.startsWith("/") ? (
-            <Link
-              className="rounded-full px-3 py-1 font-medium text-notion-accent transition hover:bg-notion-accentSoft"
-              href={project.demo}
-            >
-              Preview
-            </Link>
-          ) : (
-            <a
-              className="rounded-full px-3 py-1 font-medium text-notion-accent transition hover:bg-notion-accentSoft"
-              href={project.demo}
-            >
-              Preview
-            </a>
-          )}
+        <h3 className="text-[18px] font-semibold leading-snug text-[color:var(--tahoe-text)]">
+          {project.title}
+        </h3>
+        <p className="mt-2 line-clamp-2 text-[14px] leading-6 text-[color:var(--tahoe-muted)]">
+          {project.description}
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {project.stack.slice(0, 4).map((item) => (
+            <span className="tahoe-small-tag" key={item}>
+              {item}
+            </span>
+          ))}
         </div>
       </div>
     </article>
+  );
+
+  return project.demo?.startsWith("/") ? (
+    <Link href={project.demo} key={project.slug}>
+      {card}
+    </Link>
+  ) : (
+    <a href={project.demo || project.github} key={project.slug}>
+      {card}
+    </a>
   );
 }
