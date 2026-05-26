@@ -2,7 +2,7 @@
   "projects": [
     {
       "title": "个人主页",
-      "slug": " klay-studio",
+      "slug": "klay-studio",
       "description": "基于 Markdown 的个人博客系统。",
       "longDescription": "用于沉淀 Java、微服务、AI 工具链相关内容。",
       "stack": [

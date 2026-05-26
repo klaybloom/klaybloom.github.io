@@ -771,7 +771,7 @@ export default function AdminDashboard() {
     const targetList = customProjList || projects;
     const cleaned = targetList.map((project) => ({
       title: project.title,
-      slug: project.slug,
+      slug: project.slug.trim(),
       description: project.description,
       longDescription: project.longDescription,
       stack: project.stack,
