@@ -2812,7 +2812,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div data-tahoe-preview className="tahoe-shell min-h-screen font-sans" style={{ color: "var(--tahoe-text)" }}>
+    <div data-tahoe-preview className="min-h-screen font-sans" style={{ color: "var(--tahoe-text)", background: "var(--tahoe-bg)" }}>
       {/* Toast Alert */}
       {alert && (
         <div className={`fixed bottom-5 right-5 px-5 py-3 rounded-xl border shadow-lg z-50 flex items-center gap-3 text-sm transition-all duration-300 animate-slide-up ${
@@ -2933,7 +2933,7 @@ export default function AdminDashboard() {
 
       {/* Floating Collapsible Sidebar */}
       <aside
-        className="fixed left-4 top-4 bottom-4 z-40 flex flex-col select-none transition-all duration-300"
+        className="fixed left-4 top-4 bottom-4 z-50 flex flex-col select-none transition-all duration-300"
         style={{
           width: sidebarCollapsed ? "48px" : "220px",
           background: "var(--tahoe-glass)",
@@ -3045,10 +3045,8 @@ export default function AdminDashboard() {
       </aside>
 
       {/* Main Workspace Area */}
-      <main
-        className="min-h-screen p-6 transition-all duration-300"
-        style={{ paddingLeft: sidebarCollapsed ? "calc(48px + 2rem)" : "calc(220px + 2rem)" }}
-      >
+      <main className="min-h-screen p-6">
+        <div className="max-w-4xl mx-auto">
         {isLoading ? (
           <div className="h-full w-full flex flex-col justify-center items-center space-y-3">
             <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: "var(--tahoe-accent)", borderTopColor: "transparent" }}></div>
@@ -3064,6 +3062,7 @@ export default function AdminDashboard() {
             {activeTab === "home" && renderHomeSectionsTab()}
           </div>
         )}
+        </div>
       </main>
     </div>
   );
