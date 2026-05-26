@@ -3,7 +3,9 @@
   "nickname": "klay",
   "title": "Java开发工程师,AI Agent重度使用",
   "summary": "没有AI不会干活",
-  "bio": [],
+  "bio": [
+    "hello，everybody"
+  ],
   "links": {
     "github": "https://github.com/klaybloom",
     "blog": "/blog",
