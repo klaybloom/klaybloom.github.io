@@ -2961,12 +2961,12 @@ export default function AdminDashboard() {
               <button
                 key={tab.key}
                 onClick={() => { setActiveTab(tab.key as typeof activeTab); setSelectedPostIndex(null); setSelectedProjIndex(null); setSelectedExpIndex(null); }}
-                className={`w-full text-left px-3 py-2 rounded-lg font-medium text-sm flex items-center gap-2.5 transition ${
+                className="w-full text-left px-3 py-2 rounded-lg font-medium text-sm flex items-center gap-2.5"
+                style={
                   activeTab === tab.key
-                    ? "tahoe-segment is-active !rounded-lg"
-                    : ""
-                }`}
-                style={activeTab !== tab.key ? { color: "var(--tahoe-muted)", background: "transparent" } : undefined}
+                    ? { color: "#fff", background: "var(--tahoe-accent)", fontWeight: 600 }
+                    : { color: "var(--tahoe-muted)", background: "transparent" }
+                }
               >
                 <span>{tab.icon}</span> {tab.label}
               </button>
@@ -2974,30 +2974,32 @@ export default function AdminDashboard() {
           </nav>
         </div>
 
-        {/* Sidebar Footer with environment info */}
+        {/* Sidebar Footer */}
         <div className="p-4 space-y-3 shrink-0" style={{ borderTop: "1px solid var(--tahoe-card-border)", background: "var(--tahoe-glass)" }}>
-          <div className="space-y-1">
-            <div className="flex items-center gap-1.5 text-xs">
-              <span className={`w-2.5 h-2.5 rounded-full ${isLocal ? "bg-green-500" : "bg-blue-500"}`}></span>
-              <span className="font-semibold" style={{ color: "var(--tahoe-text)" }}>
-                {isLocal ? "本地开发模式" : "GitHub 线上模式"}
-              </span>
-            </div>
+          <div className="flex items-center gap-2">
+            <span className={`w-2 h-2 rounded-full shrink-0 ${isLocal ? "bg-green-500" : "bg-blue-500"}`} />
+            <span className="text-[11px] font-semibold" style={{ color: "var(--tahoe-text)" }}>
+              {isLocal ? "本地开发模式" : "GitHub 线上模式"}
+            </span>
           </div>
 
-          <div className="flex items-center justify-between gap-2 pt-1" style={{ borderTop: "1px dashed var(--tahoe-card-border)" }}>
-            <Link href="/" className="text-[10px] font-semibold hover:underline" style={{ color: "var(--tahoe-accent)" }}>
-              🏠 返回网站主页
+          <div className="flex items-center justify-between gap-2 pt-2" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
+            <Link href="/" className="text-[11px] font-semibold hover:underline" style={{ color: "var(--tahoe-accent)" }}>
+              🏠 返回主页
             </Link>
-            <TahoeModeToggle iconOnly />
-            {!isLocal && (
-              <button
-                onClick={handleSignOut}
-                className="text-[10px] text-red-500 font-semibold hover:underline"
-              >
-                🔒 退出登录
-              </button>
-            )}
+            <div className="flex items-center gap-2">
+              <div style={{ transform: "scale(1.15)", transformOrigin: "center" }}>
+                <TahoeModeToggle iconOnly />
+              </div>
+              {!isLocal && (
+                <button
+                  onClick={handleSignOut}
+                  className="text-[11px] text-red-500 font-semibold hover:underline"
+                >
+                  退出
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </aside>
