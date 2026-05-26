@@ -1002,62 +1002,70 @@ export default function AdminDashboard() {
   const renderProfileForm = () => {
     return (
       <form onSubmit={handleProfileSave} className="space-y-6 max-w-4xl">
-        <div className="bg-notion-paper border border-notion-line rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-semibold text-notion-text pb-2 border-b border-notion-line flex items-center gap-2">
+        <div className="tahoe-system-card space-y-4 !p-6">
+          <h3 className="text-lg font-semibold pb-2 flex items-center gap-2"
+              style={{ color: "var(--tahoe-text)", borderBottom: "1px solid var(--tahoe-card-border)" }}>
             <span>👤</span> 基本信息
           </h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-notion-muted mb-1">姓名</label>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>姓名</label>
               <input
                 type="text"
                 value={profile.name}
                 onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent focus:ring-1 focus:ring-notion-accent text-notion-text"
+                className="w-full px-3 py-2 rounded-lg focus:outline-none"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-notion-muted mb-1">昵称</label>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>昵称</label>
               <input
                 type="text"
                 value={profile.nickname}
                 onChange={(e) => setProfile({ ...profile, nickname: e.target.value })}
-                className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent focus:ring-1 focus:ring-notion-accent text-notion-text"
+                className="w-full px-3 py-2 rounded-lg focus:outline-none"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-notion-muted mb-1">职位头衔 (如: Java Backend Engineer)</label>
+            <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>职位头衔 (如: Java Backend Engineer)</label>
             <input
               type="text"
               value={profile.title}
               onChange={(e) => setProfile({ ...profile, title: e.target.value })}
-              className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent focus:ring-1 focus:ring-notion-accent text-notion-text"
+              className="w-full px-3 py-2 rounded-lg focus:outline-none"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-notion-muted mb-1">一句话简介</label>
+            <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>一句话简介</label>
             <input
               type="text"
               value={profile.summary}
               onChange={(e) => setProfile({ ...profile, summary: e.target.value })}
-              className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent focus:ring-1 focus:ring-notion-accent text-notion-text"
+              className="w-full px-3 py-2 rounded-lg focus:outline-none"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
             />
           </div>
         </div>
 
-        <div className="bg-notion-paper border border-notion-line rounded-xl p-6 shadow-sm space-y-4">
-          <div className="flex justify-between items-center pb-2 border-b border-notion-line">
-            <h3 className="text-lg font-semibold text-notion-text flex items-center gap-2">
+        <div className="tahoe-system-card space-y-4 !p-6">
+          <div className="flex justify-between items-center pb-2"
+              style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
+            <h3 className="text-lg font-semibold flex items-center gap-2"
+              style={{ color: "var(--tahoe-text)" }}>
               <span>📝</span> 详细段落介绍 (Bio)
             </h3>
             <button
               type="button"
               onClick={handleAddBioLine}
-              className="px-3 py-1 text-xs font-semibold text-notion-accent bg-notion-accentSoft rounded hover:bg-opacity-80 transition"
+              className="px-3 py-1 text-xs font-semibold rounded hover:bg-opacity-80 transition"
+              style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}
             >
               ➕ 添加段落
             </button>
@@ -1090,46 +1098,51 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-notion-paper border border-notion-line rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-semibold text-notion-text pb-2 border-b border-notion-line flex items-center gap-2">
+        <div className="tahoe-system-card space-y-4 !p-6">
+          <h3 className="text-lg font-semibold pb-2 flex items-center gap-2"
+              style={{ color: "var(--tahoe-text)", borderBottom: "1px solid var(--tahoe-card-border)" }}>
             <span>🔗</span> 社交与联系链接
           </h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-notion-muted mb-1">GitHub 链接</label>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>GitHub 链接</label>
               <input
                 type="text"
                 value={profile.links.github}
                 onChange={(e) => setProfile({ ...profile, links: { ...profile.links, github: e.target.value } })}
-                className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent focus:ring-1 focus:ring-notion-accent text-notion-text text-sm"
+                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-notion-muted mb-1">Email (如: mailto:test@email.com)</label>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>Email (如: mailto:test@email.com)</label>
               <input
                 type="text"
                 value={profile.links.email}
                 onChange={(e) => setProfile({ ...profile, links: { ...profile.links, email: e.target.value } })}
-                className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent focus:ring-1 focus:ring-notion-accent text-notion-text text-sm"
+                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-notion-muted mb-1">项目归档链接 (默认: /projects)</label>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>项目归档链接 (默认: /projects)</label>
               <input
                 type="text"
                 value={profile.links.projects}
                 onChange={(e) => setProfile({ ...profile, links: { ...profile.links, projects: e.target.value } })}
-                className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent focus:ring-1 focus:ring-notion-accent text-notion-text text-sm"
+                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-notion-muted mb-1">博客链接 (默认: /blog)</label>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>博客链接 (默认: /blog)</label>
               <input
                 type="text"
                 value={profile.links.blog}
                 onChange={(e) => setProfile({ ...profile, links: { ...profile.links, blog: e.target.value } })}
-                className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent focus:ring-1 focus:ring-notion-accent text-notion-text text-sm"
+                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
               />
             </div>
           </div>
@@ -1139,7 +1152,7 @@ export default function AdminDashboard() {
           <button
             type="submit"
             disabled={isSaving}
-            className="px-6 py-2.5 bg-notion-accent text-white font-semibold rounded-lg hover:bg-opacity-90 shadow-sm transition disabled:opacity-50"
+            className="tahoe-button tahoe-button-primary px-6 py-2.5 font-semibold disabled:opacity-50"
           >
             {isSaving ? "正在保存..." : "💾 保存个人信息"}
           </button>
@@ -1189,8 +1202,9 @@ export default function AdminDashboard() {
       };
 
       return (
-        <div className="space-y-6 max-w-4xl bg-notion-paper border border-notion-line rounded-xl p-6 shadow-sm animate-on-scroll visible">
-          <div className="flex justify-between items-center pb-2 border-b border-notion-line">
+        <div className="tahoe-system-card space-y-6 max-w-4xl animate-on-scroll visible !p-6">
+          <div className="flex justify-between items-center pb-2"
+              style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
             <h3 className="text-lg font-bold text-notion-text">
               {isNew ? "➕ 添加工作经历" : "✏️ 编辑工作经历"}
             </h3>
@@ -1211,34 +1225,37 @@ export default function AdminDashboard() {
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-notion-muted mb-1">起止时间 (如: 2022 - 至今)</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>起止时间 (如: 2022 - 至今)</label>
                 <input
                   type="text"
                   value={exp?.period || ""}
                   onChange={(e) => handleFieldChange("period", e.target.value)}
-                  className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent focus:ring-1 focus:ring-notion-accent text-notion-text text-sm"
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   placeholder="例如: 2022 - Now"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-notion-muted mb-1">公司名称</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>公司名称</label>
                 <input
                   type="text"
                   value={exp?.company || ""}
                   onChange={(e) => handleFieldChange("company", e.target.value)}
-                  className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent focus:ring-1 focus:ring-notion-accent text-notion-text text-sm"
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   placeholder="公司名称"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-notion-muted mb-1">职位头衔</label>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>职位头衔</label>
               <input
                 type="text"
                 value={exp?.title || ""}
                 onChange={(e) => handleFieldChange("title", e.target.value)}
-                className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent focus:ring-1 focus:ring-notion-accent text-notion-text text-sm"
+                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                 placeholder="例如: Senior Java Developer"
               />
             </div>
@@ -1463,8 +1480,9 @@ export default function AdminDashboard() {
       };
 
       return (
-        <div className="space-y-6 max-w-5xl bg-notion-paper border border-notion-line rounded-xl p-6 shadow-sm">
-          <div className="flex justify-between items-center pb-2 border-b border-notion-line">
+        <div className="tahoe-system-card space-y-6 max-w-5xl !p-6">
+          <div className="flex justify-between items-center pb-2"
+              style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
             <h3 className="text-lg font-bold text-notion-text">
               {isNew ? "➕ 上传与创建新项目" : "✏️ 编辑项目详情"}
             </h3>
@@ -1484,7 +1502,7 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-notion-muted mb-1">项目标题</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>项目标题</label>
                 <input
                   type="text"
                   value={proj?.title || ""}
@@ -1495,7 +1513,7 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-notion-muted mb-1">Slug 路径名 (URL 标识，如: my-project)</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>Slug 路径名 (URL 标识，如: my-project)</label>
                 <input
                   type="text"
                   value={proj?.slug || ""}
@@ -1506,7 +1524,7 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-notion-muted mb-1">一句话简短介绍 (Description)</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>一句话简短介绍 (Description)</label>
                 <input
                   type="text"
                   value={proj?.description || ""}
@@ -1517,7 +1535,7 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-notion-muted mb-1">项目分类</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>项目分类</label>
                 <input
                   type="text"
                   value={proj?.category || ""}
@@ -1529,7 +1547,7 @@ export default function AdminDashboard() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-notion-muted mb-1">项目状态</label>
+                  <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>项目状态</label>
                   <select
                     value={proj?.status || "building"}
                     onChange={(e) => handleFieldChange("status", e.target.value as ProjectItem["status"])}
@@ -1541,7 +1559,7 @@ export default function AdminDashboard() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-notion-muted mb-1">开发时间</label>
+                  <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>开发时间</label>
                   <input
                     type="date"
                     value={proj?.date || ""}
@@ -1554,7 +1572,7 @@ export default function AdminDashboard() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-notion-muted mb-1">技术栈 (用逗号分隔，如: Next.js, Java)</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>技术栈 (用逗号分隔，如: Next.js, Java)</label>
                 <input
                   type="text"
                   value={proj?.stack?.join(", ") || ""}
@@ -1565,7 +1583,7 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-notion-muted mb-1">项目封面图链接</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>项目封面图链接</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -1594,7 +1612,7 @@ export default function AdminDashboard() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-notion-muted mb-1">GitHub 链接</label>
+                  <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>GitHub 链接</label>
                   <input
                     type="text"
                     value={proj?.github || ""}
@@ -1604,7 +1622,7 @@ export default function AdminDashboard() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-notion-muted mb-1">Demo 演示链接</label>
+                  <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>Demo 演示链接</label>
                   <input
                     type="text"
                     value={proj?.demo || ""}
@@ -1640,7 +1658,7 @@ export default function AdminDashboard() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-notion-muted mb-1">详细描述 (Long Description)</label>
+            <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>详细描述 (Long Description)</label>
             <textarea
               value={proj?.longDescription || ""}
               onChange={(e) => handleFieldChange("longDescription", e.target.value)}
@@ -1852,7 +1870,8 @@ export default function AdminDashboard() {
 
     return (
       <div className="space-y-6 max-w-4xl">
-        <div className="flex justify-between items-center pb-2 border-b border-notion-line">
+        <div className="flex justify-between items-center pb-2"
+              style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
           <h3 className="text-xl font-bold text-notion-text flex items-center gap-2">
             <span>🧠</span> 专业技能分类管理
           </h3>
@@ -1974,7 +1993,8 @@ export default function AdminDashboard() {
 
     return (
       <div className="space-y-6 max-w-4xl">
-        <div className="flex justify-between items-center pb-2 border-b border-notion-line">
+        <div className="flex justify-between items-center pb-2"
+              style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
           <h3 className="text-xl font-bold text-notion-text flex items-center gap-2">
             <span>🏠</span> 首页布局配置
           </h3>
@@ -2247,7 +2267,8 @@ export default function AdminDashboard() {
 
       return (
         <div className="space-y-6 max-w-7xl animate-on-scroll visible">
-          <div className="flex justify-between items-center pb-2 border-b border-notion-line">
+          <div className="flex justify-between items-center pb-2"
+              style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
             <h3 className="text-lg font-bold text-notion-text">
               {isNew ? "✍️ 撰写新文章" : "📝 编辑技术博文"}
             </h3>
@@ -2278,7 +2299,7 @@ export default function AdminDashboard() {
           <div className="bg-notion-paper border border-notion-line rounded-xl p-5 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-notion-muted mb-1">文章标题</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>文章标题</label>
                 <input
                   type="text"
                   value={post?.frontmatter?.title || ""}
@@ -2289,7 +2310,7 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-notion-muted mb-1">Slug 网页路径 (英文/拼音/数字连字符，例如: java-high-concurrency)</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>Slug 网页路径 (英文/拼音/数字连字符，例如: java-high-concurrency)</label>
                 <input
                   type="text"
                   value={post?.slug || ""}
@@ -2301,7 +2322,7 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-notion-muted mb-1">简介简介 (Description)</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>简介简介 (Description)</label>
                 <input
                   type="text"
                   value={post?.frontmatter?.description || ""}
@@ -2315,7 +2336,7 @@ export default function AdminDashboard() {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-notion-muted mb-1">发布日期</label>
+                  <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>发布日期</label>
                   <input
                     type="date"
                     value={post?.frontmatter?.date || ""}
@@ -2324,7 +2345,7 @@ export default function AdminDashboard() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-notion-muted mb-1">分类 (Category)</label>
+                  <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>分类 (Category)</label>
                   <input
                     type="text"
                     value={post?.frontmatter?.category || ""}
@@ -2336,7 +2357,7 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-notion-muted mb-1">标签 Tags (逗号分隔，如: Spring, SQL)</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>标签 Tags (逗号分隔，如: Spring, SQL)</label>
                 <input
                   type="text"
                   value={post?.frontmatter?.tags?.join(", ") || ""}
@@ -2347,7 +2368,7 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-notion-muted mb-1">封面图链接</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>封面图链接</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -2700,7 +2721,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-notion-bg text-notion-text font-sans flex">
+    <div data-tahoe-preview className="tahoe-shell min-h-screen flex font-sans" style={{ color: "var(--tahoe-text)" }}>
       {/* Toast Alert */}
       {alert && (
         <div className={`fixed bottom-5 right-5 px-5 py-3 rounded-xl border shadow-lg z-50 flex items-center gap-3 text-sm transition-all duration-300 animate-slide-up ${
@@ -2758,90 +2779,63 @@ export default function AdminDashboard() {
       )}
 
       {/* Sidebar navigation */}
-      <aside className="w-64 bg-notion-paper border-r border-notion-line flex flex-col justify-between select-none">
+      <aside className="tahoe-system-card w-64 flex flex-col justify-between select-none !rounded-none !border-r !border-l-0 !border-t-0 !border-b-0" style={{ borderColor: "var(--tahoe-card-border)", background: "var(--tahoe-card)" }}>
         <div className="p-6 space-y-6">
           <div className="space-y-1">
-            <h1 className="text-lg font-bold text-notion-text flex items-center gap-2">
-              <span>🌾</span> Studio Admin
+            <h1 className="text-lg font-bold flex items-center gap-2" style={{ color: "var(--tahoe-text)" }}>
+              <span className="tahoe-brand-mark">K</span> Studio Admin
             </h1>
-            <p className="text-[10px] text-notion-faint">极简美观的内容管家</p>
+            <p className="text-[10px]" style={{ color: "var(--tahoe-faint)" }}>极简美观的内容管家</p>
           </div>
 
           <nav className="space-y-1">
-            <button
-              onClick={() => { setActiveTab("home"); setSelectedPostIndex(null); setSelectedProjIndex(null); setSelectedExpIndex(null); }}
-              className={`w-full text-left px-3 py-2 rounded-lg font-medium text-sm flex items-center gap-2.5 transition ${
-                activeTab === "home" ? "bg-notion-accentSoft text-notion-accent font-semibold" : "text-notion-muted hover:bg-notion-hover"
-              }`}
-            >
-              <span>🏠</span> 首页布局
-            </button>
-            <button
-              onClick={() => { setActiveTab("profile"); setSelectedPostIndex(null); setSelectedProjIndex(null); setSelectedExpIndex(null); }}
-              className={`w-full text-left px-3 py-2 rounded-lg font-medium text-sm flex items-center gap-2.5 transition ${
-                activeTab === "profile" ? "bg-notion-accentSoft text-notion-accent font-semibold" : "text-notion-muted hover:bg-notion-hover"
-              }`}
-            >
-              <span>👤</span> 个人介绍
-            </button>
-            <button
-              onClick={() => { setActiveTab("experience"); setSelectedPostIndex(null); setSelectedProjIndex(null); setSelectedExpIndex(null); }}
-              className={`w-full text-left px-3 py-2 rounded-lg font-medium text-sm flex items-center gap-2.5 transition ${
-                activeTab === "experience" ? "bg-notion-accentSoft text-notion-accent font-semibold" : "text-notion-muted hover:bg-notion-hover"
-              }`}
-            >
-              <span>💼</span> 经历履历
-            </button>
-            <button
-              onClick={() => { setActiveTab("projects"); setSelectedPostIndex(null); setSelectedProjIndex(null); setSelectedExpIndex(null); }}
-              className={`w-full text-left px-3 py-2 rounded-lg font-medium text-sm flex items-center gap-2.5 transition ${
-                activeTab === "projects" ? "bg-notion-accentSoft text-notion-accent font-semibold" : "text-notion-muted hover:bg-notion-hover"
-              }`}
-            >
-              <span>🚀</span> 技术项目
-            </button>
-            <button
-              onClick={() => { setActiveTab("skills"); setSelectedPostIndex(null); setSelectedProjIndex(null); setSelectedExpIndex(null); }}
-              className={`w-full text-left px-3 py-2 rounded-lg font-medium text-sm flex items-center gap-2.5 transition ${
-                activeTab === "skills" ? "bg-notion-accentSoft text-notion-accent font-semibold" : "text-notion-muted hover:bg-notion-hover"
-              }`}
-            >
-              <span>🧠</span> 专业技能
-            </button>
-            <button
-              onClick={() => { setActiveTab("posts"); setSelectedPostIndex(null); setSelectedProjIndex(null); setSelectedExpIndex(null); }}
-              className={`w-full text-left px-3 py-2 rounded-lg font-medium text-sm flex items-center gap-2.5 transition ${
-                activeTab === "posts" ? "bg-notion-accentSoft text-notion-accent font-semibold" : "text-notion-muted hover:bg-notion-hover"
-              }`}
-            >
-              <span>✍️</span> 文章博文
-            </button>
+            {[
+              { key: "home", icon: "🏠", label: "首页布局" },
+              { key: "profile", icon: "👤", label: "个人介绍" },
+              { key: "experience", icon: "💼", label: "经历履历" },
+              { key: "projects", icon: "🚀", label: "技术项目" },
+              { key: "skills", icon: "🧠", label: "专业技能" },
+              { key: "posts", icon: "✍️", label: "文章博文" },
+            ].map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => { setActiveTab(tab.key as typeof activeTab); setSelectedPostIndex(null); setSelectedProjIndex(null); setSelectedExpIndex(null); }}
+                className={`w-full text-left px-3 py-2 rounded-lg font-medium text-sm flex items-center gap-2.5 transition ${
+                  activeTab === tab.key
+                    ? "tahoe-segment is-active !rounded-lg"
+                    : ""
+                }`}
+                style={activeTab !== tab.key ? { color: "var(--tahoe-muted)", background: "transparent" } : undefined}
+              >
+                <span>{tab.icon}</span> {tab.label}
+              </button>
+            ))}
           </nav>
         </div>
 
         {/* Sidebar Footer with environment info */}
-        <div className="p-4 border-t border-notion-line bg-notion-bg space-y-3">
+        <div className="p-4 space-y-3" style={{ borderTop: "1px solid var(--tahoe-card-border)", background: "var(--tahoe-glass)" }}>
           <div className="space-y-1">
             <div className="flex items-center gap-1.5 text-xs">
               <span className={`w-2.5 h-2.5 rounded-full ${isLocal ? "bg-green-500" : "bg-blue-500"}`}></span>
-              <span className="font-semibold text-notion-text">
+              <span className="font-semibold" style={{ color: "var(--tahoe-text)" }}>
                 {isLocal ? "本地开发模式" : "GitHub 线上模式"}
               </span>
             </div>
             {isLocal ? (
-              <p className="text-[9px] text-notion-faint leading-normal">
+              <p className="text-[9px] leading-normal" style={{ color: "var(--tahoe-faint)" }}>
                 📝 保存将立即更新磁盘 JSON/Markdown 文件。<br />
                 📢 提示：推送到线上需要运行 `git push`！
               </p>
             ) : (
-              <p className="text-[9px] text-notion-faint leading-normal">
+              <p className="text-[9px] leading-normal" style={{ color: "var(--tahoe-faint)" }}>
                 🎯 提交修改将自动 Push 并触发 GitHub Actions，数分钟后主页刷新即更新。
               </p>
             )}
           </div>
 
-          <div className="flex justify-between items-center gap-2 pt-1 border-t border-dashed border-notion-line">
-            <Link href="/" className="text-[10px] text-notion-accent font-semibold hover:underline">
+          <div className="flex justify-between items-center gap-2 pt-1" style={{ borderTop: "1px dashed var(--tahoe-card-border)" }}>
+            <Link href="/" className="text-[10px] font-semibold hover:underline" style={{ color: "var(--tahoe-accent)" }}>
               🏠 返回网站主页
             </Link>
             {!isLocal && (
