@@ -48,7 +48,7 @@ export function Interactions() {
           width: "4px",
           height: "4px",
           borderRadius: "50%",
-          background: "#2d5a3d",
+          background: `rgb(${getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim()})`,
           pointerEvents: "none",
           zIndex: "9996",
           transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
