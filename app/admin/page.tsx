@@ -184,6 +184,7 @@ export default function AdminDashboard() {
   const [pendingDeleteSkill, setPendingDeleteSkill] = useState<{ index: number; groupName: string } | null>(null);
   const [pendingConfirm, setPendingConfirm] = useState<{ title: string; message: string; onConfirm: () => void } | null>(null);
   const [deleteConfirmSlug, setDeleteConfirmSlug] = useState("");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   
   // Image Uploading state
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -2811,7 +2812,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div data-tahoe-preview className="tahoe-shell min-h-screen flex font-sans" style={{ color: "var(--tahoe-text)" }}>
+    <div data-tahoe-preview className="tahoe-shell min-h-screen font-sans" style={{ color: "var(--tahoe-text)" }}>
       {/* Toast Alert */}
       {alert && (
         <div className={`fixed bottom-5 right-5 px-5 py-3 rounded-xl border shadow-lg z-50 flex items-center gap-3 text-sm transition-all duration-300 animate-slide-up ${
@@ -2930,82 +2931,120 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* Sidebar navigation */}
+      {/* Floating Collapsible Sidebar */}
       <aside
-        className="sticky top-0 h-screen w-60 flex flex-col select-none shrink-0"
+        className="fixed left-4 top-4 bottom-4 z-40 flex flex-col select-none transition-all duration-300"
         style={{
-          background: "var(--tahoe-card)",
-          borderRight: "1px solid var(--tahoe-card-border)",
-          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6), 0 16px 44px -26px var(--tahoe-shadow)",
+          width: sidebarCollapsed ? "48px" : "220px",
+          background: "var(--tahoe-glass)",
+          border: "1px solid var(--tahoe-border)",
+          borderRadius: "22px",
+          boxShadow: "inset 0 1px 0 var(--tahoe-highlight), inset 0 0 0 1px rgba(255,255,255,0.08), 0 22px 64px -24px var(--tahoe-shadow)",
           backdropFilter: "blur(28px) saturate(180%)",
           WebkitBackdropFilter: "blur(28px) saturate(180%)",
         }}
       >
-        <div className="p-6 space-y-6 flex-1 overflow-y-auto">
-          <div className="space-y-1">
-            <h1 className="text-lg font-bold flex items-center gap-2" style={{ color: "var(--tahoe-text)" }}>
-              <span className="tahoe-brand-mark">K</span> Studio Admin
+        {/* Header / Collapse Toggle */}
+        <div className="flex items-center justify-between p-4 pb-2">
+          {!sidebarCollapsed && (
+            <h1 className="text-sm font-bold" style={{ color: "var(--tahoe-text)" }}>
+              Studio
             </h1>
-            <p className="text-[10px]" style={{ color: "var(--tahoe-faint)" }}>极简美观的内容管家</p>
-          </div>
-
-          <nav className="space-y-1">
-            {[
-              { key: "home", icon: "🏠", label: "首页布局" },
-              { key: "profile", icon: "👤", label: "个人介绍" },
-              { key: "experience", icon: "💼", label: "经历履历" },
-              { key: "projects", icon: "🚀", label: "技术项目" },
-              { key: "skills", icon: "🧠", label: "专业技能" },
-              { key: "posts", icon: "✍️", label: "文章博文" },
-            ].map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => { setActiveTab(tab.key as typeof activeTab); setSelectedPostIndex(null); setSelectedProjIndex(null); setSelectedExpIndex(null); }}
-                className="w-full text-left px-3 py-2 rounded-lg font-medium text-sm flex items-center gap-2.5"
-                style={
-                  activeTab === tab.key
-                    ? { color: "#fff", background: "var(--tahoe-accent)", fontWeight: 600 }
-                    : { color: "var(--tahoe-muted)", background: "transparent" }
-                }
-              >
-                <span>{tab.icon}</span> {tab.label}
-              </button>
-            ))}
-          </nav>
+          )}
+          <button
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className="flex h-7 w-7 items-center justify-center rounded-full ml-auto transition hover:bg-[color:var(--tahoe-glass-strong)]"
+            style={{ color: "var(--tahoe-muted)" }}
+            title={sidebarCollapsed ? "展开侧栏" : "收起侧栏"}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {sidebarCollapsed
+                ? <><polyline points="9 18 15 12 9 6" /></>
+                : <><polyline points="15 18 9 12 15 6" /></>
+              }
+            </svg>
+          </button>
         </div>
 
-        {/* Sidebar Footer */}
-        <div className="p-4 space-y-3 shrink-0" style={{ borderTop: "1px solid var(--tahoe-card-border)", background: "var(--tahoe-glass)" }}>
-          <div className="flex items-center gap-2">
-            <span className={`w-2 h-2 rounded-full shrink-0 ${isLocal ? "bg-green-500" : "bg-blue-500"}`} />
-            <span className="text-[11px] font-semibold" style={{ color: "var(--tahoe-text)" }}>
-              {isLocal ? "本地开发模式" : "GitHub 线上模式"}
-            </span>
-          </div>
+        {/* Nav Items */}
+        <nav className="flex-1 overflow-y-auto px-2 space-y-1">
+          {[
+            { key: "home", icon: "🏠", label: "首页布局" },
+            { key: "profile", icon: "👤", label: "个人介绍" },
+            { key: "experience", icon: "💼", label: "经历履历" },
+            { key: "projects", icon: "🚀", label: "技术项目" },
+            { key: "skills", icon: "🧠", label: "专业技能" },
+            { key: "posts", icon: "✍️", label: "文章博文" },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => { setActiveTab(tab.key as typeof activeTab); setSelectedPostIndex(null); setSelectedProjIndex(null); setSelectedExpIndex(null); }}
+              className="w-full flex items-center gap-2.5 rounded-xl text-sm transition"
+              style={{
+                color: activeTab === tab.key ? "#fff" : "var(--tahoe-muted)",
+                background: activeTab === tab.key ? "var(--tahoe-accent)" : "transparent",
+                padding: sidebarCollapsed ? "8px" : "8px 12px",
+                justifyContent: sidebarCollapsed ? "center" : "flex-start",
+                fontWeight: activeTab === tab.key ? 600 : 400,
+              }}
+              title={sidebarCollapsed ? tab.label : undefined}
+            >
+              <span className="shrink-0 text-base">{tab.icon}</span>
+              {!sidebarCollapsed && <span>{tab.label}</span>}
+            </button>
+          ))}
+        </nav>
 
-          <div className="flex items-center justify-between gap-2 pt-2" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
-            <Link href="/" className="text-[11px] font-semibold hover:underline" style={{ color: "var(--tahoe-accent)" }}>
-              🏠 返回主页
-            </Link>
-            <div className="flex items-center gap-2">
-              <div style={{ transform: "scale(1.15)", transformOrigin: "center" }}>
+        {/* Footer */}
+        <div className="p-3 shrink-0" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
+          {!sidebarCollapsed ? (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isLocal ? "bg-green-500" : "bg-blue-500"}`} />
+                <span className="text-[11px] font-semibold" style={{ color: "var(--tahoe-text)" }}>
+                  {isLocal ? "本地开发" : "线上模式"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-1 pt-1" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
+                <Link href="/" className="text-[11px] font-semibold hover:underline" style={{ color: "var(--tahoe-accent)" }}>
+                  🏠 主页
+                </Link>
+                <div style={{ transform: "scale(1.1)", transformOrigin: "center" }}>
+                  <TahoeModeToggle iconOnly />
+                </div>
+                {!isLocal && (
+                  <button
+                    onClick={handleSignOut}
+                    className="text-[11px] text-red-500 font-semibold hover:underline"
+                  >
+                    退出
+                  </button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-2">
+              <Link href="/" className="text-xs hover:underline" style={{ color: "var(--tahoe-accent)" }} title="返回主页">
+                🏠
+              </Link>
+              <div style={{ transform: "scale(1.1)", transformOrigin: "center" }}>
                 <TahoeModeToggle iconOnly />
               </div>
               {!isLocal && (
-                <button
-                  onClick={handleSignOut}
-                  className="text-[11px] text-red-500 font-semibold hover:underline"
-                >
-                  退出
+                <button onClick={handleSignOut} className="text-xs text-red-500 hover:underline" title="退出登录">
+                  🔒
                 </button>
               )}
             </div>
-          </div>
+          )}
         </div>
       </aside>
 
       {/* Main Workspace Area */}
-      <main className="flex-1 h-screen overflow-y-auto p-10">
+      <main
+        className="min-h-screen p-6 transition-all duration-300"
+        style={{ paddingLeft: sidebarCollapsed ? "calc(48px + 2rem)" : "calc(220px + 2rem)" }}
+      >
         {isLoading ? (
           <div className="h-full w-full flex flex-col justify-center items-center space-y-3">
             <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: "var(--tahoe-accent)", borderTopColor: "transparent" }}></div>
