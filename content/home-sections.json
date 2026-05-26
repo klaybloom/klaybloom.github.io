@@ -23,21 +23,21 @@
       }
     },
     {
-      "id": "latest-projects",
-      "type": "latest-projects",
-      "enabled": true,
-      "params": {
-        "title": "精选项目",
-        "count": 1
-      }
-    },
-    {
       "id": "latest-posts",
       "type": "latest-posts",
       "enabled": true,
       "params": {
         "title": "技术文章",
         "count": 3
+      }
+    },
+    {
+      "id": "latest-projects",
+      "type": "latest-projects",
+      "enabled": true,
+      "params": {
+        "title": "精选项目",
+        "count": 1
       }
     }
   ]
