@@ -742,8 +742,9 @@
 
 .tahoe-segment.is-active {
   background: var(--tahoe-accent);
-  border-color: rgba(255, 255, 255, 0.38);
+  border-color: var(--tahoe-accent);
   color: #fff;
+  box-shadow: 0 8px 20px -8px var(--tahoe-accent);
 }
 
 .tahoe-project-card,

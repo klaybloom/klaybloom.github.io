@@ -7,10 +7,12 @@ const PORT = 8081;
 const ALLOWED_IMAGE_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".webp", ".gif"]);
 
 // CORS helper
-function setCorsHeaders(res) {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+function setCorsHeaders(req, res) {
+  const origin = req.headers.origin || "http://localhost:3000";
+  res.setHeader("Access-Control-Allow-Origin", origin);
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
 }
 
 function isSafeSlug(value) {
@@ -35,7 +37,7 @@ function sanitizeImageFileName(fileName) {
 }
 
 const server = http.createServer((req, res) => {
-  setCorsHeaders(res);
+  setCorsHeaders(req, res);
 
   // Handle CORS preflight
   if (req.method === "OPTIONS") {

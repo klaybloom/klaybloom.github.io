@@ -1,14 +1,13 @@
 ---
-title: "模型选型别再翻十个官网：Models.dev 把价格和能力做成一张表"
-date: "2026-05-25"
-description: "Models.dev 把模型价格、能力和上下文窗口做成开源数据库，适合团队做选型、报价和技术方案。"
+title: 模型选型别再翻十个官网：Models.dev 把价格和能力做成一张表
+date: '2026-05-25'
+updated: ''
+description: Models.dev 把模型价格、能力和上下文窗口做成开源数据库，适合团队做选型、报价和技术方案。
 tags:
   - AI
   - Models
-  - Product
-  - Engineering
-category: "AI"
-cover: "/images/posts/2026-05-25-models-dev-ai-model-database/cover.png"
+category: AI
+cover: /images/posts/2026-05-25-models-dev-ai-model-database/cover.png
 published: true
 featured: false
 ---

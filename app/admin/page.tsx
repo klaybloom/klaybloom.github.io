@@ -2948,10 +2948,10 @@ export default function AdminDashboard() {
         className="fixed left-4 top-4 bottom-4 z-50 flex flex-col select-none transition-all duration-300"
         style={{
           width: sidebarCollapsed ? "48px" : "200px",
-          background: "rgba(255,255,255,0.45)",
-          border: "1px solid rgba(255,255,255,0.55)",
+          background: "var(--tahoe-glass)",
+          border: "1px solid var(--tahoe-card-border)",
           borderRadius: "22px",
-          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.92), 0 8px 32px -12px rgba(0,0,0,0.12)",
+          boxShadow: "inset 0 1px 0 var(--tahoe-highlight), 0 8px 32px -12px var(--tahoe-shadow)",
           backdropFilter: "blur(32px) saturate(200%)",
           WebkitBackdropFilter: "blur(32px) saturate(200%)",
         }}
@@ -2965,7 +2965,7 @@ export default function AdminDashboard() {
           )}
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="flex h-7 w-7 items-center justify-center rounded-full ml-auto transition hover:bg-[color:var(--tahoe-glass-strong)]"
+            className="flex h-7 w-7 items-center justify-center rounded-full ml-auto transition hover:bg-[color:var(--tahoe-glass-strong)] hover:scale-105"
             style={{ color: "var(--tahoe-muted)" }}
             title={sidebarCollapsed ? "展开侧栏" : "收起侧栏"}
           >
@@ -2991,7 +2991,7 @@ export default function AdminDashboard() {
             <button
               key={tab.key}
               onClick={() => { setActiveTab(tab.key as typeof activeTab); setSelectedPostIndex(null); setSelectedProjIndex(null); setSelectedExpIndex(null); }}
-              className="w-full flex items-center gap-2.5 rounded-xl text-sm transition"
+              className="w-full flex items-center gap-2.5 rounded-xl text-sm transition hover:bg-[color:var(--tahoe-glass-strong)] hover:text-[color:var(--tahoe-text)]"
               style={{
                 color: activeTab === tab.key ? "#fff" : "var(--tahoe-muted)",
                 background: activeTab === tab.key ? "var(--tahoe-accent)" : "transparent",
@@ -3008,35 +3008,39 @@ export default function AdminDashboard() {
         </nav>
 
         {/* Footer */}
-        <div className="p-3 shrink-0" style={{ borderTop: "1px solid rgba(255,255,255,0.4)" }}>
+        <div className="p-3 shrink-0" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
           {!sidebarCollapsed ? (
-            <div className="space-y-2">
-              <Link href="/" className="text-xs font-semibold hover:underline block" style={{ color: "var(--tahoe-accent)" }}>
-                🏠 主页
-              </Link>
-              <div className="flex items-center justify-between gap-1 pt-1" style={{ borderTop: "1px solid rgba(255,255,255,0.4)" }}>
-                <div className="flex items-center gap-1.5">
-                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isLocal ? "bg-blue-500" : "bg-green-500"}`} />
-                  <span className="text-[11px] font-semibold" style={{ color: "var(--tahoe-text)" }}>
-                    {isLocal ? "本地" : "线上"}
-                  </span>
-                </div>
-                <div style={{ transform: "scale(1.1)", transformOrigin: "center" }}>
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <Link href="/" className="text-xs font-semibold hover:underline flex items-center gap-1" style={{ color: "var(--tahoe-accent)" }}>
+                  🏠 返回主页
+                </Link>
+                <div style={{ transform: "scale(0.9)", transformOrigin: "right center" }}>
                   <TahoeModeToggle iconOnly />
                 </div>
+              </div>
+              <div className="flex items-center justify-between pt-2" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold" style={{ color: "var(--tahoe-text)" }}>
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isLocal ? "bg-blue-500" : "bg-green-500"}`} />
+                  <span>{isLocal ? "本地模式" : "线上模式"}</span>
+                </div>
                 {!isLocal && (
-                  <button onClick={handleSignOut} className="text-[11px] text-red-500 font-semibold hover:underline">
-                    退出
+                  <button 
+                    onClick={handleSignOut} 
+                    className="text-[11px] text-red-500 hover:text-red-600 font-semibold flex items-center gap-0.5 hover:underline transition"
+                  >
+                    <span>🚪</span>
+                    <span>退出</span>
                   </button>
                 )}
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col items-center gap-3">
               <Link href="/" className="text-sm hover:underline" style={{ color: "var(--tahoe-accent)" }} title="返回主页">
                 🏠
               </Link>
-              <div style={{ transform: "scale(1.1)", transformOrigin: "center" }}>
+              <div style={{ transform: "scale(0.9)", transformOrigin: "center" }}>
                 <TahoeModeToggle iconOnly />
               </div>
               <span
@@ -3044,8 +3048,12 @@ export default function AdminDashboard() {
                 title={isLocal ? "本地" : "线上"}
               />
               {!isLocal && (
-                <button onClick={handleSignOut} className="text-sm text-red-500 hover:underline" title="退出登录">
-                  🔒
+                <button 
+                  onClick={handleSignOut} 
+                  className="text-xs text-red-500 hover:text-red-600 font-semibold transition" 
+                  title="退出登录"
+                >
+                  🚪
                 </button>
               )}
             </div>

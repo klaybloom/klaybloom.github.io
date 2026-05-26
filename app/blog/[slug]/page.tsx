@@ -79,17 +79,17 @@ export default async function PostPage({ params }: PostPageProps) {
       <TOCScrollActive />
 
       {headings.length ? (
-        <aside className="group fixed left-4 top-32 z-40 hidden lg:block">
+        <aside className="group fixed left-4 top-32 z-40 hidden xl:block">
           <button
             type="button"
             aria-label="展开文章目录"
-            className="tahoe-mini-button flex h-10 w-10 items-center justify-center !rounded-full font-mono text-[18px] font-semibold"
+            className="tahoe-mini-button flex h-10 w-10 items-center justify-center !rounded-full font-mono text-[18px] font-semibold transition-all duration-300 hover:scale-105"
             style={{ color: "var(--tahoe-accent)" }}
           >
             ≡
           </button>
-          <div className="pointer-events-none absolute left-10 top-0 w-72 opacity-0 transition-opacity duration-150 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
-            <nav className="tahoe-system-card max-h-[calc(100vh-9rem)] overflow-y-auto !p-4">
+          <div className="pointer-events-none absolute left-8 top-0 w-60 opacity-0 transition-all duration-200 group-hover:left-10 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:left-10 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
+            <nav className="tahoe-system-card max-h-[calc(100vh-9rem)] overflow-y-auto !p-4 shadow-xl">
               <p
                 className="mb-3 text-[12px] font-semibold uppercase tracking-[0.24em]"
                 style={{ color: "var(--tahoe-accent)" }}
@@ -165,7 +165,7 @@ export default async function PostPage({ params }: PostPageProps) {
           ) : null}
 
           <div
-            className="markdown-body tahoe-custom-body"
+            className="markdown-body tahoe-custom-body text-[16px] leading-relaxedBody"
             style={{ padding: "clamp(24px, 4vw, 48px)" }}
             dangerouslySetInnerHTML={{ __html: html }}
           />
