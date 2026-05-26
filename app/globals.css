@@ -4,9 +4,38 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Light (default, Notion warm-cream) */
 :root {
-  --background: #f7f5f0;
-  --foreground: #1a1a1a;
+  --color-bg: 247 245 240;          /* #f7f5f0 */
+  --color-paper: 255 253 248;       /* #fffdf8 */
+  --color-text: 26 26 26;           /* #1a1a1a */
+  --color-muted: 85 85 85;          /* #555555 */
+  --color-faint: 136 136 136;       /* #888888 */
+  --color-line: 224 219 211;        /* #e0dbd3 */
+  --color-hover: 240 236 228;       /* #f0ece4 */
+  --color-accent: 45 90 61;         /* #2d5a3d */
+  --color-accent-soft: 232 240 235; /* #e8f0eb */
+  --color-selection: 212 232 218;   /* #d4e8da */
+  --color-md-body: 55 65 81;        /* #374151 */
+  --color-md-pre-bg: 26 26 26;
+  --color-md-pre-text: 248 250 252;
+}
+
+/* Dark — warm, low-glare counterpart that keeps the green accent */
+[data-theme="dark"] {
+  --color-bg: 26 24 20;             /* warm near-black */
+  --color-paper: 34 31 26;          /* card surface */
+  --color-text: 236 232 222;        /* warm off-white */
+  --color-muted: 163 156 142;
+  --color-faint: 122 116 102;
+  --color-line: 58 52 43;
+  --color-hover: 42 38 32;
+  --color-accent: 122 179 138;      /* brighter green for AA contrast on dark */
+  --color-accent-soft: 42 61 49;
+  --color-selection: 60 96 72;
+  --color-md-body: 195 188 174;
+  --color-md-pre-bg: 13 12 10;
+  --color-md-pre-text: 236 232 222;
 }
 
 * {
@@ -19,11 +48,12 @@ html {
 
 body {
   margin: 0;
-  background: var(--background);
-  color: var(--foreground);
+  background: rgb(var(--color-bg));
+  color: rgb(var(--color-text));
   font-family: "IBM Plex Sans", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 a {
@@ -32,7 +62,7 @@ a {
 }
 
 ::selection {
-  background: #d4e8da;
+  background: rgb(var(--color-selection));
 }
 
 /* Scroll animation base */
@@ -58,7 +88,7 @@ a {
 .click-ripple {
   position: fixed;
   border-radius: 50%;
-  border: 2px solid #2d5a3d;
+  border: 2px solid rgb(var(--color-accent));
   pointer-events: none;
   z-index: 9997;
   animation: rippleExpand 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -82,7 +112,7 @@ a {
   position: fixed;
   top: 0; left: 0;
   width: 6px; height: 6px;
-  background: #2d5a3d;
+  background: rgb(var(--color-accent));
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
@@ -97,7 +127,7 @@ a {
 }
 
 .markdown-body {
-  color: #374151;
+  color: rgb(var(--color-md-body));
   font-size: 16px;
   line-height: 1.85;
 }
@@ -110,7 +140,7 @@ a {
 .markdown-body h2,
 .markdown-body h3,
 .markdown-body h4 {
-  color: #1a1a1a;
+  color: rgb(var(--color-text));
   font-weight: 700;
   line-height: 1.35;
   scroll-margin-top: 96px;
@@ -123,7 +153,7 @@ a {
 .markdown-body h2 {
   margin-top: 2.2rem;
   padding-left: 0.75rem;
-  border-left: 4px solid #2d5a3d;
+  border-left: 4px solid rgb(var(--color-accent));
   font-size: 1.45rem;
 }
 
@@ -133,7 +163,7 @@ a {
 }
 
 .markdown-body a {
-  color: #2d5a3d;
+  color: rgb(var(--color-accent));
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -150,8 +180,8 @@ a {
 
 .markdown-body blockquote {
   padding: 0.2rem 0 0.2rem 1rem;
-  color: #555555;
-  border-left: 4px solid #e0dbd3;
+  color: rgb(var(--color-muted));
+  border-left: 4px solid rgb(var(--color-line));
 }
 
 .markdown-body table {
@@ -165,26 +195,26 @@ a {
 .markdown-body th,
 .markdown-body td {
   padding: 0.7rem 0.8rem;
-  border: 1px solid #e0dbd3;
+  border: 1px solid rgb(var(--color-line));
 }
 
 .markdown-body th {
-  background: #f0ece4;
-  color: #1a1a1a;
+  background: rgb(var(--color-hover));
+  color: rgb(var(--color-text));
   font-weight: 700;
 }
 
 .markdown-body img {
   max-width: 100%;
   height: auto;
-  border: 1px solid #e0dbd3;
+  border: 1px solid rgb(var(--color-line));
   border-radius: 8px;
 }
 
 .markdown-body code {
   padding: 0.12rem 0.35rem;
-  color: #1a1a1a;
-  background: #f0ece4;
+  color: rgb(var(--color-text));
+  background: rgb(var(--color-hover));
   border-radius: 6px;
   font-size: 0.9em;
 }
@@ -192,17 +222,17 @@ a {
 .markdown-body pre {
   overflow-x: auto;
   padding: 1rem;
-  background: #1a1a1a;
+  background: rgb(var(--color-md-pre-bg));
   border-radius: 8px;
 }
 
 .markdown-body pre code {
   padding: 0;
-  color: #f8fafc;
+  color: rgb(var(--color-md-pre-text));
   background: transparent;
 }
 
 .markdown-body hr {
   border: 0;
-  border-top: 1px solid #e0dbd3;
+  border-top: 1px solid rgb(var(--color-line));
 }

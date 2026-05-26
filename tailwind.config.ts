@@ -11,15 +11,15 @@ const config: Config = {
     extend: {
       colors: {
         notion: {
-          bg: "#f7f5f0",
-          paper: "#fffdf8",
-          text: "#1a1a1a",
-          muted: "#555555",
-          faint: "#888888",
-          line: "#e0dbd3",
-          hover: "#f0ece4",
-          accent: "#2d5a3d",
-          accentSoft: "#e8f0eb"
+          bg: "rgb(var(--color-bg) / <alpha-value>)",
+          paper: "rgb(var(--color-paper) / <alpha-value>)",
+          text: "rgb(var(--color-text) / <alpha-value>)",
+          muted: "rgb(var(--color-muted) / <alpha-value>)",
+          faint: "rgb(var(--color-faint) / <alpha-value>)",
+          line: "rgb(var(--color-line) / <alpha-value>)",
+          hover: "rgb(var(--color-hover) / <alpha-value>)",
+          accent: "rgb(var(--color-accent) / <alpha-value>)",
+          accentSoft: "rgb(var(--color-accent-soft) / <alpha-value>)"
         }
       },
       fontFamily: {

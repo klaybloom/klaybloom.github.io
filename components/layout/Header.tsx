@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { NavItem } from "@/content/types";
+import { ThemeToggle } from "./ThemeToggle";
 
 type HeaderProps = {
   name: string;
@@ -16,26 +17,29 @@ export function Header({ name, nav }: HeaderProps) {
         >
           {name}
         </Link>
-        <div className="flex min-w-0 items-center gap-1 overflow-x-auto text-[14px] font-medium text-notion-muted">
-          {nav.map((link) =>
-            link.href.startsWith("/") ? (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="magnetic relative shrink-0 px-3.5 py-2 transition hover:text-notion-text [&:hover::after]:scale-x-100 after:absolute after:bottom-[6px] after:left-[14px] after:right-[14px] after:h-[1.5px] after:origin-left after:scale-x-0 after:bg-notion-accent after:transition-transform after:duration-300"
-              >
-                {link.label}
-              </Link>
-            ) : (
-              <a
-                key={link.label}
-                href={link.href}
-                className="magnetic relative shrink-0 px-3.5 py-2 transition hover:text-notion-text [&:hover::after]:scale-x-100 after:absolute after:bottom-[6px] after:left-[14px] after:right-[14px] after:h-[1.5px] after:origin-left after:scale-x-0 after:bg-notion-accent after:transition-transform after:duration-300"
-              >
-                {link.label}
-              </a>
-            )
-          )}
+        <div className="flex min-w-0 items-center gap-1 text-[14px] font-medium text-notion-muted">
+          <div className="flex min-w-0 items-center gap-1 overflow-x-auto">
+            {nav.map((link) =>
+              link.href.startsWith("/") ? (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="magnetic relative shrink-0 px-3.5 py-2 transition hover:text-notion-text [&:hover::after]:scale-x-100 after:absolute after:bottom-[6px] after:left-[14px] after:right-[14px] after:h-[1.5px] after:origin-left after:scale-x-0 after:bg-notion-accent after:transition-transform after:duration-300"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="magnetic relative shrink-0 px-3.5 py-2 transition hover:text-notion-text [&:hover::after]:scale-x-100 after:absolute after:bottom-[6px] after:left-[14px] after:right-[14px] after:h-[1.5px] after:origin-left after:scale-x-0 after:bg-notion-accent after:transition-transform after:duration-300"
+                >
+                  {link.label}
+                </a>
+              )
+            )}
+          </div>
+          <ThemeToggle />
         </div>
       </nav>
     </header>
