@@ -8,14 +8,14 @@ type PostListProps = {
 export function PostList({ posts }: PostListProps) {
   if (posts.length === 0) {
     return (
-      <div className="border-y border-notion-line py-10 text-center text-[15px] text-notion-muted">
+      <div className="tahoe-system-card py-12 text-center text-[15px] text-[color:var(--tahoe-muted)]">
         没有找到匹配的文章。
       </div>
     );
   }
 
   return (
-    <div className="divide-y divide-notion-line border-y border-notion-line">
+    <div className="tahoe-post-grid">
       {posts.map((post) => (
         <PostCard key={post.slug} post={post} />
       ))}

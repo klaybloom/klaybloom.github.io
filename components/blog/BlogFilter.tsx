@@ -25,26 +25,27 @@ export function BlogFilter({ posts, tags }: BlogFilterProps) {
 
   return (
     <div>
-      <div className="mb-8 rounded-[22px] border border-notion-line bg-white/72 p-3">
-        <input
-          aria-label="搜索文章"
-          className="h-11 w-full rounded-[16px] border border-notion-line bg-white px-4 text-[14px] text-notion-text outline-none transition placeholder:text-notion-faint focus:border-notion-accent"
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="搜索文章标题、描述、标签、分类..."
-          type="search"
-          value={query}
-        />
+      <div className="tahoe-system-card mb-10 !p-3">
+        <div className="tahoe-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            aria-label="搜索文章"
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="搜索文章标题、描述、标签、分类..."
+            type="search"
+            value={query}
+          />
+        </div>
         <div className="mt-3 flex flex-wrap gap-2">
           {["全部", ...tags].map((tag) => {
             const isActive = selectedTag === tag;
 
             return (
               <button
-                className={`rounded-full border px-3 py-1.5 text-[13px] transition ${
-                  isActive
-                    ? "border-notion-accent bg-notion-accent text-white"
-                    : "border-notion-line bg-white text-notion-muted hover:bg-notion-hover hover:text-notion-text"
-                }`}
+                className={isActive ? "tahoe-segment is-active" : "tahoe-segment"}
                 key={tag}
                 onClick={() => setSelectedTag(tag)}
                 type="button"

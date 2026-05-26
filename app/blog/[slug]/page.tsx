@@ -54,30 +54,37 @@ export default async function PostPage({ params }: PostPageProps) {
   const olderPost = currentIndex >= 0 && currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
 
   return (
-    <main className="min-h-screen bg-notion-bg text-notion-text">
+    <main data-tahoe-preview className="tahoe-shell min-h-screen overflow-x-hidden">
+      <div className="tahoe-bg-fixed" aria-hidden />
       <Header name={siteConfig.name} nav={siteConfig.nav} />
+
       {headings.length ? (
         <aside className="group fixed left-4 top-32 z-40 hidden lg:block">
           <button
             type="button"
             aria-label="展开文章目录"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-notion-line bg-notion-paper/95 font-mono text-[18px] font-semibold text-notion-accent shadow-sm transition hover:border-notion-accent hover:bg-white"
+            className="tahoe-mini-button flex h-10 w-10 items-center justify-center !rounded-full font-mono text-[18px] font-semibold"
+            style={{ color: "var(--tahoe-accent)" }}
           >
             ≡
           </button>
           <div className="pointer-events-none absolute left-10 top-0 w-72 opacity-0 transition-opacity duration-150 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
-            <nav className="max-h-[calc(100vh-9rem)] overflow-y-auto rounded-2xl border border-notion-line bg-notion-paper/98 p-4 shadow-lg">
-              <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.24em] text-notion-accent">
+            <nav className="tahoe-system-card max-h-[calc(100vh-9rem)] overflow-y-auto !p-4">
+              <p
+                className="mb-3 text-[12px] font-semibold uppercase tracking-[0.24em]"
+                style={{ color: "var(--tahoe-accent)" }}
+              >
                 文章目录
               </p>
-              <div className="grid gap-2">
+              <div className="grid gap-1">
                 {headings.map((heading) => (
                   <a
                     key={heading.id}
                     href={`#${heading.id}`}
-                    className={`block rounded-md px-2 py-1 text-[13px] leading-snug text-notion-muted transition hover:bg-notion-hover hover:text-notion-accent ${
+                    className={`block rounded-md px-2 py-1 text-[13px] leading-snug transition hover:bg-[color:var(--tahoe-glass-strong)] ${
                       heading.level === 3 ? "ml-3" : ""
                     }`}
+                    style={{ color: "var(--tahoe-muted)" }}
                   >
                     {heading.text}
                   </a>
@@ -88,34 +95,35 @@ export default async function PostPage({ params }: PostPageProps) {
         </aside>
       ) : null}
 
-      <article className="mx-auto max-w-[760px] px-5 pb-20 pt-16">
+      <div className="relative z-10 mx-auto max-w-[760px] px-4 pb-20 pt-28 sm:px-6">
+        <article>
           <Link
-            className="mb-10 inline-flex rounded-full px-3 py-1 text-[14px] font-medium text-notion-accent transition hover:bg-notion-accentSoft"
+            className="tahoe-link-button mb-10 inline-flex"
             href="/blog"
           >
             ← 返回文章列表
           </Link>
 
           <header className="mb-10">
-            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.24em] text-notion-accent">
+            <p
+              className="mb-4 text-[13px] font-semibold uppercase tracking-[0.24em]"
+              style={{ color: "var(--tahoe-accent)" }}
+            >
               {formatPostDate(post.date)}
               {post.category ? ` · ${post.category}` : ""}
             </p>
-            <h1 className="font-serif text-4xl font-semibold leading-tight text-notion-text sm:text-6xl">
+            <h1 className="text-[clamp(2rem,5vw,3rem)] font-semibold leading-tight text-[color:var(--tahoe-text)]">
               {post.title}
             </h1>
             {post.description ? (
-              <p className="mt-5 text-[17px] leading-relaxedBody text-notion-muted">
+              <p className="mt-5 text-[17px] leading-8 text-[color:var(--tahoe-muted)]">
                 {post.description}
               </p>
             ) : null}
             {post.tags.length ? (
               <div className="mt-6 flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
-                  <span
-                    className="rounded-full bg-notion-hover px-3 py-1 text-[13px] text-notion-muted"
-                    key={tag}
-                  >
+                  <span className="tahoe-small-tag" key={tag}>
                     {tag}
                   </span>
                 ))}
@@ -124,7 +132,7 @@ export default async function PostPage({ params }: PostPageProps) {
           </header>
 
           {post.cover ? (
-            <div className="group relative mb-12 overflow-hidden rounded-2xl border border-notion-line shadow-sm transition-all hover:shadow-md">
+            <div className="tahoe-system-card group relative mb-12 overflow-hidden !p-0">
               <img
                 src={post.cover}
                 alt={post.title}
@@ -134,33 +142,36 @@ export default async function PostPage({ params }: PostPageProps) {
           ) : null}
 
           <div
-            className="markdown-body"
+            className="markdown-body tahoe-custom-body"
+            style={{ padding: "clamp(24px, 4vw, 48px)" }}
             dangerouslySetInnerHTML={{ __html: html }}
           />
 
           {(newerPost || olderPost) ? (
-            <nav className="mt-12 grid gap-3 border-t border-notion-line pt-8 sm:grid-cols-2">
+            <nav className="mt-12 grid gap-3 pt-8 sm:grid-cols-2" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
               {newerPost ? (
                 <Link
-                  className="rounded-xl border border-notion-line bg-notion-paper px-4 py-3 transition hover:border-notion-accent"
+                  className="tahoe-system-card !p-4 transition hover:border-[color:var(--tahoe-accent)]"
                   href={`/blog/${newerPost.slug}`}
                 >
-                  <span className="block text-[12px] text-notion-faint">上一篇</span>
-                  <span className="mt-1 block text-[14px] font-medium text-notion-text">{newerPost.title}</span>
+                  <span className="block text-[12px] text-[color:var(--tahoe-faint)]">上一篇</span>
+                  <span className="mt-1 block text-[14px] font-medium text-[color:var(--tahoe-text)]">{newerPost.title}</span>
                 </Link>
               ) : <div />}
               {olderPost ? (
                 <Link
-                  className="rounded-xl border border-notion-line bg-notion-paper px-4 py-3 text-right transition hover:border-notion-accent"
+                  className="tahoe-system-card !p-4 text-right transition hover:border-[color:var(--tahoe-accent)]"
                   href={`/blog/${olderPost.slug}`}
                 >
-                  <span className="block text-[12px] text-notion-faint">下一篇</span>
-                  <span className="mt-1 block text-[14px] font-medium text-notion-text">{olderPost.title}</span>
+                  <span className="block text-[12px] text-[color:var(--tahoe-faint)]">下一篇</span>
+                  <span className="mt-1 block text-[14px] font-medium text-[color:var(--tahoe-text)]">{olderPost.title}</span>
                 </Link>
               ) : null}
             </nav>
           ) : null}
-      </article>
+        </article>
+      </div>
+
       <Footer nav={siteConfig.nav} />
     </main>
   );
