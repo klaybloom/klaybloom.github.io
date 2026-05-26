@@ -33,13 +33,9 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
     </article>
   );
 
-  return project.demo?.startsWith("/") ? (
-    <Link href={project.demo} key={project.slug}>
+  return (
+    <Link href={`/projects/${project.slug}`} key={project.slug}>
       {card}
     </Link>
-  ) : (
-    <a href={project.demo || project.github} key={project.slug}>
-      {card}
-    </a>
   );
 }

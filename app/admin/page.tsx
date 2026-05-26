@@ -2802,15 +2802,15 @@ export default function AdminDashboard() {
 
       {pendingDeletePost && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-4">
-          <div className="w-full max-w-md rounded-2xl border border-red-100 bg-white p-6 shadow-xl">
+          <div className="w-full max-w-md tahoe-system-card !p-6" style={{ borderColor: "rgba(239, 68, 68, 0.3)" }}>
             <div className="mb-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-red-500">删除文章</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "var(--tahoe-accent)" }}>删除文章</p>
               <h2 className="mt-2 text-xl font-bold" style={{ color: "var(--tahoe-text)" }}>
                 {pendingDeletePost.post.frontmatter.title || pendingDeletePost.post.slug}
               </h2>
               <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--tahoe-muted)" }}>
                 删除后会移除对应 Markdown 文件。请再次确认，并输入文章 slug：
-                <span className="ml-1 font-mono font-semibold text-red-600">
+                <span className="ml-1 font-mono font-semibold" style={{ color: "var(--tahoe-accent)" }}>
                   {pendingDeletePost.post.originalSlug || pendingDeletePost.post.slug}
                 </span>
               </p>
@@ -2819,7 +2819,7 @@ export default function AdminDashboard() {
             <input
               value={deleteConfirmSlug}
               onChange={(event) => setDeleteConfirmSlug(event.target.value)}
-              className="w-full rounded-lg px-3 py-2 font-mono text-sm outline-none focus:border-red-400"
+              className="w-full rounded-lg px-3 py-2 font-mono text-sm outline-none"
               style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
               placeholder="输入文章 slug"
               autoFocus
@@ -2837,7 +2837,8 @@ export default function AdminDashboard() {
               <button
                 onClick={confirmPostDelete}
                 disabled={isSaving || deleteConfirmSlug.trim() !== (pendingDeletePost.post.originalSlug || pendingDeletePost.post.slug)}
-                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-45"
+                className="tahoe-button tahoe-button-primary px-4 py-2 text-sm font-semibold disabled:opacity-45"
+                style={isSaving ? {} : { background: "linear-gradient(180deg, #ef4444, #dc2626)" }}
               >
                 {isSaving ? "正在删除..." : "确认删除"}
               </button>

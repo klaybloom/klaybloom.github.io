@@ -35,7 +35,7 @@ export default async function Home() {
     <main data-tahoe-preview className="tahoe-shell min-h-screen overflow-x-hidden">
       <div className="tahoe-bg-fixed" aria-hidden />
       <TahoeHomeHeader name={siteConfig.name} nav={siteConfig.nav} />
-      <TahoeSectionRail />
+      <TahoeSectionRail sections={sections} />
 
       <div className="relative z-10 mx-auto max-w-[1080px] px-4 pb-20 pt-28 sm:px-6">
         <div className="space-y-20">
@@ -76,13 +76,26 @@ function TahoeHomeHeader({ name, nav }: { name: string; nav: NavItem[] }) {
   );
 }
 
-function TahoeSectionRail() {
-  const items = [
-    { href: "#skills", label: "技术" },
-    { href: "#projects", label: "项目" },
-    { href: "#articles", label: "文章" },
-    { href: "#experience", label: "经历" },
-  ];
+const SECTION_ANCHORS: Record<string, { anchor: string; label: string }> = {
+  skills: { anchor: "#skills", label: "技术" },
+  "latest-projects": { anchor: "#projects", label: "项目" },
+  "latest-posts": { anchor: "#articles", label: "文章" },
+  experience: { anchor: "#experience", label: "经历" },
+  custom: { anchor: "", label: "" },
+};
+
+function TahoeSectionRail({ sections }: { sections: HomeSection[] }) {
+  const items = sections
+    .filter((s) => s.type === "custom" || s.type in SECTION_ANCHORS)
+    .map((s) => {
+      const entry = SECTION_ANCHORS[s.type];
+      if (!entry) return null;
+      if (s.type === "custom") {
+        return { href: `#custom-${s.id}`, label: s.params?.title ?? "" };
+      }
+      return { href: entry.anchor, label: entry.label };
+    })
+    .filter((item): item is { href: string; label: string } => item !== null && item.label !== "");
 
   return (
     <nav aria-label="页面段落" className="tahoe-section-rail">
@@ -278,14 +291,10 @@ function TahoeProjects({
             </article>
           );
 
-          return project.demo.startsWith("/") ? (
-            <Link href={project.demo} key={project.slug}>
+          return (
+            <Link href={`/projects/${project.slug}`} key={project.slug}>
               {card}
             </Link>
-          ) : (
-            <a href={project.demo} key={project.slug}>
-              {card}
-            </a>
           );
         })}
       </div>
