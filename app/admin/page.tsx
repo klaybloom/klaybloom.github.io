@@ -1074,12 +1074,13 @@ export default function AdminDashboard() {
           <div className="space-y-3">
             {profile.bio.map((line, idx) => (
               <div key={idx} className="flex gap-2 items-start">
-                <span className="text-xs text-notion-faint mt-3 w-6">{idx + 1}.</span>
+                <span className="text-xs mt-3 w-6" style={{ color: "var(--tahoe-faint)" }}>{idx + 1}.</span>
                 <textarea
                   value={line}
                   onChange={(e) => handleBioLineChange(idx, e.target.value)}
                   rows={2}
-                  className="flex-1 px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent focus:ring-1 focus:ring-notion-accent text-notion-text text-sm"
+                  className="flex-1 px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   placeholder="输入一段关于你的介绍..."
                 />
                 <button
@@ -1093,7 +1094,7 @@ export default function AdminDashboard() {
               </div>
             ))}
             {profile.bio.length === 0 && (
-              <p className="text-sm text-notion-faint italic py-2">暂无详细段落介绍，请点击“添加段落”按钮。</p>
+              <p className="text-sm italic py-2" style={{ color: "var(--tahoe-faint)" }}>暂无详细段落介绍，请点击“添加段落”按钮。</p>
             )}
           </div>
         </div>
@@ -1205,7 +1206,7 @@ export default function AdminDashboard() {
         <div className="tahoe-system-card space-y-6 max-w-4xl animate-on-scroll visible !p-6">
           <div className="flex justify-between items-center pb-2"
               style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
-            <h3 className="text-lg font-bold text-notion-text">
+            <h3 className="text-lg font-bold" style={{ color: "var(--tahoe-text)" }}>
               {isNew ? "➕ 添加工作经历" : "✏️ 编辑工作经历"}
             </h3>
             <button
@@ -1216,7 +1217,7 @@ export default function AdminDashboard() {
                 }
                 setSelectedExpIndex(null);
               }}
-              className="text-sm font-semibold text-notion-muted hover:text-notion-text"
+              className="text-sm font-semibold hover:opacity-70" style={{ color: "var(--tahoe-muted)" }}
             >
               返回列表
             </button>
@@ -1262,11 +1263,12 @@ export default function AdminDashboard() {
 
             <div className="space-y-3">
               <div className="flex justify-between items-center pb-1">
-                <label className="block text-sm font-medium text-notion-muted">工作职责与详情 (Bullet Points)</label>
+                <label className="block text-sm font-medium" style={{ color: "var(--tahoe-muted)" }}>工作职责与详情 (Bullet Points)</label>
                 <button
                   type="button"
                   onClick={handleAddBullet}
-                  className="px-2 py-0.5 text-xs font-semibold text-notion-accent bg-notion-accentSoft rounded hover:bg-opacity-80 transition"
+                  className="px-2 py-0.5 text-xs font-semibold rounded hover:opacity-80 transition"
+                  style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}
                 >
                   ➕ 添加详情行
                 </button>
@@ -1275,12 +1277,13 @@ export default function AdminDashboard() {
               <div className="space-y-2">
                 {exp?.description?.map((bullet, bulletIdx) => (
                   <div key={bulletIdx} className="flex gap-2 items-center">
-                    <span className="text-xs text-notion-faint w-4">•</span>
+                    <span className="text-xs w-4" style={{ color: "var(--tahoe-faint)" }}>•</span>
                     <input
                       type="text"
                       value={bullet}
                       onChange={(e) => handleBulletChange(bulletIdx, e.target.value)}
-                      className="flex-1 px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent focus:ring-1 focus:ring-notion-accent text-notion-text text-sm"
+                      className="flex-1 px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                       placeholder="编写具体的工作职责、项目成就或技术点..."
                     />
                     <button
@@ -1293,13 +1296,13 @@ export default function AdminDashboard() {
                   </div>
                 ))}
                 {(!exp?.description || exp.description.length === 0) && (
-                  <p className="text-xs text-notion-faint italic py-1">暂无详情项，请点击右侧“添加详情行”。</p>
+                  <p className="text-xs italic py-1" style={{ color: "var(--tahoe-faint)" }}>暂无详情项，请点击右侧“添加详情行”。</p>
                 )}
               </div>
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-notion-line">
+          <div className="flex justify-end gap-3 pt-4" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
             <button
               onClick={() => {
                 if (isNew) {
@@ -1307,14 +1310,15 @@ export default function AdminDashboard() {
                 }
                 setSelectedExpIndex(null);
               }}
-              className="px-4 py-2 border border-notion-line rounded-lg text-notion-muted hover:text-notion-text text-sm transition"
+              className="px-4 py-2 rounded-lg text-sm transition hover:opacity-70"
+              style={{ border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-muted)" }}
             >
               取消
             </button>
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="px-5 py-2 bg-notion-accent text-white font-semibold rounded-lg hover:bg-opacity-90 shadow-sm transition text-sm disabled:opacity-50"
+              className="tahoe-button tahoe-button-primary px-5 py-2 font-semibold text-sm disabled:opacity-50"
             >
               {isSaving ? "正在保存..." : "💾 保存此经历"}
             </button>
@@ -1367,12 +1371,12 @@ export default function AdminDashboard() {
     return (
       <div className="space-y-6 max-w-5xl">
         <div className="flex justify-between items-center">
-          <h3 className="text-xl font-bold text-notion-text flex items-center gap-2">
+          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: "var(--tahoe-text)" }}>
             <span>💼</span> 简历与经历时间轴
           </h3>
           <button
             onClick={handleAddNew}
-            className="px-4 py-2 text-sm font-semibold text-white bg-notion-accent rounded-lg hover:bg-opacity-90 transition shadow-sm"
+            className="tahoe-button tahoe-button-primary px-4 py-2 text-sm font-semibold"
           >
             ➕ 添加工作履历
           </button>
@@ -1382,30 +1386,31 @@ export default function AdminDashboard() {
           {experiences.map((exp, idx) => (
             <div
               key={idx}
-              className="bg-notion-paper border border-notion-line rounded-xl p-5 shadow-sm hover:shadow-md transition flex justify-between items-start"
+              className="tahoe-system-card !p-5 hover:shadow-md transition flex justify-between items-start"
             >
               <div className="space-y-2 flex-1 pr-4">
                 <div className="flex items-center gap-3">
-                  <span className="px-2 py-0.5 bg-notion-accentSoft text-notion-accent text-xs font-semibold rounded-md font-mono">
+                  <span className="px-2 py-0.5 text-xs font-semibold rounded-md font-mono"
+                  style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}>
                     {exp.period || "起止时间未定"}
                   </span>
-                  <h4 className="text-base font-bold text-notion-text">
+                  <h4 className="text-base font-bold" style={{ color: "var(--tahoe-text)" }}>
                     {exp.title || "暂无职位名称"}
                   </h4>
-                  <span className="text-sm text-notion-faint">@</span>
-                  <span className="text-sm font-medium text-notion-muted">
+                  <span className="text-sm" style={{ color: "var(--tahoe-faint)" }}>@</span>
+                  <span className="text-sm font-medium" style={{ color: "var(--tahoe-muted)" }}>
                     {exp.company || "未指明公司"}
                   </span>
                 </div>
                 
                 <ul className="list-disc list-inside pl-2 space-y-1">
                   {exp.description?.map((bullet, bulletIdx) => (
-                    <li key={bulletIdx} className="text-xs text-notion-muted">
+                    <li key={bulletIdx} className="text-xs" style={{ color: "var(--tahoe-muted)" }}>
                       {bullet}
                     </li>
                   ))}
                   {(!exp.description || exp.description.length === 0) && (
-                    <span className="text-xs text-notion-faint italic">双击编辑以添加详情项</span>
+                    <span className="text-xs italic" style={{ color: "var(--tahoe-faint)" }}>双击编辑以添加详情项</span>
                   )}
                 </ul>
               </div>
@@ -1415,7 +1420,8 @@ export default function AdminDashboard() {
                   <button
                     onClick={() => moveItem(idx, "up")}
                     disabled={idx === 0}
-                    className="p-1 text-xs bg-notion-hover border border-notion-line rounded hover:bg-opacity-80 disabled:opacity-30"
+                    className="p-1 text-xs rounded hover:opacity-80 disabled:opacity-30"
+                    style={{ background: "var(--tahoe-glass-strong)", border: "1px solid var(--tahoe-card-border)" }}
                     title="上移"
                   >
                     ▲
@@ -1423,7 +1429,8 @@ export default function AdminDashboard() {
                   <button
                     onClick={() => moveItem(idx, "down")}
                     disabled={idx === experiences.length - 1}
-                    className="p-1 text-xs bg-notion-hover border border-notion-line rounded hover:bg-opacity-80 disabled:opacity-30"
+                    className="p-1 text-xs rounded hover:opacity-80 disabled:opacity-30"
+                    style={{ background: "var(--tahoe-glass-strong)", border: "1px solid var(--tahoe-card-border)" }}
                     title="下移"
                   >
                     ▼
@@ -1432,7 +1439,8 @@ export default function AdminDashboard() {
                 
                 <button
                   onClick={() => setSelectedExpIndex(idx)}
-                  className="px-3 py-1.5 text-xs bg-notion-accentSoft text-notion-accent font-semibold rounded-md hover:bg-opacity-80 transition"
+                  className="px-3 py-1.5 text-xs font-semibold rounded-md hover:opacity-80 transition"
+                  style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}
                 >
                   编辑
                 </button>
@@ -1447,7 +1455,8 @@ export default function AdminDashboard() {
           ))}
 
           {experiences.length === 0 && (
-            <div className="text-center py-10 bg-notion-paper border border-dashed border-notion-line rounded-xl text-notion-faint">
+            <div className="text-center py-10 rounded-xl"
+              style={{ background: "var(--tahoe-glass)", border: "1px dashed var(--tahoe-card-border)", color: "var(--tahoe-faint)" }}>
               📭 暂无简历项，点击右上角“添加工作履历”开始创建！
             </div>
           )}
@@ -1483,7 +1492,7 @@ export default function AdminDashboard() {
         <div className="tahoe-system-card space-y-6 max-w-5xl !p-6">
           <div className="flex justify-between items-center pb-2"
               style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
-            <h3 className="text-lg font-bold text-notion-text">
+            <h3 className="text-lg font-bold" style={{ color: "var(--tahoe-text)" }}>
               {isNew ? "➕ 上传与创建新项目" : "✏️ 编辑项目详情"}
             </h3>
             <button
@@ -1493,7 +1502,7 @@ export default function AdminDashboard() {
                 }
                 setSelectedProjIndex(null);
               }}
-              className="text-sm font-semibold text-notion-muted hover:text-notion-text"
+              className="text-sm font-semibold hover:opacity-70" style={{ color: "var(--tahoe-muted)" }}
             >
               返回列表
             </button>
@@ -1507,7 +1516,8 @@ export default function AdminDashboard() {
                   type="text"
                   value={proj?.title || ""}
                   onChange={(e) => handleFieldChange("title", e.target.value)}
-                  className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   placeholder="项目标题"
                 />
               </div>
@@ -1518,7 +1528,8 @@ export default function AdminDashboard() {
                   type="text"
                   value={proj?.slug || ""}
                   onChange={(e) => handleFieldChange("slug", e.target.value)}
-                  className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   placeholder="my-project"
                 />
               </div>
@@ -1529,7 +1540,8 @@ export default function AdminDashboard() {
                   type="text"
                   value={proj?.description || ""}
                   onChange={(e) => handleFieldChange("description", e.target.value)}
-                  className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   placeholder="在卡片中显示的简短一句话介绍"
                 />
               </div>
@@ -1540,7 +1552,8 @@ export default function AdminDashboard() {
                   type="text"
                   value={proj?.category || ""}
                   onChange={(e) => handleFieldChange("category", e.target.value)}
-                  className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   placeholder="例如: Personal Site, Web Application"
                 />
               </div>
@@ -1551,7 +1564,8 @@ export default function AdminDashboard() {
                   <select
                     value={proj?.status || "building"}
                     onChange={(e) => handleFieldChange("status", e.target.value as ProjectItem["status"])}
-                    className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                    className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   >
                     <option value="planning">规划中 (Planning)</option>
                     <option value="building">进行中 (Building)</option>
@@ -1564,7 +1578,8 @@ export default function AdminDashboard() {
                     type="date"
                     value={proj?.date || ""}
                     onChange={(e) => handleFieldChange("date", e.target.value)}
-                    className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                    className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   />
                 </div>
               </div>
@@ -1577,7 +1592,8 @@ export default function AdminDashboard() {
                   type="text"
                   value={proj?.stack?.join(", ") || ""}
                   onChange={(e) => handleStackChange(e.target.value)}
-                  className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   placeholder="React, TypeScript, Spring Boot"
                 />
               </div>
@@ -1589,13 +1605,15 @@ export default function AdminDashboard() {
                     type="text"
                     value={proj?.cover || ""}
                     onChange={(e) => handleFieldChange("cover", e.target.value)}
-                    className="flex-1 px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                    className="flex-1 px-3 py-2 rounded-lg focus:outline-none text-sm"
+                    style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                     placeholder="/images/projects/default.png"
                   />
                   <div className="relative">
                     <button
                       type="button"
-                      className="px-3 py-2 bg-notion-accentSoft text-notion-accent font-semibold rounded-lg hover:bg-opacity-80 text-sm transition"
+                      className="px-3 py-2 font-semibold rounded-lg hover:opacity-80 text-sm transition"
+                      style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}
                     >
                       {isUploading ? "Uploading..." : "📁 上传"}
                     </button>
@@ -1617,7 +1635,8 @@ export default function AdminDashboard() {
                     type="text"
                     value={proj?.github || ""}
                     onChange={(e) => handleFieldChange("github", e.target.value)}
-                    className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                    className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                     placeholder="https://..."
                   />
                 </div>
@@ -1627,7 +1646,8 @@ export default function AdminDashboard() {
                     type="text"
                     value={proj?.demo || ""}
                     onChange={(e) => handleFieldChange("demo", e.target.value)}
-                    className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                    className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                     placeholder="https://..."
                   />
                 </div>
@@ -1639,9 +1659,10 @@ export default function AdminDashboard() {
                     type="checkbox"
                     checked={proj?.featured}
                     onChange={(e) => handleFieldChange("featured", e.target.checked)}
-                    className="w-4 h-4 text-notion-accent bg-notion-bg border-notion-line rounded focus:ring-notion-accent"
+                    className="w-4 h-4 rounded"
+                    style={{ accentColor: "var(--tahoe-accent)" }}
                   />
-                  <span className="text-sm font-medium text-notion-text">精选展示 (Featured)</span>
+                  <span className="text-sm font-medium" style={{ color: "var(--tahoe-text)" }}>精选展示 (Featured)</span>
                 </label>
 
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -1649,9 +1670,10 @@ export default function AdminDashboard() {
                     type="checkbox"
                     checked={proj?.pinned}
                     onChange={(e) => handleFieldChange("pinned", e.target.checked)}
-                    className="w-4 h-4 text-notion-accent bg-notion-bg border-notion-line rounded focus:ring-notion-accent"
+                    className="w-4 h-4 rounded"
+                    style={{ accentColor: "var(--tahoe-accent)" }}
                   />
-                  <span className="text-sm font-medium text-notion-text">置顶展示 (Pinned)</span>
+                  <span className="text-sm font-medium" style={{ color: "var(--tahoe-text)" }}>置顶展示 (Pinned)</span>
                 </label>
               </div>
             </div>
@@ -1663,12 +1685,13 @@ export default function AdminDashboard() {
               value={proj?.longDescription || ""}
               onChange={(e) => handleFieldChange("longDescription", e.target.value)}
               rows={4}
-              className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+              className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
               placeholder="编写更详尽的项目技术介绍、业务痛点解决方案及个人贡献..."
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-notion-line">
+          <div className="flex justify-end gap-3 pt-4" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
             <button
               onClick={() => {
                 if (isNew) {
@@ -1676,14 +1699,15 @@ export default function AdminDashboard() {
                 }
                 setSelectedProjIndex(null);
               }}
-              className="px-4 py-2 border border-notion-line rounded-lg text-notion-muted hover:text-notion-text text-sm transition"
+              className="px-4 py-2 rounded-lg text-sm transition hover:opacity-70"
+              style={{ border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-muted)" }}
             >
               取消
             </button>
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="px-5 py-2 bg-notion-accent text-white font-semibold rounded-lg hover:bg-opacity-90 shadow-sm transition text-sm disabled:opacity-50"
+              className="tahoe-button tahoe-button-primary px-5 py-2 font-semibold text-sm disabled:opacity-50"
             >
               {isSaving ? "正在保存..." : "💾 保存此项目"}
             </button>
@@ -1749,12 +1773,12 @@ export default function AdminDashboard() {
     return (
       <div className="space-y-6 max-w-full animate-on-scroll visible">
         <div className="flex justify-between items-center">
-          <h3 className="text-xl font-bold text-notion-text flex items-center gap-2">
+          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: "var(--tahoe-text)" }}>
             <span>🚀</span> 技术项目管理与上传
           </h3>
           <button
             onClick={handleAddNew}
-            className="px-4 py-2 text-sm font-semibold text-white bg-notion-accent rounded-lg hover:bg-opacity-90 transition shadow-sm"
+            className="tahoe-button tahoe-button-primary px-4 py-2 text-sm font-semibold"
           >
             ➕ 上传/新增个人项目
           </button>
@@ -1764,11 +1788,11 @@ export default function AdminDashboard() {
           {projects.map((proj, idx) => (
             <div
               key={idx}
-              className="bg-notion-paper border border-notion-line rounded-xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col justify-between"
+              className="tahoe-system-card overflow-hidden hover:shadow-md transition flex flex-col justify-between !p-0"
             >
               <div className="p-5 space-y-3">
                 <div className="flex justify-between items-start gap-2">
-                  <h4 className="text-lg font-bold text-notion-text">{proj.title || "未命名项目"}</h4>
+                  <h4 className="text-lg font-bold" style={{ color: "var(--tahoe-text)" }}>{proj.title || "未命名项目"}</h4>
                   <span className={`px-2 py-0.5 text-xs font-semibold rounded-md uppercase font-mono ${
                     proj.status === "launched" ? "bg-green-100 text-green-800" :
                     proj.status === "building" ? "bg-orange-100 text-orange-800" :
@@ -1782,31 +1806,34 @@ export default function AdminDashboard() {
                   <img
                     src={proj.cover}
                     alt={proj.title}
-                    className="w-full h-36 object-cover rounded-lg border border-notion-line"
+                    className="w-full h-36 object-cover rounded-lg" style={{ border: "1px solid var(--tahoe-card-border)" }}
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = "/images/default-cover.jpg";
                     }}
                   />
                 )}
 
-                <p className="text-xs text-notion-muted line-clamp-2">{proj.description || "暂无简短介绍"}</p>
+                <p className="text-xs line-clamp-2" style={{ color: "var(--tahoe-muted)" }}>{proj.description || "暂无简短介绍"}</p>
                 
                 <div className="flex flex-wrap gap-1">
                   {proj.stack?.map((tag, sIdx) => (
-                    <span key={sIdx} className="px-1.5 py-0.5 bg-notion-hover text-notion-muted text-[10px] rounded border border-notion-line">
+                    <span key={sIdx} className="px-1.5 py-0.5 text-[10px] rounded"
+                      style={{ background: "var(--tahoe-glass-strong)", color: "var(--tahoe-muted)", border: "1px solid var(--tahoe-card-border)" }}>
                       {tag}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="p-4 bg-notion-bg border-t border-notion-line flex justify-between items-center gap-2">
-                <span className="text-[10px] text-notion-faint font-mono">/{proj.slug || "no-slug"}</span>
+              <div className="p-4 flex justify-between items-center gap-2"
+                style={{ background: "var(--tahoe-glass)", borderTop: "1px solid var(--tahoe-card-border)" }}>
+                <span className="text-[10px] font-mono" style={{ color: "var(--tahoe-faint)" }}>/{proj.slug || "no-slug"}</span>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => moveItem(idx, "up")}
                     disabled={idx === 0}
-                    className="p-1 text-xs bg-notion-paper border border-notion-line rounded hover:bg-opacity-80 disabled:opacity-30"
+                    className="p-1 text-xs rounded hover:opacity-80 disabled:opacity-30"
+                    style={{ background: "var(--tahoe-card)", border: "1px solid var(--tahoe-card-border)" }}
                     title="前移"
                   >
                     ◀
@@ -1814,14 +1841,16 @@ export default function AdminDashboard() {
                   <button
                     onClick={() => moveItem(idx, "down")}
                     disabled={idx === projects.length - 1}
-                    className="p-1 text-xs bg-notion-paper border border-notion-line rounded hover:bg-opacity-80 disabled:opacity-30"
+                    className="p-1 text-xs rounded hover:opacity-80 disabled:opacity-30"
+                    style={{ background: "var(--tahoe-card)", border: "1px solid var(--tahoe-card-border)" }}
                     title="后移"
                   >
                     ▶
                   </button>
                   <button
                     onClick={() => setSelectedProjIndex(idx)}
-                    className="px-2.5 py-1 text-xs bg-notion-accentSoft text-notion-accent font-semibold rounded hover:bg-opacity-80 transition"
+                    className="px-2.5 py-1 text-xs font-semibold rounded hover:opacity-80 transition"
+                    style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}
                   >
                     编辑
                   </button>
@@ -1837,7 +1866,8 @@ export default function AdminDashboard() {
           ))}
 
           {projects.length === 0 && (
-            <div className="col-span-2 text-center py-10 bg-notion-paper border border-dashed border-notion-line rounded-xl text-notion-faint">
+            <div className="col-span-2 text-center py-10 rounded-xl"
+              style={{ background: "var(--tahoe-glass)", border: "1px dashed var(--tahoe-card-border)", color: "var(--tahoe-faint)" }}>
               📭 暂无项目，点击右上角“上传/新增项目”开始展示你的个人成就！
             </div>
           )}
@@ -1872,12 +1902,12 @@ export default function AdminDashboard() {
       <div className="space-y-6 max-w-4xl">
         <div className="flex justify-between items-center pb-2"
               style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
-          <h3 className="text-xl font-bold text-notion-text flex items-center gap-2">
+          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: "var(--tahoe-text)" }}>
             <span>🧠</span> 专业技能分类管理
           </h3>
           <button
             onClick={handleAddGroup}
-            className="px-3 py-1.5 text-xs font-semibold text-white bg-notion-accent rounded hover:bg-opacity-90 transition"
+            className="tahoe-button tahoe-button-primary px-3 py-1.5 text-xs font-semibold"
           >
             ➕ 添加技能分组
           </button>
@@ -1885,15 +1915,16 @@ export default function AdminDashboard() {
 
         <div className="space-y-4">
           {skills.map((group, idx) => (
-            <div key={idx} className="bg-notion-paper border border-notion-line rounded-xl p-5 shadow-sm space-y-4">
+            <div key={idx} className="tahoe-system-card !p-5 space-y-4">
               <div className="flex gap-4 items-center justify-between">
                 <div className="flex-1 max-w-xs">
-                  <label className="block text-xs font-medium text-notion-faint mb-1">分组名称</label>
+                  <label className="block text-xs font-medium mb-1" style={{ color: "var(--tahoe-faint)" }}>分组名称</label>
                   <input
                     type="text"
                     value={group.group}
                     onChange={(e) => handleGroupNameChange(idx, e.target.value)}
-                    className="w-full px-3 py-1 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm font-semibold"
+                    className="w-full px-3 py-1 rounded-lg focus:outline-none text-sm font-semibold"
+                    style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   />
                 </div>
                 <button
@@ -1905,19 +1936,21 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-notion-faint mb-1">包含技能 (逗号分隔，如: Java, Spring Boot, MySQL)</label>
+                <label className="block text-xs font-medium mb-1" style={{ color: "var(--tahoe-faint)" }}>包含技能 (逗号分隔，如: Java, Spring Boot, MySQL)</label>
                 <input
                   type="text"
                   value={group.items?.join(", ") || ""}
                   onChange={(e) => handleTagsChange(idx, e.target.value)}
-                  className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   placeholder="Java, Spring Boot, MySQL"
                 />
               </div>
 
               <div className="flex flex-wrap gap-1.5 pt-1">
                 {group.items?.map((item, iIdx) => (
-                  <span key={iIdx} className="px-2 py-0.5 bg-notion-accentSoft text-notion-accent text-xs font-medium rounded-full border border-notion-line">
+                  <span key={iIdx} className="px-2 py-0.5 text-xs font-medium rounded-full"
+                  style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)", border: "1px solid var(--tahoe-card-border)" }}>
                     {item}
                   </span>
                 ))}
@@ -1930,7 +1963,7 @@ export default function AdminDashboard() {
           <button
             onClick={handleSkillsSave}
             disabled={isSaving}
-            className="px-6 py-2 bg-notion-accent text-white font-semibold rounded-lg hover:bg-opacity-90 shadow-sm transition disabled:opacity-50"
+            className="tahoe-button tahoe-button-primary px-6 py-2 font-semibold disabled:opacity-50"
           >
             {isSaving ? "正在保存..." : "💾 保存全部技能"}
           </button>
@@ -1995,7 +2028,7 @@ export default function AdminDashboard() {
       <div className="space-y-6 max-w-4xl">
         <div className="flex justify-between items-center pb-2"
               style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
-          <h3 className="text-xl font-bold text-notion-text flex items-center gap-2">
+          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: "var(--tahoe-text)" }}>
             <span>🏠</span> 首页布局配置
           </h3>
           <div className="flex items-center gap-2">
@@ -2008,7 +2041,8 @@ export default function AdminDashboard() {
                   }
                 }}
                 defaultValue=""
-                className="px-3 py-1.5 text-xs font-medium text-notion-accent bg-notion-accentSoft border border-notion-line rounded-lg cursor-pointer hover:bg-opacity-80 transition"
+                className="px-3 py-1.5 text-xs font-medium rounded-lg cursor-pointer hover:opacity-80 transition"
+                style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)", border: "1px solid var(--tahoe-card-border)" }}
               >
                 <option value="" disabled>
                   ➕ 添加新区块
@@ -2023,14 +2057,14 @@ export default function AdminDashboard() {
             <button
               onClick={handleHomeSectionsSave}
               disabled={isSaving}
-              className="px-4 py-1.5 text-xs font-semibold text-white bg-notion-accent rounded-lg hover:bg-opacity-90 transition shadow-sm disabled:opacity-50"
+              className="tahoe-button tahoe-button-primary px-4 py-1.5 text-xs font-semibold disabled:opacity-50"
             >
               {isSaving ? "正在保存..." : "💾 保存首页布局"}
             </button>
           </div>
         </div>
 
-        <p className="text-xs text-notion-faint -mt-2">
+        <p className="text-xs -mt-2" style={{ color: "var(--tahoe-faint)" }}>
           顺序、开关、参数都在这里控制。预设块只能关闭不能删除；自由块可任意添加和删除。
         </p>
 
@@ -2043,12 +2077,13 @@ export default function AdminDashboard() {
             return (
               <div
                 key={section.id}
-                className={`bg-notion-paper border rounded-xl p-4 shadow-sm transition ${
-                  section.enabled ? "border-notion-line" : "border-dashed border-notion-line opacity-60"
+                className={`tahoe-system-card !p-4 transition ${
+                  section.enabled ? "" : "opacity-60"
                 }`}
+                style={section.enabled ? undefined : { borderStyle: "dashed" }}
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="font-mono text-xs text-notion-faint w-6 text-center">
+                  <span className="font-mono text-xs w-6 text-center" style={{ color: "var(--tahoe-faint)" }}>
                     {String(idx + 1).padStart(2, "0")}
                   </span>
                   <label className="flex items-center gap-2 cursor-pointer">
@@ -2056,16 +2091,18 @@ export default function AdminDashboard() {
                       type="checkbox"
                       checked={section.enabled}
                       onChange={(e) => updateSection(idx, { enabled: e.target.checked })}
-                      className="w-4 h-4 text-notion-accent bg-notion-bg border-notion-line rounded focus:ring-notion-accent"
+                      className="w-4 h-4 rounded"
+                    style={{ accentColor: "var(--tahoe-accent)" }}
                     />
-                    <span className="text-sm font-semibold text-notion-text">{def.label}</span>
+                    <span className="text-sm font-semibold" style={{ color: "var(--tahoe-text)" }}>{def.label}</span>
                   </label>
-                  <span className="font-mono text-[10px] text-notion-faint">/{section.id}</span>
+                  <span className="font-mono text-[10px]" style={{ color: "var(--tahoe-faint)" }}>/{section.id}</span>
                   <div className="flex-1" />
                   <button
                     onClick={() => moveSection(idx, "up")}
                     disabled={idx === 0}
-                    className="p-1 text-xs bg-notion-hover border border-notion-line rounded hover:bg-opacity-80 disabled:opacity-30"
+                    className="p-1 text-xs rounded hover:opacity-80 disabled:opacity-30"
+                    style={{ background: "var(--tahoe-glass-strong)", border: "1px solid var(--tahoe-card-border)" }}
                     title="上移"
                   >
                     ▲
@@ -2073,7 +2110,8 @@ export default function AdminDashboard() {
                   <button
                     onClick={() => moveSection(idx, "down")}
                     disabled={idx === homeSections.length - 1}
-                    className="p-1 text-xs bg-notion-hover border border-notion-line rounded hover:bg-opacity-80 disabled:opacity-30"
+                    className="p-1 text-xs rounded hover:opacity-80 disabled:opacity-30"
+                    style={{ background: "var(--tahoe-glass-strong)", border: "1px solid var(--tahoe-card-border)" }}
                     title="下移"
                   >
                     ▼
@@ -2089,24 +2127,25 @@ export default function AdminDashboard() {
                 </div>
 
                 {def.paramFields.length === 0 ? (
-                  <p className="pl-9 text-xs text-notion-faint italic">此区块无可调参数</p>
+                  <p className="pl-9 text-xs italic" style={{ color: "var(--tahoe-faint)" }}>此区块无可调参数</p>
                 ) : (
                   <div className="pl-9 space-y-3">
                     {def.paramFields.includes("title") && (
                       <div>
-                        <label className="block text-xs font-medium text-notion-muted mb-1">区块标题</label>
+                        <label className="block text-xs font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>区块标题</label>
                         <input
                           type="text"
                           value={(section.params?.title as string) ?? ""}
                           onChange={(e) => updateParams(idx, { title: e.target.value })}
                           placeholder={def.defaultParams.title as string}
-                          className="w-full max-w-md px-3 py-1.5 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                          className="w-full max-w-md px-3 py-1.5 rounded-lg focus:outline-none text-sm"
+                          style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                         />
                       </div>
                     )}
                     {def.paramFields.includes("count") && (
                       <div>
-                        <label className="block text-xs font-medium text-notion-muted mb-1">展示条数</label>
+                        <label className="block text-xs font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>展示条数</label>
                         <input
                           type="number"
                           min={1}
@@ -2116,18 +2155,20 @@ export default function AdminDashboard() {
                             const n = parseInt(e.target.value, 10);
                             updateParams(idx, { count: Number.isFinite(n) ? Math.max(1, n) : 3 });
                           }}
-                          className="w-24 px-3 py-1.5 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                          className="w-24 px-3 py-1.5 rounded-lg focus:outline-none text-sm"
+                          style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                         />
                       </div>
                     )}
                     {def.paramFields.includes("body") && (
                       <div>
-                        <label className="block text-xs font-medium text-notion-muted mb-1">内容（Markdown，支持 GFM、代码高亮）</label>
+                        <label className="block text-xs font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>内容（Markdown，支持 GFM、代码高亮）</label>
                         <textarea
                           value={(section.params?.body as string) ?? ""}
                           onChange={(e) => updateParams(idx, { body: e.target.value })}
                           rows={6}
-                          className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text font-mono text-xs leading-relaxed"
+                          className="w-full px-3 py-2 rounded-lg focus:outline-none font-mono text-xs leading-relaxed"
+                          style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                           placeholder="## 子标题&#10;&#10;支持 markdown 语法、链接、列表、代码块..."
                         />
                       </div>
@@ -2139,7 +2180,8 @@ export default function AdminDashboard() {
           })}
 
           {homeSections.length === 0 && (
-            <div className="text-center py-10 bg-notion-paper border border-dashed border-notion-line rounded-xl text-notion-faint">
+            <div className="text-center py-10 rounded-xl"
+              style={{ background: "var(--tahoe-glass)", border: "1px dashed var(--tahoe-card-border)", color: "var(--tahoe-faint)" }}>
               📭 没有任何区块。从右上角下拉菜单添加。
             </div>
           )}
@@ -2269,7 +2311,7 @@ export default function AdminDashboard() {
         <div className="space-y-6 max-w-7xl animate-on-scroll visible">
           <div className="flex justify-between items-center pb-2"
               style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
-            <h3 className="text-lg font-bold text-notion-text">
+            <h3 className="text-lg font-bold" style={{ color: "var(--tahoe-text)" }}>
               {isNew ? "✍️ 撰写新文章" : "📝 编辑技术博文"}
             </h3>
             <div className="flex items-center gap-3">
@@ -2288,7 +2330,7 @@ export default function AdminDashboard() {
                   }
                   setSelectedPostIndex(null);
                 }}
-                className="text-sm font-semibold text-notion-muted hover:text-notion-text"
+                className="text-sm font-semibold hover:opacity-70" style={{ color: "var(--tahoe-muted)" }}
               >
                 返回文章列表
               </button>
@@ -2296,7 +2338,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Editor Meta Form */}
-          <div className="bg-notion-paper border border-notion-line rounded-xl p-5 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="tahoe-system-card !p-5 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2 space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>文章标题</label>
@@ -2304,7 +2346,8 @@ export default function AdminDashboard() {
                   type="text"
                   value={post?.frontmatter?.title || ""}
                   onChange={(e) => handleFieldChange("title", e.target.value)}
-                  className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm font-semibold"
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm font-semibold"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   placeholder="输入文章标题..."
                 />
               </div>
@@ -2316,7 +2359,8 @@ export default function AdminDashboard() {
                   value={post?.slug || ""}
                   onChange={(e) => handleSlugChange(e.target.value)}
                   disabled={false}
-                  className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm font-mono disabled:opacity-50"
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm font-mono disabled:opacity-50"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   placeholder="java-high-concurrency"
                 />
               </div>
@@ -2327,7 +2371,8 @@ export default function AdminDashboard() {
                   type="text"
                   value={post?.frontmatter?.description || ""}
                   onChange={(e) => handleFieldChange("description", e.target.value)}
-                  className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   placeholder="简短一两句总结文章内容..."
                 />
               </div>
@@ -2341,7 +2386,8 @@ export default function AdminDashboard() {
                     type="date"
                     value={post?.frontmatter?.date || ""}
                     onChange={(e) => handleFieldChange("date", e.target.value)}
-                    className="w-full px-3 py-1.5 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-xs"
+                    className="w-full px-3 py-1.5 rounded-lg focus:outline-none text-xs"
+                    style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   />
                 </div>
                 <div>
@@ -2350,7 +2396,8 @@ export default function AdminDashboard() {
                     type="text"
                     value={post?.frontmatter?.category || ""}
                     onChange={(e) => handleFieldChange("category", e.target.value)}
-                    className="w-full px-3 py-1.5 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-xs"
+                    className="w-full px-3 py-1.5 rounded-lg focus:outline-none text-xs"
+                    style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                     placeholder="如: Java, Frontend"
                   />
                 </div>
@@ -2362,7 +2409,8 @@ export default function AdminDashboard() {
                   type="text"
                   value={post?.frontmatter?.tags?.join(", ") || ""}
                   onChange={(e) => handleTagsChange(e.target.value)}
-                  className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                   placeholder="Java, Concurrency, SpringBoot"
                 />
               </div>
@@ -2374,13 +2422,15 @@ export default function AdminDashboard() {
                     type="text"
                     value={post?.frontmatter?.cover || ""}
                     onChange={(e) => handleFieldChange("cover", e.target.value)}
-                    className="flex-1 px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-notion-text text-sm"
+                    className="flex-1 px-3 py-2 rounded-lg focus:outline-none text-sm"
+                    style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                     placeholder="/images/uploads/my-cover.png"
                   />
                   <div className="relative">
                     <button
                       type="button"
-                      className="px-3 py-2 bg-notion-accentSoft text-notion-accent font-semibold rounded-lg hover:bg-opacity-80 text-sm transition"
+                      className="px-3 py-2 font-semibold rounded-lg hover:opacity-80 text-sm transition"
+                      style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}
                     >
                       上传
                     </button>
@@ -2401,9 +2451,10 @@ export default function AdminDashboard() {
                     type="checkbox"
                     checked={post?.frontmatter?.published}
                     onChange={(e) => handleFieldChange("published", e.target.checked)}
-                    className="w-4 h-4 text-notion-accent bg-notion-bg border-notion-line rounded focus:ring-notion-accent"
+                    className="w-4 h-4 rounded"
+                    style={{ accentColor: "var(--tahoe-accent)" }}
                   />
-                  <span className="text-xs font-semibold text-notion-text">公开发布 (Published)</span>
+                  <span className="text-xs font-semibold" style={{ color: "var(--tahoe-text)" }}>公开发布 (Published)</span>
                 </label>
 
                 <label className="flex items-center gap-1.5 cursor-pointer">
@@ -2411,9 +2462,10 @@ export default function AdminDashboard() {
                     type="checkbox"
                     checked={post?.frontmatter?.featured}
                     onChange={(e) => handleFieldChange("featured", e.target.checked)}
-                    className="w-4 h-4 text-notion-accent bg-notion-bg border-notion-line rounded focus:ring-notion-accent"
+                    className="w-4 h-4 rounded"
+                    style={{ accentColor: "var(--tahoe-accent)" }}
                   />
-                  <span className="text-xs font-semibold text-notion-text">置顶推荐 (Featured)</span>
+                  <span className="text-xs font-semibold" style={{ color: "var(--tahoe-text)" }}>置顶推荐 (Featured)</span>
                 </label>
               </div>
             </div>
@@ -2422,15 +2474,17 @@ export default function AdminDashboard() {
           {/* Double Pane Writing Block */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-[500px]">
             {/* Editor Textarea */}
-            <div className="flex flex-col h-full bg-notion-paper border border-notion-line rounded-xl overflow-hidden shadow-sm">
-              <div className="px-4 py-2 bg-notion-bg border-b border-notion-line flex justify-between items-center">
+            <div className="flex flex-col h-full tahoe-system-card overflow-hidden !p-0">
+              <div className="px-4 py-2 flex justify-between items-center"
+                style={{ background: "var(--tahoe-glass)", borderBottom: "1px solid var(--tahoe-card-border)" }}>
                 <div className="flex items-center gap-3">
-                  <span className="text-xs font-semibold text-notion-muted">Markdown 编辑器</span>
+                  <span className="text-xs font-semibold" style={{ color: "var(--tahoe-muted)" }}>Markdown 编辑器</span>
                   <div className="relative flex items-center justify-center">
                     <button
                       type="button"
                       disabled={isUploading}
-                      className="px-2.5 py-1 bg-notion-paper hover:bg-notion-hover border border-notion-line rounded-lg text-xs font-semibold text-notion-text flex items-center gap-1.5 transition shadow-sm"
+                      className="px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition"
+                      style={{ background: "var(--tahoe-card)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
                     >
                       <span>📷</span>
                       <span>{isUploading ? "正在上传..." : "插入图片"}</span>
@@ -2444,7 +2498,7 @@ export default function AdminDashboard() {
                     />
                   </div>
                 </div>
-                <span className="text-[10px] text-notion-faint">支持拖拽、截图粘贴或标准 MD 格式</span>
+                <span className="text-[10px]" style={{ color: "var(--tahoe-faint)" }}>支持拖拽、截图粘贴或标准 MD 格式</span>
               </div>
               <textarea
                 ref={textareaRef}
@@ -2453,29 +2507,32 @@ export default function AdminDashboard() {
                 onPaste={handleEditorPaste}
                 onDrop={handleEditorDrop}
                 onDragOver={(e) => e.preventDefault()}
-                className="flex-1 w-full p-4 bg-transparent resize-none font-mono text-sm focus:outline-none text-notion-text overflow-y-auto leading-relaxed"
+                className="flex-1 w-full p-4 bg-transparent resize-none font-mono text-sm focus:outline-none overflow-y-auto leading-relaxed"
+                style={{ color: "var(--tahoe-text)" }}
                 placeholder="在此处开始使用 Markdown 编写你的高质量技术文章内容... (支持截图粘贴或拖拽图片到此处上传)"
               />
             </div>
 
             {/* Live Preview */}
-            <div className="flex flex-col h-full bg-notion-paper border border-notion-line rounded-xl overflow-hidden shadow-sm">
-              <div className="px-4 py-2 bg-notion-bg border-b border-notion-line flex justify-between items-center">
-                <span className="text-xs font-semibold text-notion-muted">实时双栏预览</span>
-                <span className="text-[10px] text-notion-faint">Notion 优雅渲染</span>
+            <div className="flex flex-col h-full tahoe-system-card overflow-hidden !p-0">
+              <div className="px-4 py-2 flex justify-between items-center"
+                style={{ background: "var(--tahoe-glass)", borderBottom: "1px solid var(--tahoe-card-border)" }}>
+                <span className="text-xs font-semibold" style={{ color: "var(--tahoe-muted)" }}>实时双栏预览</span>
+                <span className="text-[10px]" style={{ color: "var(--tahoe-faint)" }}>Notion 优雅渲染</span>
               </div>
               <div className="flex-1 p-5 overflow-y-auto bg-[#fffdf8]">
                 <div className="markdown-body">
-                  <h1 className="text-2xl font-bold border-b border-notion-line pb-2 text-notion-text">{post?.frontmatter?.title || "未命名博文"}</h1>
-                  <div className="flex gap-2 items-center text-xs text-notion-faint my-3">
+                  <h1 className="text-2xl font-bold pb-2" style={{ borderBottom: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}>{post?.frontmatter?.title || "未命名博文"}</h1>
+                  <div className="flex gap-2 items-center text-xs my-3" style={{ color: "var(--tahoe-faint)" }}>
                     <span>🗓️ {post?.frontmatter?.date}</span>
                     <span>📂 {post?.frontmatter?.category || "未分类"}</span>
                   </div>
                   {post?.frontmatter?.cover && (
-                    <img src={post.frontmatter.cover} alt="Cover Preview" className="w-full h-44 object-cover rounded-lg border border-notion-line my-3" />
+                    <img src={post.frontmatter.cover} alt="Cover Preview" className="w-full h-44 object-cover rounded-lg my-3" style={{ border: "1px solid var(--tahoe-card-border)" }} />
                   )}
                   <div
-                    className="mt-4 prose prose-sm max-w-none text-notion-muted leading-relaxed"
+                    className="mt-4 prose prose-sm max-w-none leading-relaxed"
+                    style={{ color: "var(--tahoe-muted)" }}
                     dangerouslySetInnerHTML={{ __html: parseMarkdown(post?.content || "") }}
                   />
                 </div>
@@ -2491,14 +2548,15 @@ export default function AdminDashboard() {
                 }
                 setSelectedPostIndex(null);
               }}
-              className="px-5 py-2.5 border border-notion-line rounded-lg text-notion-muted hover:text-notion-text text-sm transition"
+              className="px-5 py-2.5 rounded-lg text-sm transition"
+              style={{ border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-muted)" }}
             >
               取消
             </button>
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="px-6 py-2.5 bg-notion-accent text-white font-semibold rounded-lg hover:bg-opacity-90 shadow-sm transition disabled:opacity-50 text-sm"
+              className="tahoe-button tahoe-button-primary px-6 py-2.5 font-semibold disabled:opacity-50 text-sm"
             >
               {isSaving ? "正在提交发布..." : "🚀 保存并发布文章"}
             </button>
@@ -2539,7 +2597,7 @@ export default function AdminDashboard() {
     return (
       <div className="space-y-6 max-w-full animate-on-scroll visible">
         <div className="flex justify-between items-center">
-          <h3 className="text-xl font-bold text-notion-text flex items-center gap-2">
+          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: "var(--tahoe-text)" }}>
             <span>✍️</span> 博文文章管理
           </h3>
           <div className="flex items-center gap-3">
@@ -2551,20 +2609,21 @@ export default function AdminDashboard() {
                   loadOnlineData();
                 }
               }}
-              className="px-4 py-2 text-sm font-semibold text-notion-muted bg-notion-bg border border-notion-line rounded-lg hover:text-notion-text hover:bg-notion-accentSoft transition shadow-sm flex items-center gap-1.5"
+              className="px-4 py-2 text-sm font-semibold rounded-lg transition flex items-center gap-1.5"
+              style={{ color: "var(--tahoe-muted)", background: "var(--tahoe-card)", border: "1px solid var(--tahoe-card-border)" }}
             >
               🔄 刷新同步
             </button>
             <button
               onClick={handleAddNew}
-              className="px-4 py-2 text-sm font-semibold text-white bg-notion-accent rounded-lg hover:bg-opacity-90 transition shadow-sm"
+              className="tahoe-button tahoe-button-primary px-4 py-2 text-sm font-semibold"
             >
               ➕ 撰写新博文
             </button>
           </div>
         </div>
 
-        <div className="bg-notion-paper border border-notion-line rounded-xl overflow-hidden shadow-sm">
+        <div className="tahoe-system-card overflow-hidden !p-0">
           <table className="w-full text-left border-collapse table-fixed">
             <colgroup>
               <col style={{ width: '33%' }} />
@@ -2574,7 +2633,8 @@ export default function AdminDashboard() {
               <col style={{ width: '19%' }} />
             </colgroup>
             <thead>
-              <tr className="bg-notion-bg text-notion-muted border-b border-notion-line font-medium text-xs">
+              <tr className="font-medium text-xs"
+              style={{ background: "var(--tahoe-glass)", color: "var(--tahoe-muted)", borderBottom: "1px solid var(--tahoe-card-border)" }}>
                 <th className="p-4 pl-6">文章标题</th>
                 <th className="p-4">路径 (Slug)</th>
                 <th className="p-4">日期</th>
@@ -2586,13 +2646,14 @@ export default function AdminDashboard() {
               {posts.map((post, idx) => (
                 <tr
                   key={idx}
-                  className="border-b border-notion-line last:border-0 hover:bg-notion-hover transition text-sm"
+                  className="last:border-0 transition text-sm hover:bg-[color:var(--tahoe-glass-strong)]"
+                  style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}
                 >
-                  <td className="p-4 pl-6 font-semibold text-notion-text truncate" title={post.frontmatter?.title || "未命名博文"}>
+                  <td className="p-4 pl-6 font-semibold truncate" style={{ color: "var(--tahoe-text)" }} title={post.frontmatter?.title || "未命名博文"}>
                     {post.frontmatter?.title || "未命名博文"}
                   </td>
-                  <td className="p-4 font-mono text-xs text-notion-faint truncate" title={`/${post.slug}.md`}>/{post.slug}.md</td>
-                  <td className="p-4 text-xs text-notion-muted">{post.frontmatter?.date}</td>
+                  <td className="p-4 font-mono text-xs truncate" style={{ color: "var(--tahoe-faint)" }} title={`/${post.slug}.md`}>/{post.slug}.md</td>
+                  <td className="p-4 text-xs" style={{ color: "var(--tahoe-muted)" }}>{post.frontmatter?.date}</td>
                   <td className="p-4">
                     <span className={`px-2 py-0.5 text-xs font-semibold rounded ${
                       post.frontmatter?.published ? "bg-green-50 text-green-700 border border-green-200" : "bg-gray-100 text-gray-500 border"
@@ -2604,7 +2665,8 @@ export default function AdminDashboard() {
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => handleEditPost(idx)}
-                        className="px-3 py-1 bg-notion-accentSoft text-notion-accent font-semibold rounded hover:bg-opacity-80 transition text-xs"
+                        className="px-3 py-1 font-semibold rounded hover:opacity-80 transition text-xs"
+                        style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}
                       >
                         编辑
                       </button>
@@ -2621,7 +2683,7 @@ export default function AdminDashboard() {
 
               {posts.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="text-center py-10 text-notion-faint">
+                  <td colSpan={5} className="text-center py-10" style={{ color: "var(--tahoe-faint)" }}>
                     📭 暂无文章，点击右上角“撰写新博文”开始分享你的技术洞察吧！
                   </td>
                 </tr>
@@ -2639,14 +2701,15 @@ export default function AdminDashboard() {
 
   const renderAuthScreen = () => {
     return (
-      <div className="min-h-screen bg-notion-bg text-notion-text flex flex-col justify-center items-center p-5">
-        <div className="w-full max-w-md bg-notion-paper border border-notion-line p-8 rounded-2xl shadow-lg space-y-6">
+      <div data-tahoe-preview className="tahoe-shell min-h-screen flex flex-col justify-center items-center p-5">
+        <div className="tahoe-bg-fixed" aria-hidden />
+        <div className="relative z-10 w-full max-w-md tahoe-system-card !p-8 space-y-6">
           <div className="text-center space-y-2">
-            <div className="w-16 h-16 bg-notion-accentSoft rounded-2xl flex items-center justify-center text-3xl mx-auto text-notion-accent">
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mx-auto" style={{ background: "var(--tahoe-accent-soft)", color: "var(--tahoe-accent)" }}>
               🔒
             </div>
-            <h2 className="text-2xl font-bold text-notion-text">Studio 内容管理器</h2>
-            <p className="text-xs text-notion-muted">
+            <h2 className="text-2xl font-bold" style={{ color: "var(--tahoe-text)" }}>Studio 内容管理器</h2>
+            <p className="text-xs" style={{ color: "var(--tahoe-muted)" }}>
               您当前正通过 GitHub Pages 访问线上后台。<br />
               请输入您的 GitHub 访问令牌以建立安全连接。
             </p>
@@ -2654,7 +2717,7 @@ export default function AdminDashboard() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-notion-muted mb-1">
+              <label className="block text-xs font-semibold mb-1" style={{ color: "var(--tahoe-muted)" }}>
                 GitHub 个人访问令牌 (PAT)
               </label>
               <input
@@ -2662,15 +2725,16 @@ export default function AdminDashboard() {
                 value={githubPat}
                 onChange={(e) => setGithubPat(e.target.value)}
                 placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxx"
-                className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-sm"
+                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
               />
-              <p className="text-[10px] text-notion-faint mt-1 leading-normal">
+              <p className="text-[10px] mt-1 leading-normal" style={{ color: "var(--tahoe-faint)" }}>
                 需要 `repo` 作用域权限。令牌仅保存在浏览器本地 localStorage，直接向 GitHub 发起连接，安全无公害。
               </p>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-notion-muted mb-1">
+              <label className="block text-xs font-semibold mb-1" style={{ color: "var(--tahoe-muted)" }}>
                 目标 GitHub 仓库 (用户名/仓库名)
               </label>
               <input
@@ -2678,12 +2742,13 @@ export default function AdminDashboard() {
                 value={githubRepo}
                 onChange={(e) => setGithubRepo(e.target.value)}
                 placeholder="klaybloom/klaybloom.github.io"
-                className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-sm font-mono"
+                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm font-mono"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-notion-muted mb-1">
+              <label className="block text-xs font-semibold mb-1" style={{ color: "var(--tahoe-muted)" }}>
                 发布分支 (Branch)
               </label>
               <input
@@ -2691,20 +2756,21 @@ export default function AdminDashboard() {
                 value={githubBranch}
                 onChange={(e) => setGithubBranch(e.target.value)}
                 placeholder="main"
-                className="w-full px-3 py-2 bg-notion-bg border border-notion-line rounded-lg focus:outline-none focus:border-notion-accent text-sm font-mono"
+                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm font-mono"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
               />
             </div>
 
             <button
               onClick={handleSignIn}
-              className="w-full py-2.5 bg-notion-accent text-white font-bold rounded-lg hover:bg-opacity-95 shadow-sm transition text-sm"
+              className="tahoe-button tahoe-button-primary w-full py-2.5 font-bold text-sm"
             >
               🔐 授权登录后台
             </button>
           </div>
 
-          <div className="text-center text-[10px] text-notion-faint">
-            如果您在本地运行项目，请访问 <a href="http://localhost:3000/admin/" className="text-notion-accent underline">localhost:3000/admin/</a> 免密自动连接本地磁盘。
+          <div className="text-center text-[10px]" style={{ color: "var(--tahoe-faint)" }}>
+            如果您在本地运行项目，请访问 <a href="http://localhost:3000/admin/" className="underline" style={{ color: "var(--tahoe-accent)" }}>localhost:3000/admin/</a> 免密自动连接本地磁盘。
           </div>
         </div>
       </div>
@@ -2739,10 +2805,10 @@ export default function AdminDashboard() {
           <div className="w-full max-w-md rounded-2xl border border-red-100 bg-white p-6 shadow-xl">
             <div className="mb-4">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-red-500">删除文章</p>
-              <h2 className="mt-2 text-xl font-bold text-notion-text">
+              <h2 className="mt-2 text-xl font-bold" style={{ color: "var(--tahoe-text)" }}>
                 {pendingDeletePost.post.frontmatter.title || pendingDeletePost.post.slug}
               </h2>
-              <p className="mt-2 text-sm leading-relaxed text-notion-muted">
+              <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--tahoe-muted)" }}>
                 删除后会移除对应 Markdown 文件。请再次确认，并输入文章 slug：
                 <span className="ml-1 font-mono font-semibold text-red-600">
                   {pendingDeletePost.post.originalSlug || pendingDeletePost.post.slug}
@@ -2753,7 +2819,8 @@ export default function AdminDashboard() {
             <input
               value={deleteConfirmSlug}
               onChange={(event) => setDeleteConfirmSlug(event.target.value)}
-              className="w-full rounded-lg border border-notion-line bg-notion-bg px-3 py-2 font-mono text-sm text-notion-text outline-none focus:border-red-400"
+              className="w-full rounded-lg px-3 py-2 font-mono text-sm outline-none focus:border-red-400"
+              style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
               placeholder="输入文章 slug"
               autoFocus
             />
@@ -2762,7 +2829,8 @@ export default function AdminDashboard() {
               <button
                 onClick={cancelPostDelete}
                 disabled={isSaving}
-                className="rounded-lg border border-notion-line px-4 py-2 text-sm font-medium text-notion-muted transition hover:text-notion-text disabled:opacity-50"
+                className="rounded-lg px-4 py-2 text-sm font-medium transition disabled:opacity-50"
+                style={{ border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-muted)" }}
               >
                 取消
               </button>
@@ -2854,8 +2922,8 @@ export default function AdminDashboard() {
       <main className="flex-1 p-10 overflow-y-auto">
         {isLoading ? (
           <div className="h-full w-full flex flex-col justify-center items-center space-y-3">
-            <div className="w-8 h-8 border-4 border-notion-accent border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-xs text-notion-muted">正在加载数据，请稍候...</p>
+            <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: "var(--tahoe-accent)", borderTopColor: "transparent" }}></div>
+            <p className="text-xs" style={{ color: "var(--tahoe-muted)" }}>正在加载数据，请稍候...</p>
           </div>
         ) : (
           <div className="space-y-4">
