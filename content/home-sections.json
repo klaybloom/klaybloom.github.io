@@ -43,7 +43,7 @@
     {
       "id": "custom-1779805151481",
       "type": "custom",
-      "enabled": true,
+      "enabled": false,
       "params": {
         "title": "测试",
         "body": "## 你好"
