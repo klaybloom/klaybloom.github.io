@@ -3,14 +3,14 @@ import type { Highlight } from "./types";
 export const highlights: Highlight[] = [
   {
     label: "Backend",
-    value: "4 年 Java 后端开发经验"
+    value: "5 年 Java 后端与企业级系统开发经验"
   },
   {
     label: "Microservices",
-    value: "熟悉 Spring Boot、Spring Cloud、Nacos、OAuth2、Redis"
+    value: "熟悉 Spring Boot、Spring Cloud Alibaba、Nacos、OpenFeign、RocketMQ、Redis"
   },
   {
-    label: "AI Workflow",
-    value: "持续实践 Dify、n8n、Coze、Codex 等 AI 工具链"
+    label: "AI Application",
+    value: "实践 RAG 知识库问答、混合检索、来源引用、SSE 流式输出和 RAG 评测"
   }
 ];

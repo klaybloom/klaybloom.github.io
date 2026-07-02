@@ -1,10 +1,11 @@
 {
-  "name": "师方旭",
+  "name": "Klay",
   "nickname": "klay",
-  "title": "Java开发工程师,AI Agent重度使用",
-  "summary": "没有AI不会干活",
+  "title": "Java / AI 应用开发工程师",
+  "summary": "专注 Java 后端、微服务和企业级 AI 应用，把 RAG、文档问答和大模型能力接入真实业务系统。",
   "bio": [
-    "hello，everybody"
+    "长期参与企业级系统研发、接口联调、权限流程、现场部署、国产化适配和生产问题排查。",
+    "近期重点投入 AI 应用开发，实践过私有知识库问答、混合检索、来源引用、SSE 流式输出、RAG 评测和文档索引管理。"
   ],
   "links": {
     "github": "https://github.com/klaybloom",

@@ -1,46 +1,50 @@
 {
   "skills": [
     {
-      "group": "Java 后端",
+      "group": "Java 后端开发",
       "items": [
         "Java",
         "Spring Boot",
-        "Spring Cloud",
+        "Spring MVC",
+        "MyBatis",
         "MyBatis Plus",
-        "JPA",
-        "OAuth2"
+        "Spring OAuth2",
+        "Quartz"
       ]
     },
     {
-      "group": " SpringCloud",
+      "group": "微服务与中间件",
       "items": [
+        "Spring Cloud Alibaba",
         "Nacos",
+        "OpenFeign",
         "Gateway",
+        "RocketMQ",
         "Redis",
-        "RabbitMQ",
-        "Docker",
-        "Linux",
         "Nginx"
       ]
     },
     {
-      "group": " 数据库",
+      "group": "数据库与交付",
       "items": [
         "MySQL",
-        "SQL Optimization",
-        "Transaction",
-        "Index",
-        "ORM Mapping"
+        "TiDB",
+        "SQL 优化",
+        "慢查询排查",
+        "Docker",
+        "Linux",
+        "国产化适配"
       ]
     },
     {
-      "group": " AI-Agent",
+      "group": "AI 应用开发",
       "items": [
-        "Dify",
-        "n8n",
-        "Coze",
-        "AI Agent",
-        "Automation"
+        "RAG",
+        "Spring AI",
+        "LangChain4j",
+        "Chroma",
+        "DeepSeek",
+        "SSE 流式输出"
       ]
     }
   ]

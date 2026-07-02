@@ -1,10 +1,33 @@
 {
   "projects": [
     {
+      "title": "DocuMind 企业私有 RAG 知识库问答系统",
+      "slug": "documind-rag",
+      "description": "面向企业私有文档的 RAG 问答系统，支持文档上传、混合检索、来源引用、问答历史和 RAG 质量评测。",
+      "longDescription": "DocuMind 用 Java 17、Spring Boot、Spring AI、LangChain4j、Chroma 和 DeepSeek 实现完整 RAG 链路。系统支持 PDF、Word、Excel、PPT、TXT 文档解析，经过递归切分、Embedding 向量化、向量检索与关键词匹配后生成带来源引用的回答，并提供检索调试视图、知识库隔离、文档索引状态管理、SSE 流式问答、审计记录和结构化评测用例。",
+      "stack": [
+        "Java 17",
+        "Spring Boot",
+        "Spring AI",
+        "LangChain4j",
+        "Chroma",
+        "DeepSeek"
+      ],
+      "category": "AI Application",
+      "cover": "/images/uploads/cover.png",
+      "github": "https://github.com/klaybloom/DocuMind",
+      "demo": "",
+      "date": "2026-06-01",
+      "updated": "2026-07-01",
+      "status": "building",
+      "featured": true,
+      "pinned": true
+    },
+    {
       "title": "个人主页",
       "slug": "klay-studio",
-      "description": "基于 Markdown 的个人博客系统。",
-      "longDescription": "用于沉淀 Java、微服务、AI 工具链相关内容。",
+      "description": "基于 Next.js 和 Markdown 的个人技术网站，用于展示项目、文章和工程实践。",
+      "longDescription": "个人主页采用文件驱动内容管理方式，文章写入 Markdown，项目、技能和经历通过结构化内容文件维护。网站用于沉淀 Java 后端、微服务、AI 应用开发和工程效率相关内容。",
       "stack": [
         "Next.js",
         "TypeScript",
@@ -13,10 +36,10 @@
       ],
       "category": "Personal Site",
       "cover": "/images/uploads/1779802244520-5.png",
-      "github": "https://github.com/klaybloom/signal-blob",
+      "github": "https://github.com/klaybloom/klaybloom.github.io",
       "demo": "/blog",
       "date": "2026-05-07",
-      "updated": "2026-05-08",
+      "updated": "2026-07-01",
       "status": "building",
       "featured": true,
       "pinned": true
