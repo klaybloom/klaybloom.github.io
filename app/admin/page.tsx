@@ -1817,6 +1817,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {proj.cover && (
+                  // eslint-disable-next-line @next/next/no-img-element -- Admin previews support arbitrary user-entered image URLs.
                   <img
                     src={proj.cover}
                     alt={proj.title}
@@ -2553,6 +2554,7 @@ export default function AdminDashboard() {
                     <span>📂 {post?.frontmatter?.category || "未分类"}</span>
                   </div>
                   {post?.frontmatter?.cover && (
+                    // eslint-disable-next-line @next/next/no-img-element -- Admin previews support arbitrary user-entered image URLs.
                     <img src={post.frontmatter.cover} alt="Cover Preview" className="w-full h-44 object-cover rounded-lg my-3" style={{ border: "1px solid var(--tahoe-card-border)" }} />
                   )}
                   <div

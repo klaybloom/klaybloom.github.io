@@ -9,7 +9,7 @@ const pagesBasePath = process.env.PAGES_BASE_PATH ?? "";
 
 // Self-healing dev-server startup in development mode
 if (process.env.NODE_ENV === "development") {
-  const checkReq = http.get("http://localhost:8081/api/admin/load-data", (res) => {
+  const checkReq = http.get("http://localhost:8081/api/admin/load-data", () => {
     // Port 8081 is already active
   });
   checkReq.on("error", () => {
