@@ -26,7 +26,7 @@ export function Header({ name, nav }: HeaderProps) {
             </a>
           )
         )}
-        <Link href="/rss.xml">RSS</Link>
+        <a href="/rss.xml">RSS</a>
         <TahoeModeToggle iconOnly />
       </div>
     </header>

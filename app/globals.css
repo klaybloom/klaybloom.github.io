@@ -1275,6 +1275,7 @@
   .tahoe-banner-nav {
     max-width: 70%;
     overflow-x: auto;
+    justify-content: flex-start;
     scrollbar-width: none;
   }
 

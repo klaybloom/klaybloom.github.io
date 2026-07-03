@@ -2754,7 +2754,7 @@ export default function AdminDashboard() {
                 style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
               />
               <p className="text-[10px] mt-1 leading-normal" style={{ color: "var(--tahoe-faint)" }}>
-                需要 `repo` 作用域权限。令牌仅保存在浏览器本地 localStorage，直接向 GitHub 发起连接，安全无公害。
+                需要目标仓库 Contents 写入权限；如需修改 workflow，还需要 Workflows 写入权限。令牌会保存在浏览器 localStorage，请只在可信设备使用。
               </p>
             </div>
 
