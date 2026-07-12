@@ -40,9 +40,9 @@ export const metadata: Metadata = {
   },
 };
 
-// Runs before hydration to set legacy [data-theme] from localStorage (or OS preference),
-// preventing a light/dark flash on pages that still use the base theme tokens.
-const themeInitScript = `(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'){document.documentElement.dataset.theme=t;}}catch(e){}})();`;
+// Runs before hydration to set theme attributes from localStorage (or OS preference),
+// preventing light/dark flashes before the client theme toggles mount.
+const themeInitScript = `(function(){try{var r=document.documentElement;var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'){r.dataset.theme=t;}var m=localStorage.getItem('tahoe-mode');if(m!=='dark'&&m!=='light'){m=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}r.dataset.tahoeMode=m;}catch(e){}})();`;
 
 export default function RootLayout({
   children
@@ -50,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" suppressHydrationWarning>
+    <html lang="zh-CN" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <Script
           id="theme-init"

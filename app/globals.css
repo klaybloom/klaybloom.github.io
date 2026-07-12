@@ -181,33 +181,7 @@
   letter-spacing: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  [data-tahoe-preview] {
-    --tahoe-bg: #080a0f;
-    --tahoe-text: #f5f7fb;
-    --tahoe-muted: #c3cad7;
-    --tahoe-faint: #8b94a7;
-    --tahoe-glass: rgba(24, 27, 35, 0.58);
-    --tahoe-glass-strong: rgba(32, 36, 46, 0.78);
-    --tahoe-border: rgba(255, 255, 255, 0.12);
-    --tahoe-highlight: rgba(255, 255, 255, 0.16);
-    --tahoe-card: rgba(18, 21, 29, 0.9);
-    --tahoe-card-border: rgba(255, 255, 255, 0.1);
-    --tahoe-reader: rgba(15, 18, 25, 0.94);
-    --tahoe-accent: #7ab7ff;
-    --tahoe-accent-soft: rgba(122, 183, 255, 0.16);
-    --tahoe-shadow: rgba(0, 0, 0, 0.42);
-  }
-
-  [data-tahoe-preview]:not([data-tahoe-mode="light"]).tahoe-shell::before {
-    background-image: none;
-  }
-
-  [data-tahoe-preview]:not([data-tahoe-mode="light"]) .tahoe-bg-fixed {
-    display: none;
-  }
-}
-
+html[data-tahoe-mode="dark"] [data-tahoe-preview],
 [data-tahoe-preview][data-tahoe-mode="dark"] {
   --tahoe-bg: #080a0f;
   --tahoe-text: #f5f7fb;
@@ -225,14 +199,17 @@
   --tahoe-shadow: rgba(0, 0, 0, 0.42);
 }
 
+html[data-tahoe-mode="dark"] [data-tahoe-preview].tahoe-shell::before,
 [data-tahoe-preview][data-tahoe-mode="dark"].tahoe-shell::before {
   background-image: none;
 }
 
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-bg-fixed,
 [data-tahoe-preview][data-tahoe-mode="dark"] .tahoe-bg-fixed {
   display: none;
 }
 
+html[data-tahoe-mode="light"] [data-tahoe-preview],
 [data-tahoe-preview][data-tahoe-mode="light"] {
   --tahoe-bg: #f5f7fb;
   --tahoe-text: #111827;

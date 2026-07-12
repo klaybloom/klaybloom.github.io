@@ -14,24 +14,34 @@ function getInitialMode(): Mode {
 }
 
 function applyMode(mode: Mode) {
+  document.documentElement.setAttribute("data-tahoe-mode", mode);
   document
     .querySelector("[data-tahoe-preview]")
     ?.setAttribute("data-tahoe-mode", mode);
 }
 
 export function TahoeModeToggle({ iconOnly = false }: { iconOnly?: boolean }) {
-  const [mode, setMode] = useState<Mode>(getInitialMode);
+  const [mode, setMode] = useState<Mode>("light");
 
   useEffect(() => {
-    applyMode(mode);
-    window.localStorage.setItem(STORAGE_KEY, mode);
-  }, [mode]);
+    const initialMode = getInitialMode();
+    applyMode(initialMode);
+    window.localStorage.setItem(STORAGE_KEY, initialMode);
+    const frame = window.requestAnimationFrame(() => setMode(initialMode));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  function updateMode(nextMode: Mode) {
+    setMode(nextMode);
+    applyMode(nextMode);
+    window.localStorage.setItem(STORAGE_KEY, nextMode);
+  }
 
   return (
     <button
       aria-label={mode === "light" ? "切换到夜间模式" : "切换到日间模式"}
       className={iconOnly ? "tahoe-mode-toggle is-icon-only" : "tahoe-mode-toggle"}
-      onClick={() => setMode(mode === "light" ? "dark" : "light")}
+      onClick={() => updateMode(mode === "light" ? "dark" : "light")}
       suppressHydrationWarning
       type="button"
     >
