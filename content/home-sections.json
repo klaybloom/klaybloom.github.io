@@ -28,7 +28,7 @@
       "enabled": true,
       "params": {
         "title": "技术文章",
-        "count": 3
+        "count": 4
       }
     },
     {
@@ -37,7 +37,7 @@
       "enabled": true,
       "params": {
         "title": "精选项目",
-        "count": 1
+        "count": 3
       }
     },
     {
