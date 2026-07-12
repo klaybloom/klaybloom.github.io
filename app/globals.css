@@ -1227,22 +1227,103 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  [data-tahoe-preview] *,
-  [data-tahoe-preview] *::before,
-  [data-tahoe-preview] *::after {
-    animation: none !important;
-    scroll-behavior: auto !important;
-    transition: none !important;
-  }
-}
-
 * {
   box-sizing: border-box;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+@keyframes admin-toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-toast {
+  animation: admin-toast-enter 180ms cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  [data-tahoe-preview] *,
+  [data-tahoe-preview] *::before,
+  [data-tahoe-preview] *::after {
+    animation: none !important;
+  }
+
+  [data-tahoe-preview] .tahoe-nav-item,
+  [data-tahoe-preview] .tahoe-mini-button,
+  [data-tahoe-preview] .tahoe-button,
+  [data-tahoe-preview] .tahoe-link-button,
+  [data-tahoe-preview] .tahoe-segment,
+  [data-tahoe-preview] .tahoe-project-card,
+  [data-tahoe-preview] .tahoe-post-tile,
+  [data-tahoe-preview] .tahoe-skill-card {
+    transition-property: background-color, border-color, color, box-shadow;
+  }
+
+  [data-tahoe-preview] .animate-on-scroll {
+    transform: none;
+    transition-property: opacity;
+  }
+
+  [data-tahoe-preview] .tahoe-nav-item:hover,
+  [data-tahoe-preview] .tahoe-nav-item:focus-visible,
+  [data-tahoe-preview] .tahoe-mini-button:hover,
+  [data-tahoe-preview] .tahoe-mini-button:focus-visible,
+  [data-tahoe-preview] .tahoe-button:hover,
+  [data-tahoe-preview] .tahoe-button:focus-visible,
+  [data-tahoe-preview] .tahoe-link-button:hover,
+  [data-tahoe-preview] .tahoe-link-button:focus-visible,
+  [data-tahoe-preview] .tahoe-tag:hover,
+  [data-tahoe-preview] .tahoe-tag:focus-visible,
+  [data-tahoe-preview] .tahoe-segment:hover,
+  [data-tahoe-preview] .tahoe-segment:focus-visible,
+  [data-tahoe-preview] .tahoe-project-card:hover,
+  [data-tahoe-preview] .tahoe-project-card:focus-within,
+  [data-tahoe-preview] .tahoe-post-card:hover,
+  [data-tahoe-preview] .tahoe-post-card:focus-within,
+  [data-tahoe-preview] .tahoe-preview-card:hover,
+  [data-tahoe-preview] .tahoe-preview-card:focus-within,
+  [data-tahoe-preview] .tahoe-skill-card:hover,
+  [data-tahoe-preview] .tahoe-skill-card:focus-within,
+  [data-tahoe-preview] .tahoe-project-row:hover,
+  [data-tahoe-preview] .tahoe-project-row:focus-visible,
+  [data-tahoe-preview] .tahoe-post-row:hover,
+  [data-tahoe-preview] .tahoe-post-row:focus-visible,
+  [data-tahoe-preview] .tahoe-post-tile:hover,
+  [data-tahoe-preview] .tahoe-post-tile:focus-visible,
+  [data-tahoe-preview] .tahoe-experience-card:hover,
+  [data-tahoe-preview] .tahoe-experience-card:focus-within,
+  [data-tahoe-preview] .tahoe-section-action:hover,
+  [data-tahoe-preview] .tahoe-section-action:focus-visible,
+  [data-tahoe-preview] .tahoe-banner-nav > a:not(.tahoe-mini-button):hover,
+  [data-tahoe-preview] .tahoe-banner-nav > a:not(.tahoe-mini-button):focus-visible,
+  [data-tahoe-preview] .tahoe-mode-toggle:hover,
+  [data-tahoe-preview] .tahoe-mode-toggle:focus-visible,
+  [data-tahoe-preview] .tahoe-section-rail a:hover,
+  [data-tahoe-preview] .tahoe-section-rail a:focus-visible,
+  [data-tahoe-preview] .tahoe-contact-button:hover,
+  [data-tahoe-preview] .tahoe-contact-button:focus-visible,
+  [data-tahoe-preview] .tahoe-dock-item:hover,
+  [data-tahoe-preview] .tahoe-dock-item:focus-visible,
+  [data-tahoe-preview] .tahoe-project-row:hover .tahoe-arrow,
+  [data-tahoe-preview] .tahoe-project-row:focus-visible .tahoe-arrow,
+  [data-tahoe-preview] .tahoe-post-card:hover .tahoe-post-cover img {
+    transform: none;
+  }
 }
 
 body {

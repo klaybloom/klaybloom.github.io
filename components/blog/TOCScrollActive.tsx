@@ -6,11 +6,16 @@ export function TOCScrollActive() {
   const [activeId, setActiveId] = useState<string>("");
 
   useEffect(() => {
-    // Enable smooth scroll behavior globally on mount
-    document.documentElement.style.scrollBehavior = "smooth";
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = reduceMotion ? "auto" : "smooth";
 
     const headings = Array.from(document.querySelectorAll(".markdown-body h2, .markdown-body h3"));
-    if (headings.length === 0) return;
+    if (headings.length === 0) {
+      return () => {
+        document.documentElement.style.scrollBehavior = previousScrollBehavior;
+      };
+    }
 
     function handleScroll() {
       // Offset of 160px for the sticky header
@@ -38,7 +43,7 @@ export function TOCScrollActive() {
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
-      document.documentElement.style.scrollBehavior = "";
+      document.documentElement.style.scrollBehavior = previousScrollBehavior;
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);

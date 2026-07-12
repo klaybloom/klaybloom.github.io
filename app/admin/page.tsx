@@ -2829,7 +2829,7 @@ export default function AdminDashboard() {
       />
       {/* Toast Alert */}
       {alert && (
-        <div className={`fixed bottom-5 right-5 px-5 py-3 rounded-xl border shadow-lg z-50 flex items-center gap-3 text-sm transition-all duration-300 animate-slide-up ${
+        <div className={`admin-toast fixed bottom-5 right-5 z-50 flex items-center gap-3 rounded-xl border px-5 py-3 text-sm shadow-lg ${
           alert.type === "success" ? "bg-green-50 text-green-800 border-green-200" :
           alert.type === "error" ? "bg-red-50 text-red-800 border-red-200" :
           "bg-blue-50 text-blue-800 border-blue-200"
@@ -2947,7 +2947,7 @@ export default function AdminDashboard() {
 
       {/* Floating Collapsible Sidebar */}
       <aside
-        className="fixed left-4 top-4 bottom-4 z-50 flex flex-col select-none transition-all duration-300"
+        className="fixed left-4 top-4 bottom-4 z-50 flex flex-col select-none transition-[background-color,border-color,box-shadow] duration-200 ease-out"
         style={{
           width: sidebarCollapsed ? "48px" : "200px",
           background: "var(--tahoe-glass)",
@@ -2967,7 +2967,7 @@ export default function AdminDashboard() {
           )}
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="flex h-7 w-7 items-center justify-center rounded-full ml-auto transition hover:bg-[color:var(--tahoe-glass-strong)] hover:scale-105"
+            className="flex h-7 w-7 items-center justify-center rounded-full ml-auto transition-transform duration-150 ease-out hover:bg-[color:var(--tahoe-glass-strong)] hover:scale-105"
             style={{ color: "var(--tahoe-muted)" }}
             title={sidebarCollapsed ? "展开侧栏" : "收起侧栏"}
           >
@@ -3065,7 +3065,7 @@ export default function AdminDashboard() {
 
       {/* Main Workspace Area */}
       <main
-        className="min-h-screen p-6 transition-all duration-300"
+        className="min-h-screen p-6"
         style={{ paddingLeft: sidebarCollapsed ? "80px" : "232px" }}
       >
         <div className="max-w-4xl mx-auto">
