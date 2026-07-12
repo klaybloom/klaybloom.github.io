@@ -7,8 +7,7 @@ type HeroProps = {
 
 export function Hero({ profile, highlights }: HeroProps) {
   return (
-    <section id="home" className="tahoe-hero tahoe-window relative overflow-hidden">
-      <WindowDots />
+    <section id="home" className="tahoe-hero tahoe-content-panel relative overflow-hidden">
       <div className="grid gap-10 lg:grid-cols-[1fr_320px] lg:items-end">
         <div className="relative z-10">
           <p className="tahoe-kicker">Hello, I&apos;m</p>
@@ -29,7 +28,7 @@ export function Hero({ profile, highlights }: HeroProps) {
           ) : null}
         </div>
 
-        <aside className="tahoe-system-card relative z-10">
+        <aside className="tahoe-info-panel relative z-10">
           <div className="mb-4 flex items-center gap-2 text-[12px] font-semibold uppercase text-[color:var(--tahoe-accent)]">
             <span className="h-2 w-2 rounded-full bg-[color:var(--tahoe-accent)] shadow-[0_0_0_5px_var(--tahoe-accent-soft)]" />
             Current Status
@@ -42,15 +41,5 @@ export function Hero({ profile, highlights }: HeroProps) {
         </aside>
       </div>
     </section>
-  );
-}
-
-export function WindowDots() {
-  return (
-    <div className="tahoe-dots" aria-hidden>
-      <span className="bg-[#ff5f57]" />
-      <span className="bg-[#febc2e]" />
-      <span className="bg-[#28c840]" />
-    </div>
   );
 }

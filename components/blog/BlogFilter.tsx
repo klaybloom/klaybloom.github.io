@@ -45,6 +45,7 @@ export function BlogFilter({ posts, tags }: BlogFilterProps) {
 
             return (
               <button
+                aria-pressed={isActive}
                 className={isActive ? "tahoe-segment is-active" : "tahoe-segment"}
                 key={tag}
                 onClick={() => setSelectedTag(tag)}

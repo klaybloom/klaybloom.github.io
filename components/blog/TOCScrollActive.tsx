@@ -50,6 +50,7 @@ export function TOCScrollActive() {
       const href = link.getAttribute("href");
       if (href === `#${activeId}`) {
         link.classList.add("is-toc-active");
+        link.setAttribute("aria-current", "location");
         (link as HTMLElement).style.color = "var(--tahoe-accent)";
         (link as HTMLElement).style.fontWeight = "600";
         (link as HTMLElement).style.paddingLeft = "12px";
@@ -57,6 +58,7 @@ export function TOCScrollActive() {
         (link as HTMLElement).style.background = "var(--tahoe-accent-soft)";
       } else {
         link.classList.remove("is-toc-active");
+        link.removeAttribute("aria-current");
         (link as HTMLElement).style.color = "var(--tahoe-muted)";
         (link as HTMLElement).style.fontWeight = "400";
         (link as HTMLElement).style.paddingLeft = "8px";

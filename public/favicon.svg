@@ -2,15 +2,21 @@
   <defs>
     <!-- Background Gradient -->
     <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00C6FF" />
-      <stop offset="50%" stop-color="#0072FF" />
-      <stop offset="100%" stop-color="#7000FF" />
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="54%" stop-color="#F5F7FB" />
+      <stop offset="100%" stop-color="#EAF2FF" />
+    </linearGradient>
+
+    <!-- Soft blue tint matching the homepage brand mark -->
+    <linearGradient id="brand-tint" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#007AFF" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#7AB7FF" stop-opacity="0.04" />
     </linearGradient>
     
     <!-- Letter K Gradient -->
     <linearGradient id="k-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFFFFF" />
-      <stop offset="100%" stop-color="#E2E8F0" />
+      <stop offset="0%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#334155" />
     </linearGradient>
     
     <!-- Specular Light Rim Gradient -->
@@ -28,6 +34,7 @@
 
   <!-- App Icon Base (Rounded Square like macOS Big Sur / Tahoe) -->
   <rect x="32" y="32" width="448" height="448" rx="108" fill="url(#bg-grad)" filter="url(#shadow)" />
+  <rect x="32" y="32" width="448" height="448" rx="108" fill="url(#brand-tint)" />
 
   <!-- Specular Light Rim (Top border highlight) -->
   <rect x="33" y="33" width="446" height="446" rx="107" fill="none" stroke="url(#rim-grad)" stroke-width="3" />

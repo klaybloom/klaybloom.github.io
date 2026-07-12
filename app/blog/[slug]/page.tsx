@@ -79,39 +79,25 @@ export default async function PostPage({ params }: PostPageProps) {
       <TOCScrollActive />
 
       {headings.length ? (
-        <aside className="group fixed left-4 top-32 z-40 hidden xl:block">
-          <button
-            type="button"
-            aria-label="展开文章目录"
-            className="tahoe-mini-button flex h-10 w-10 items-center justify-center !rounded-full font-mono text-[18px] font-semibold transition-all duration-300 hover:scale-105"
-            style={{ color: "var(--tahoe-accent)" }}
-          >
-            ≡
-          </button>
-          <div className="pointer-events-none absolute left-8 top-0 w-60 opacity-0 transition-all duration-200 group-hover:left-10 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:left-10 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
-            <nav className="tahoe-system-card max-h-[calc(100vh-9rem)] overflow-y-auto !p-4 shadow-xl">
-              <p
-                className="mb-3 text-[12px] font-semibold uppercase tracking-[0.24em]"
-                style={{ color: "var(--tahoe-accent)" }}
-              >
-                文章目录
-              </p>
-              <div className="grid gap-1">
-                {headings.map((heading) => (
-                  <a
-                    key={heading.id}
-                    href={`#${heading.id}`}
-                    className={`block rounded-md px-2 py-1 text-[13px] leading-snug transition hover:bg-[color:var(--tahoe-glass-strong)] ${
-                      heading.level === 3 ? "ml-3" : ""
-                    }`}
-                    style={{ color: "var(--tahoe-muted)" }}
-                  >
-                    {heading.text}
-                  </a>
-                ))}
-              </div>
-            </nav>
-          </div>
+        <aside className="fixed left-4 top-32 z-40 hidden w-60 xl:block">
+          <nav className="tahoe-toc-panel max-h-[calc(100vh-9rem)] overflow-y-auto">
+            <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-[color:var(--tahoe-accent)]">
+              文章目录
+            </p>
+            <div className="grid gap-1">
+              {headings.map((heading) => (
+                <a
+                  key={heading.id}
+                  href={`#${heading.id}`}
+                  className={`block rounded-md px-2 py-1 text-[13px] leading-snug text-[color:var(--tahoe-muted)] transition hover:bg-[color:var(--tahoe-glass-strong)] hover:text-[color:var(--tahoe-text)] focus-visible:bg-[color:var(--tahoe-glass-strong)] focus-visible:text-[color:var(--tahoe-text)] focus-visible:outline-none ${
+                    heading.level === 3 ? "ml-3" : ""
+                  }`}
+                >
+                  {heading.text}
+                </a>
+              ))}
+            </div>
+          </nav>
         </aside>
       ) : null}
 
@@ -152,20 +138,20 @@ export default async function PostPage({ params }: PostPageProps) {
           </header>
 
           {post.cover ? (
-            <div className="tahoe-system-card group relative mb-12 overflow-hidden !p-0">
+            <div className="tahoe-media-frame relative mb-12 overflow-hidden">
               <Image
                 src={post.cover}
                 alt={post.title}
                 width={1200}
                 height={630}
                 priority={true}
-                className="w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] aspect-[16/9] md:aspect-[21/9]"
+                className="w-full object-cover aspect-[16/9] md:aspect-[21/9]"
               />
             </div>
           ) : null}
 
           <div
-            className="markdown-body tahoe-custom-body text-[16px] leading-relaxedBody"
+            className="markdown-body tahoe-article-body text-[16px] leading-relaxedBody"
             style={{ padding: "clamp(24px, 4vw, 48px)" }}
             dangerouslySetInnerHTML={{ __html: html }}
           />

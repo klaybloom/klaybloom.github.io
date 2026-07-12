@@ -34,7 +34,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
   );
 
   return (
-    <Link href={`/projects/${project.slug}`} key={project.slug}>
+    <Link className="tahoe-project-link block h-full" href={`/projects/${project.slug}`} key={project.slug}>
       {card}
     </Link>
   );

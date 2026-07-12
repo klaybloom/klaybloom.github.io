@@ -8,6 +8,8 @@ type HeaderProps = {
 };
 
 export function Header({ name, nav }: HeaderProps) {
+  const primaryNav = nav.filter((link) => link.href.startsWith("/"));
+
   return (
     <header className="tahoe-menubar flex items-center justify-between gap-4 px-4 py-2.5 sm:px-5">
       <Link href="/" className="tahoe-brand" aria-label="返回首页">
@@ -15,17 +17,11 @@ export function Header({ name, nav }: HeaderProps) {
         <span>{name}</span>
       </Link>
       <div className="tahoe-banner-nav">
-        {nav.map((link) =>
-          link.href.startsWith("/") ? (
-            <Link href={link.href} key={link.label}>
-              {link.label}
-            </Link>
-          ) : (
-            <a href={link.href} key={link.label}>
-              {link.label}
-            </a>
-          )
-        )}
+        {primaryNav.map((link) => (
+          <Link href={link.href} key={link.label}>
+            {link.label}
+          </Link>
+        ))}
         <a href="/rss.xml">RSS</a>
         <TahoeModeToggle iconOnly />
       </div>

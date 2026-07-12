@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { siteConfig } from "@/content/site";
 import { Interactions } from "@/components/Interactions";
 import "./globals.css";
@@ -39,9 +40,9 @@ export const metadata: Metadata = {
   },
 };
 
-// Runs before hydration to set [data-theme] from localStorage (or OS preference),
-// preventing a light/dark flash on first paint.
-const themeInitScript = `(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'||t==='glass'){document.documentElement.dataset.theme=t;}}catch(e){}})();`;
+// Runs before hydration to set legacy [data-theme] from localStorage (or OS preference),
+// preventing a light/dark flash on pages that still use the base theme tokens.
+const themeInitScript = `(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'){document.documentElement.dataset.theme=t;}}catch(e){}})();`;
 
 export default function RootLayout({
   children
@@ -51,7 +52,11 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: themeInitScript }}
+        />
       </head>
       <body>
         <Interactions />
