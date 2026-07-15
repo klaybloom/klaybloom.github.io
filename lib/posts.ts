@@ -161,8 +161,18 @@ export function getAllPostSlugs() {
 }
 
 export function getAllTags() {
-  return Array.from(new Set(getPublishedPosts().flatMap((post) => post.tags))).sort(
-    (a, b) => a.localeCompare(b, "zh-CN")
+  const tagUsage = new Map<string, number>();
+
+  for (const post of getPublishedPosts()) {
+    for (const tag of new Set(post.tags)) {
+      tagUsage.set(tag, (tagUsage.get(tag) ?? 0) + 1);
+    }
+  }
+
+  return Array.from(tagUsage.keys()).sort(
+    (a, b) =>
+      (tagUsage.get(b) ?? 0) - (tagUsage.get(a) ?? 0) ||
+      a.localeCompare(b, "zh-CN")
   );
 }
 

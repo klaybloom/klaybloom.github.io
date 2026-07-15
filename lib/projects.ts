@@ -29,8 +29,18 @@ export function getAllProjectSlugs() {
 }
 
 export function getAllStacks() {
-  return Array.from(new Set(projects.flatMap((project) => project.stack))).sort(
-    (a, b) => a.localeCompare(b, "zh-CN")
+  const stackUsage = new Map<string, number>();
+
+  for (const project of projects) {
+    for (const stack of new Set(project.stack)) {
+      stackUsage.set(stack, (stackUsage.get(stack) ?? 0) + 1);
+    }
+  }
+
+  return Array.from(stackUsage.keys()).sort(
+    (a, b) =>
+      (stackUsage.get(b) ?? 0) - (stackUsage.get(a) ?? 0) ||
+      a.localeCompare(b, "zh-CN")
   );
 }
 
