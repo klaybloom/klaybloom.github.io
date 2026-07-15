@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { PostSummary } from "@/lib/post-types";
+import { TagFilter } from "@/components/TagFilter";
 import { PostList } from "./PostList";
 
 type BlogFilterProps = {
@@ -12,7 +13,6 @@ type BlogFilterProps = {
 export function BlogFilter({ posts, tags }: BlogFilterProps) {
   const [query, setQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState("全部");
-  const popularTags = tags.slice(0, 5);
 
   const filteredPosts = useMemo(() => {
     const keyword = query.trim().toLowerCase();
@@ -40,40 +40,14 @@ export function BlogFilter({ posts, tags }: BlogFilterProps) {
             value={query}
           />
         </div>
-        <div className="tahoe-filter-row mt-3">
-          <div className="tahoe-filter-chips">
-            {["全部", ...popularTags].map((tag) => {
-              const isActive = selectedTag === tag;
-
-              return (
-                <button
-                  aria-pressed={isActive}
-                  className={isActive ? "tahoe-segment is-active" : "tahoe-segment"}
-                  key={tag}
-                  onClick={() => setSelectedTag(tag)}
-                  type="button"
-                >
-                  {tag}
-                </button>
-              );
-            })}
-          </div>
-          <label className="sr-only" htmlFor="blog-tag-select">
-            选择文章标签
-          </label>
-          <select
-            aria-label="选择文章标签"
-            className="tahoe-filter-select"
-            id="blog-tag-select"
-            onChange={(event) => setSelectedTag(event.target.value)}
-            value={selectedTag}
-          >
-            {['全部', ...tags].map((tag) => (
-              <option key={tag} value={tag}>
-                {tag}
-              </option>
-            ))}
-          </select>
+        <div className="mt-3">
+          <TagFilter
+            controlId="blog-tag-filter"
+            label="文章标签"
+            onSelect={setSelectedTag}
+            options={["全部", ...tags]}
+            selected={selectedTag}
+          />
         </div>
       </div>
       <PostList posts={filteredPosts} />

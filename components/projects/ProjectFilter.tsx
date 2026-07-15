@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { Project } from "@/content/types";
+import { TagFilter } from "@/components/TagFilter";
 import { getProjectSearchText } from "@/lib/projects";
 import { ProjectGrid } from "./ProjectGrid";
 
@@ -13,7 +14,6 @@ type ProjectFilterProps = {
 export function ProjectFilter({ projects, stacks }: ProjectFilterProps) {
   const [query, setQuery] = useState("");
   const [selectedStack, setSelectedStack] = useState("全部");
-  const popularStacks = stacks.slice(0, 5);
 
   const filteredProjects = useMemo(() => {
     const keyword = query.trim().toLowerCase();
@@ -44,39 +44,14 @@ export function ProjectFilter({ projects, stacks }: ProjectFilterProps) {
             value={query}
           />
         </div>
-        <div className="tahoe-filter-row mt-3">
-          <div className="tahoe-filter-chips">
-            {["全部", ...popularStacks].map((stack) => {
-              const isActive = selectedStack === stack;
-
-              return (
-                <button
-                  className={isActive ? "tahoe-segment is-active" : "tahoe-segment"}
-                  key={stack}
-                  onClick={() => setSelectedStack(stack)}
-                  type="button"
-                >
-                  {stack}
-                </button>
-              );
-            })}
-          </div>
-          <label className="sr-only" htmlFor="project-stack-select">
-            选择技术栈
-          </label>
-          <select
-            aria-label="选择技术栈"
-            className="tahoe-filter-select"
-            id="project-stack-select"
-            onChange={(event) => setSelectedStack(event.target.value)}
-            value={selectedStack}
-          >
-            {['全部', ...stacks].map((stack) => (
-              <option key={stack} value={stack}>
-                {stack}
-              </option>
-            ))}
-          </select>
+        <div className="mt-3">
+          <TagFilter
+            controlId="project-stack-filter"
+            label="项目技术栈"
+            onSelect={setSelectedStack}
+            options={["全部", ...stacks]}
+            selected={selectedStack}
+          />
         </div>
       </div>
       <ProjectGrid projects={filteredProjects} />
