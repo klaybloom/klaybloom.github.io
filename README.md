@@ -1,6 +1,6 @@
 # klay 个人主站
 
-这是 `klaybloom.github.io` 的源码仓库，包含个人主页、博客、项目作品集和一个内容管理后台。项目基于 Next.js App Router，内容主要由本仓库里的 JSON、Markdown 和 TypeScript 文件驱动，构建后以静态站点发布到 GitHub Pages。
+这是 `klaybloom.github.io` 的源码仓库，包含个人主页、博客、项目作品集和一个仅限本地使用的内容管理后台。项目基于 Next.js App Router，内容主要由本仓库里的 JSON、Markdown 和 TypeScript 文件驱动，构建后以静态站点发布到 GitHub Pages。
 
 在线地址：<https://klaybloom.github.io/>
 
@@ -11,12 +11,11 @@
 ## 项目能力
 
 - **首页**：基于最新 Tahoe 毛玻璃扁平流体设计，展示个人简介、技能、精选项目、最新文章、经历和自定义 Markdown 区块。
-- **全局高级交互动效**：挂载原生微交互动效引擎，支持自定义跟随光标、点击粒子喷射水波纹、磁性 Hover 悬浮偏移动画、视口滚动渐显以及导航栏随滚动动态加深阴影等极富品质感的视觉特效。
+- **轻量交互**：使用原生 `IntersectionObserver` 实现滚动渐显，并在页面滚动后增加导航阴影；明暗模式和 reduced motion 均有对应处理。
 - **博客**：读取 `content/posts/*.md`，支持 Front Matter、GFM、代码高亮、标题锚点、标签筛选和文章详情页。
 - **项目页**：读取 `content/projects.json`，支持项目列表、技术栈筛选和详情页。
-- **后台管理**：访问 `/admin` 可编辑 profile、experience、projects、skills、posts 和首页区块，支持日夜模式切换。
-- **本地内容保存**：开发环境下后台通过 `scripts/dev-server.mjs` 写入本地文件。
-- **线上内容保存**：部署后的后台可用 GitHub PAT 调 GitHub Contents API，把修改提交回仓库。
+- **本地后台**：开发环境的 `/admin` 可编辑 profile、experience、projects、skills、posts 和首页区块；上传图片会校验真实格式、缩放并保存为 WebP。
+- **生产后台**：线上 `/admin` 只显示本地使用说明，不读取凭证，也不提供编辑或 GitHub 提交功能。
 - **静态部署**：生产构建使用 `output: "export"`，GitHub Actions 将 `out/` 发布到 GitHub Pages。
 - **站点发现**：自动生成 `sitemap.xml`、`robots.txt` 和 `rss.xml`。
 
@@ -30,7 +29,9 @@
 - `unified` / `remark-gfm` / `rehype-highlight`
 - GitHub Pages
 - GitHub Actions
-- 原生微动效引擎 (`IntersectionObserver` + 磁性物理偏移 + 粒子喷射渲染)
+- 原生轻量交互 (`IntersectionObserver` + CSS transition)
+- Zod、react-markdown、sharp
+- Vitest、React Testing Library、jsdom
 
 ## 目录结构
 
@@ -43,10 +44,10 @@ app/
   projects/
     page.tsx                  # 项目列表
     [slug]/page.tsx           # 项目详情
-  admin/page.tsx              # 内容管理后台
-  api/admin/*                 # 静态导出占位接口，本地写文件不走这些 route
+  admin/page.tsx              # 生产只读提示与本地编辑器的环境入口
 
 components/
+  admin/                      # 本地编辑器、安全 Markdown 预览和生产提示
   home/                       # 模块化拆分后的首页 Tahoe 区块组件 (Hero, Skills, Projects, Posts, Experience, Section, CustomSection)
   blog/                       # 博客列表和筛选组件
   projects/                   # 项目列表和筛选组件
@@ -62,6 +63,8 @@ content/
   *.ts                        # JSON 数据的类型化导出和站点配置
 
 lib/
+  content-schema.ts           # 页面、后台、服务和检查脚本共用的内容 schema
+  admin/                      # 本地 API client 与共享表单规则
   posts.ts                    # 文章读取、排序、封面规则、标签聚合
   projects.ts                 # 项目读取、排序、筛选数据
   markdown.ts                 # Markdown 转安全 HTML
@@ -69,12 +72,17 @@ lib/
 
 public/images/
   default-cover.jpg
-  posts/                      # 文章图片
+  posts/                      # 文章 WebP 图片
   projects/                   # 项目图片
   uploads/                    # 后台上传图片默认保存位置
 
 scripts/
-  dev-server.mjs              # 本地后台写文件服务，端口 8081
+  admin-server.ts             # 可测试的本地后台服务
+  dev-server.ts               # 固定监听 127.0.0.1:8081
+  dev.ts                      # 统一启动和停止 Next.js 与本地服务
+  check-content.ts            # 内容、链接与图片引用检查
+  check-assets.ts             # 图片与导出体积预算
+  optimize-images.ts          # 历史文章图片 WebP 转换
 
 docs/
   CONTENT_GUIDE.md            # 内容维护补充说明
@@ -98,7 +106,7 @@ npm run dev
 这个命令会同时启动两部分：
 
 - Next.js dev server：<http://localhost:3000>
-- 本地后台写文件服务：<http://localhost:8081>
+- 本地后台写文件服务：<http://127.0.0.1:8081>
 
 开发时常用页面：
 
@@ -107,7 +115,7 @@ npm run dev
 - 项目：<http://localhost:3000/projects/>
 - 后台：<http://localhost:3000/admin/>
 
-本地打开 `/admin` 时，页面会识别 `localhost` 开发环境，并通过 `http://localhost:8081/api/admin/*` 读取和写入仓库里的内容文件。保存 profile、skills、experience、projects、home sections 和 posts 后，真实文件会被修改。
+本地打开 `/admin` 时，页面通过 `http://127.0.0.1:8081/api/admin/*` 读取和写入仓库里的内容文件。服务只接受来自 `localhost:3000` 和 `127.0.0.1:3000` 的请求，并只监听本机回环地址。
 
 ## 常用命令
 
@@ -127,7 +135,16 @@ npm run build
 npm run lint
 ```
 
-运行 ESLint。当前仓库的 admin 页面还有一些既有 lint 问题，如果只验证静态构建，以 `npm run build` 为主要信号。
+运行 ESLint。
+
+```bash
+npm test
+npm run check:content
+npm run check:assets
+npm run check
+```
+
+依次用于单元与接口测试、内容检查、构建产物体积检查，以及完整的 `test → lint → content → build → assets` 验证。
 
 ```bash
 npm run start
@@ -154,7 +171,7 @@ TypeScript 文件如 `content/profile.ts`、`content/projects.ts`、`content/ski
 2. 打开 <http://localhost:3000/admin/>。
 3. 在侧边栏选择要编辑的内容。
 4. 保存后检查 git diff。
-5. 运行 `npm run build`。
+5. 运行 `npm run check`。
 6. 提交并推送。
 
 本地后台会写入这些文件：
@@ -169,18 +186,7 @@ TypeScript 文件如 `content/profile.ts`、`content/projects.ts`、`content/ski
 
 ### 线上后台
 
-部署后的 `/admin` 不能直接写服务器文件，它会把修改提交到 GitHub 仓库。
-
-使用方式：
-
-1. 打开线上 `/admin`。
-2. 输入 GitHub PAT、仓库名和分支名。
-3. 默认仓库是 `klaybloom/klaybloom.github.io`，默认分支是 `main`。
-4. 后台会读取仓库内容并保存 token 到浏览器 `localStorage`。
-5. 保存内容时，后台会通过 GitHub API 直接创建 commit。
-6. push 到 `main` 后 GitHub Actions 会自动重新部署站点。
-
-PAT 至少需要能读取和写入目标仓库内容。不要把 PAT 写入仓库文件。
+部署后的 `/admin` 是只读说明页，不包含编辑控件、授权输入或仓库写入逻辑。内容修改必须在本地完成，经 `npm run check` 验证并通过正常 Git 流程发布。
 
 ## 首页布局
 
@@ -313,7 +319,7 @@ PAT 至少需要能读取和写入目标仓库内容。不要把 PAT 写入仓�
 - `stack` 用于项目页技术栈筛选。
 - `featured: true` 后可被首页「精选项目」区块展示。
 - `date` 影响项目排序。
-- `cover` 建议放在 `public/images/projects/`，引用路径写成 `/images/projects/file-name.png`。
+- `cover` 建议放在 `public/images/projects/`，引用路径写成 `/images/projects/file-name.webp`。
 
 可用状态：
 
@@ -323,7 +329,7 @@ PAT 至少需要能读取和写入目标仓库内容。不要把 PAT 写入仓�
 - `paused`
 - `archived`
 
-注意：后台表单目前的项目状态选项比类型定义少，手动编辑 JSON 时以 `content/types.ts` 的类型为准。
+后台和公开页面都支持以上五种状态，共享定义位于 `lib/content-schema.ts`。
 
 ## 维护博客文章
 
@@ -346,7 +352,7 @@ tags:
   - AI
   - Engineering
 category: "技术观察"
-cover: "/images/posts/2026-05-24-my-post/cover.png"
+cover: "/images/posts/2026-05-24-my-post/cover.webp"
 published: true
 featured: false
 ---
@@ -375,14 +381,14 @@ featured: false
 图片建议按文章建目录：
 
 ```txt
-public/images/posts/2026-05-24-my-post/cover.png
-public/images/posts/2026-05-24-my-post/image-01.png
+public/images/posts/2026-05-24-my-post/cover.webp
+public/images/posts/2026-05-24-my-post/image-01.webp
 ```
 
 Markdown 中引用：
 
 ```md
-![说明文字](/images/posts/2026-05-24-my-post/image-01.png)
+![说明文字](/images/posts/2026-05-24-my-post/image-01.webp)
 ```
 
 文章模板在 `docs/templates/post-template.md`。
@@ -398,16 +404,12 @@ public/images/uploads/
 返回给正文使用的路径是：
 
 ```txt
-/images/uploads/file-name.png
+/images/uploads/file-name.webp
 ```
 
 长期维护时建议把正式文章图片移动到 `public/images/posts/{slug}/`，项目图片放到 `public/images/projects/`。这样路径更清晰，也方便后续迁移。
 
-后台会对上传图片做基本限制：
-
-- 只接受 `png`、`jpg`、`jpeg`、`webp`、`gif`。
-- 上传文件名会被改成安全文件名，避免覆盖同名文件和写入异常路径。
-- 本地服务也会限制文章 slug，只允许字母、数字、连字符和下划线。
+后台会验证图片真实格式，限制解码输入体积和尺寸，将最长边缩放到 1600px 以内，并直接保存为质量 82 的 WebP。单张输出不得超过 1 MiB；服务同时限制普通请求、上传请求和解码图片体积。文章 slug 只允许小写字母、数字、连字符和下划线。
 
 ## SEO 和订阅
 
@@ -444,7 +446,7 @@ GitHub Actions 配置在 `.github/workflows/deploy-pages.yml`。触发条件：
 1. Checkout 代码。
 2. 使用 Node 22。
 3. 执行 `npm ci`。
-4. 执行 `npm run build`。
+4. 执行 `npm run check`；其中只构建一次 `out/`。
 5. 上传 `out/`。
 6. 发布到 GitHub Pages。
 
@@ -476,10 +478,11 @@ curl -I https://klaybloom.github.io/
 
 ## 发布前检查
 
-建议每次发布前执行：
+每次发布前执行：
 
 ```bash
-npm run build
+npm run check
+git diff --check
 git status --short
 ```
 

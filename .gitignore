@@ -7,6 +7,8 @@ out
 *.tsbuildinfo
 next-env.d.ts
 .klay-image-optimization-plan.json
+.playwright-cli
+output/playwright
 
 # antigravity
 .antigravitycli

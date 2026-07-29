@@ -6,7 +6,7 @@ description: "TODO: One or two sentence summary for list pages and previews."
 tags:
   - TODO
 category: "TODO: Category"
-cover: "/images/posts/TODO-cover.jpg"
+cover: "/images/posts/TODO-cover.webp"
 published: false
 featured: false
 ---
@@ -14,7 +14,7 @@ featured: false
 
 Write the opening context here. Explain the problem, project, or idea in a few direct paragraphs.
 
-![TODO image alt text](/images/posts/TODO-image.jpg)
+![TODO image alt text](/images/posts/TODO-image.webp)
 
 ## Background
 

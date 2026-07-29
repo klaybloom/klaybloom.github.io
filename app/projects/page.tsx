@@ -7,7 +7,7 @@ import { getAllProjects, getAllStacks } from "@/lib/projects";
 
 export const metadata: Metadata = {
   title: `Projects | ${siteConfig.title}`,
-  description: "klay 的个人项目、Demo、工具和实验性作品。"
+  description: "klay 参与的企业系统、Java 后端项目、AI 应用、个人工具和实验性作品。"
 };
 
 export default function ProjectsPage() {
@@ -33,7 +33,7 @@ export default function ProjectsPage() {
           </div>
 
           <p className="mb-10 max-w-2xl text-[15px] leading-8 text-[color:var(--tahoe-muted)]">
-            个人项目、Demo、工具和实验性作品。所有数据来自静态配置文件，适配 GitHub Pages 静态导出。
+            企业业务系统、Java 后端项目、AI 应用、个人工具和实验性作品。项目数据来自仓库内容文件，并随 GitHub Pages 静态构建发布。
           </p>
 
           <ProjectFilter projects={projects} stacks={stacks} />

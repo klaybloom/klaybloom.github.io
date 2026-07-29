@@ -1,6 +1,6 @@
 # Content Guide
 
-This site is a static Next.js site. Content is maintained through Markdown files and TypeScript configuration, without a CMS, database, or generation script.
+This site is a static Next.js site. Content is maintained through Markdown and JSON files. The local-only `/admin` editor writes the same files; production remains read-only.
 
 ## Blog Posts
 
@@ -25,17 +25,12 @@ Required front matter:
 ```yaml
 title: "Post title"
 date: "2026-05-07"
-```
-
-Recommended front matter:
-
-```yaml
 description: "Short summary shown in lists and previews."
 tags:
   - Java
   - AI
 category: "Engineering"
-cover: "/images/posts/example-cover.jpg"
+cover: "/images/posts/example-cover.webp"
 published: true
 featured: false
 ```
@@ -52,29 +47,31 @@ Use `docs/templates/post-template.md` as a copyable starting point.
 
 ## Projects
 
-Projects are maintained in `content/projects.ts`.
+Projects are maintained in `content/projects.json`. `content/projects.ts` is the typed page-facing export.
 
-Add a project by appending a new object to the exported `projects` array:
+Add a project by appending a new object to the `projects` array:
 
-```ts
-export const projects: Project[] = [
-  {
-    title: "Example Project",
-    slug: "example-project",
-    description: "Short project summary.",
-    longDescription: "Longer project explanation.",
-    stack: ["Next.js", "TypeScript"],
-    category: "Personal Site",
-    cover: "/images/projects/example-project.png",
-    github: "https://github.com/klaybloom/example-project",
-    demo: "https://example.com",
-    date: "2026-05-07",
-    updated: "2026-05-07",
-    status: "building",
-    featured: true,
-    pinned: false
-  }
-];
+```json
+{
+  "projects": [
+    {
+      "title": "Example Project",
+      "slug": "example-project",
+      "description": "Short project summary.",
+      "longDescription": "Longer project explanation.",
+      "stack": ["Next.js", "TypeScript"],
+      "category": "Personal Site",
+      "cover": "/images/projects/example-project.webp",
+      "github": "https://github.com/klaybloom/example-project",
+      "demo": "https://example.com",
+      "date": "2026-05-07",
+      "updated": "2026-05-07",
+      "status": "building",
+      "featured": true,
+      "pinned": false
+    }
+  ]
+}
 ```
 
 Required project fields:
@@ -110,7 +107,7 @@ Field notes:
 - `stack` powers the project filter.
 - `featured: true` allows the project to appear on the homepage.
 - `pinned` is stored in the content model for future display rules.
-- Keep image paths under `public/images/projects/` and reference them as `/images/projects/file-name.png`.
+- Keep image paths under `public/images/projects/` and reference them as `/images/projects/file-name.webp`.
 
 Use `docs/templates/project-template.ts` as a copyable starting point.
 
@@ -125,24 +122,18 @@ The homepage uses these existing data helpers:
 
 Update personal and site-level content in these files:
 
-- `content/profile.ts`: name, title, bio, and profile links.
+- `content/profile.json`: name, title, bio, and profile links.
 - `content/site.ts`: site name, metadata, URL, and top navigation.
-- `content/skills.ts`: skill groups.
+- `content/skills.json`: skill groups.
 - `content/highlights.ts`: highlight metrics.
-- `content/experience.ts`: experience timeline.
+- `content/experience.json`: experience timeline.
 
 ## Before Publishing
 
-Run these checks locally:
+Run the complete local check:
 
 ```sh
-npm run build
-```
-
-Optional content sanity check:
-
-```sh
-rg -n --hidden "[s]hifangxu|师方[旭]" . -g '!node_modules/**' -g '!.git/**' -g '!.next/**' -g '!out/**'
+npm run check
 ```
 
 After pushing, wait for GitHub Pages Actions to complete and verify the deployed site:
