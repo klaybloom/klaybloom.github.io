@@ -6,6 +6,7 @@ out
 .env*.local
 *.tsbuildinfo
 next-env.d.ts
+.klay-image-optimization-plan.json
 
 # antigravity
 .antigravitycli
