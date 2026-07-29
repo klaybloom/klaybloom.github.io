@@ -1,50 +1,70 @@
 {
   "skills": [
     {
-      "group": "Java 后端开发",
+      "group": "Java 基础与框架",
       "items": [
         "Java",
+        "并发编程",
+        "JVM",
+        "数据结构",
         "Spring Boot",
         "Spring MVC",
         "MyBatis",
         "MyBatis Plus",
-        "Spring OAuth2",
-        "Quartz"
+        "事务与 AOP",
+        "设计模式"
       ]
     },
     {
-      "group": "微服务与中间件",
+      "group": "微服务与消息中间件",
       "items": [
         "Spring Cloud Alibaba",
         "Nacos",
         "OpenFeign",
         "Gateway",
+        "RabbitMQ",
         "RocketMQ",
+        "Quartz",
         "Redis",
+        "Redisson",
         "Nginx"
       ]
     },
     {
-      "group": "数据库与交付",
+      "group": "数据库与系统交付",
       "items": [
         "MySQL",
         "TiDB",
         "SQL 优化",
         "慢查询排查",
+        "索引与 MVCC",
         "Docker",
         "Linux",
-        "国产化适配"
+        "国产化适配",
+        "灰度发布",
+        "链路追踪与监控"
       ]
     },
     {
-      "group": "AI 应用开发",
+      "group": "AI Agent 应用开发",
       "items": [
         "RAG",
+        "Hybrid Search",
+        "Reranking",
+        "Prompt 编排",
+        "Function Calling",
+        "Tool Calling",
+        "Hooks",
+        "LangChain",
+        "LangGraph",
         "Spring AI",
         "LangChain4j",
-        "Chroma",
+        "Qdrant",
+        "Milvus",
         "DeepSeek",
-        "SSE 流式输出"
+        "Qwen3 Embedding",
+        "Qwen3 Reranker",
+        "MCP"
       ]
     }
   ]

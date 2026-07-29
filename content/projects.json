@@ -1,27 +1,96 @@
 {
   "projects": [
     {
-      "title": "DocuMind 企业私有 RAG 知识库问答系统",
+      "title": "RAG 企业知识库问答系统",
       "slug": "documind-rag",
-      "description": "面向企业私有文档的 RAG 问答系统，支持文档上传、混合检索、来源引用、问答历史和 RAG 质量评测。",
-      "longDescription": "DocuMind 用 Java 17、Spring Boot、Spring AI、LangChain4j、Chroma 和 DeepSeek 实现完整 RAG 链路。系统支持 PDF、Word、Excel、PPT、TXT 文档解析，经过递归切分、Embedding 向量化、向量检索与关键词匹配后生成带来源引用的回答，并提供检索调试视图、知识库隔离、文档索引状态管理、SSE 流式问答、审计记录和结构化评测用例。",
+      "description": "面向审计知识与业务流程的 RAG 问答系统，支持知识库隔离、混合检索、来源引用、Function Calling 和索引状态管理。",
+      "longDescription": "系统基于 Spring Boot 3.4.5、LangChain4j、DeepSeek、Qdrant、Qwen3 Embedding 和 Qwen3 Reranker 构建。通过 SessionID、知识库 ID 和 userId 隔离对话与知识权限，结合向量检索和关键词匹配完成混合召回，再对候选片段过滤、去重、排序并截断。系统同时支持自定义 Prompt、问答历史、知识缺口记录、负责人追踪、文档重新索引、SHA-256 文件去重，以及查询报告、用户信息和流程进度等业务工具调用。",
       "stack": [
-        "Java 17",
-        "Spring Boot",
-        "Spring AI",
+        "Spring Boot 3.4.5",
         "LangChain4j",
-        "Chroma",
-        "DeepSeek"
+        "DeepSeek",
+        "Qdrant",
+        "Qwen3 Embedding",
+        "Qwen3 Reranker"
       ],
       "category": "AI Application",
       "cover": "",
       "github": "https://github.com/klaybloom/DocuMind",
       "demo": "",
       "date": "2026-06-01",
-      "updated": "2026-07-01",
+      "updated": "2026-07-20",
       "status": "building",
       "featured": true,
       "pinned": true
+    },
+    {
+      "title": "银行一体化稽核业务系统",
+      "slug": "bank-audit-platform",
+      "description": "面向银行内部稽核场景的企业级业务系统，覆盖任务管理、整改流程、报告生成、权限控制、消息和审计日志。",
+      "longDescription": "系统围绕稽核任务、问题台账、整改流程、稽核报告、人员权限、附件管理、消息通知和审计日志等场景建设。项目中实践了用户-角色-菜单-按钮权限模型与数据权限，设计 RocketMQ 消息状态追踪和失败重试机制，统一文件管理与日志告警，并参与基于 Prompt 和 Tools 的 SQL 助手、报告生成能力，以及 TongWeb、JDK、麒麟系统适配和 Nginx 灰度发布。",
+      "stack": [
+        "Spring Cloud Alibaba",
+        "Nacos",
+        "OpenFeign",
+        "RocketMQ",
+        "Redis",
+        "MySQL",
+        "TiDB",
+        "Quartz"
+      ],
+      "category": "Enterprise System",
+      "cover": "",
+      "github": "",
+      "demo": "",
+      "date": "2025-01-01",
+      "updated": "2025-01-01",
+      "status": "launched",
+      "featured": true,
+      "pinned": true
+    },
+    {
+      "title": "飞书内部通讯与协作系统",
+      "slug": "feishu-collaboration",
+      "description": "基于飞书开放平台的企业协作集成系统，支持登录、消息通知、机器人、会议日程和内部系统联动。",
+      "longDescription": "围绕飞书开放平台完成企业登录接入、用户身份获取与内部账号绑定，参与消息通知和机器人能力开发，用于业务系统消息推送、流程提醒和内部协作通知，并参与会议日程接口集成，支持内部系统与飞书日程能力联动。",
+      "stack": [
+        "Java",
+        "Spring Boot",
+        "飞书开放平台",
+        "Redis",
+        "MySQL"
+      ],
+      "category": "System Integration",
+      "cover": "",
+      "github": "",
+      "demo": "",
+      "date": "2022-01-01",
+      "updated": "2022-01-01",
+      "status": "launched",
+      "featured": false,
+      "pinned": false
+    },
+    {
+      "title": "政务质量检测系统",
+      "slug": "quality-inspection-system",
+      "description": "面向政务检测业务的数据录入与报告系统，支持规则计算、检测结果评估、报告生成和现场交付。",
+      "longDescription": "系统用于现场测量数据录入，后台根据业务规则完成数据计算和检测结果评估并生成检测报告。参与 PHP 到 Java 的技术栈迁移，负责测量数据、业务规则、结果评估和报告生成相关模块，并参与系统联调、客户现场部署、安装配置和问题排查。",
+      "stack": [
+        "Java",
+        "Spring Boot",
+        "MySQL",
+        "业务规则",
+        "报告生成"
+      ],
+      "category": "Government System",
+      "cover": "",
+      "github": "",
+      "demo": "",
+      "date": "2021-01-01",
+      "updated": "2021-01-01",
+      "status": "launched",
+      "featured": false,
+      "pinned": false
     },
     {
       "title": "个人主页",
@@ -39,7 +108,7 @@
       "github": "https://github.com/klaybloom/klaybloom.github.io",
       "demo": "/blog",
       "date": "2026-05-07",
-      "updated": "2026-07-01",
+      "updated": "2026-07-20",
       "status": "launched",
       "featured": true,
       "pinned": true

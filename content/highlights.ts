@@ -7,10 +7,10 @@ export const highlights: Highlight[] = [
   },
   {
     label: "Microservices",
-    value: "熟悉 Spring Boot、Spring Cloud Alibaba、Nacos、OpenFeign、RocketMQ、Redis"
+    value: "熟悉 Spring Boot、Spring Cloud Alibaba、RocketMQ、RabbitMQ、Redis、MySQL"
   },
   {
     label: "AI Application",
-    value: "实践 RAG 知识库问答、混合检索、来源引用、SSE 流式输出和 RAG 评测"
+    value: "实践 RAG、Hybrid Search、Reranking、Function Calling、Hooks 与 MCP 工具接入"
   }
 ];

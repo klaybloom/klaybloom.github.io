@@ -2,10 +2,11 @@
   "name": "Klay",
   "nickname": "klay",
   "title": "Java / AI 应用开发工程师",
-  "summary": "专注 Java 后端、微服务和企业级 AI 应用，把 RAG、文档问答和大模型能力接入真实业务系统。",
+  "summary": "专注 Java 后端、微服务与企业级 AI 应用，把 RAG、Agent 工具调用和大模型能力接入真实业务流程。",
   "bio": [
-    "长期参与企业级系统研发、接口联调、权限流程、现场部署、国产化适配和生产问题排查。",
-    "近期重点投入 AI 应用开发，实践过私有知识库问答、混合检索、来源引用、SSE 流式输出、RAG 评测和文档索引管理。"
+    "具备 5 年 Java 后端开发经验，参与银行稽核、政务检测、企业协作等系统的研发、交付和生产维护。",
+    "近期重点投入 AI 应用开发，实践 Prompt 编排、混合检索、Reranking、Function Calling、Hooks、会话记忆和文档索引管理。",
+    "关注把 Java 服务封装为可控的 Tools 或 MCP，让 AI 能力真正进入查询、报告、工单和运维等业务流程。"
   ],
   "links": {
     "github": "https://github.com/klaybloom",

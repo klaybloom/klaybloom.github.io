@@ -155,37 +155,41 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </div>
             </section>
 
-            <section>
-              <h2
-                className="mb-4 border-l-4 pl-3 text-[15px] font-semibold"
-                style={{ borderColor: "var(--tahoe-accent)", color: "var(--tahoe-text)" }}
-              >
-                链接
-              </h2>
-              <div className="flex flex-wrap gap-3 text-[14px]">
-                <a
-                  className="tahoe-button tahoe-button-primary"
-                  href={project.github}
+            {project.github || project.demo ? (
+              <section>
+                <h2
+                  className="mb-4 border-l-4 pl-3 text-[15px] font-semibold"
+                  style={{ borderColor: "var(--tahoe-accent)", color: "var(--tahoe-text)" }}
                 >
-                  GitHub
-                </a>
-                {project.demo?.startsWith("/") ? (
-                  <Link
-                    className="tahoe-button tahoe-button-glass"
-                    href={project.demo}
-                  >
-                    在线预览
-                  </Link>
-                ) : project.demo ? (
-                  <a
-                    className="tahoe-button tahoe-button-glass"
-                    href={project.demo}
-                  >
-                    在线预览
-                  </a>
-                ) : null}
-              </div>
-            </section>
+                  链接
+                </h2>
+                <div className="flex flex-wrap gap-3 text-[14px]">
+                  {project.github ? (
+                    <a
+                      className="tahoe-button tahoe-button-primary"
+                      href={project.github}
+                    >
+                      GitHub
+                    </a>
+                  ) : null}
+                  {project.demo?.startsWith("/") ? (
+                    <Link
+                      className="tahoe-button tahoe-button-glass"
+                      href={project.demo}
+                    >
+                      在线预览
+                    </Link>
+                  ) : project.demo ? (
+                    <a
+                      className="tahoe-button tahoe-button-glass"
+                      href={project.demo}
+                    >
+                      在线预览
+                    </a>
+                  ) : null}
+                </div>
+              </section>
+            ) : null}
           </div>
         </article>
       </div>
@@ -199,7 +203,7 @@ function getProjectStatusDescription(status: string) {
   const descriptions: Record<string, string> = {
     planning: "项目仍在规划中，功能边界和技术路线还会继续调整。",
     building: "项目正在建设和迭代中，当前版本可用于了解方向和阶段性成果。",
-    launched: "项目已经上线，可通过预览链接查看当前可用版本。",
+    launched: "项目已经上线或完成交付，当前页面保留项目说明与技术栈记录。",
     paused: "项目暂时暂停维护，后续是否继续取决于实际需求。",
     archived: "项目已归档，主要作为历史记录和作品展示保留。",
   };
