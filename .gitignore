@@ -1,9 +1,11 @@
 node_modules
 .next
 out
+.worktrees
 .vercel
 .env*.local
 *.tsbuildinfo
+next-env.d.ts
 
 # antigravity
 .antigravitycli
