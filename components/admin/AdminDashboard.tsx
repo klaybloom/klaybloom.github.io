@@ -1,0 +1,2297 @@
+"use client";
+
+import Link from "next/link";
+import React, { useState, useEffect } from "react";
+import {
+  BLOCK_TYPES,
+  DEFAULT_SECTIONS,
+  getBlockType,
+  type HomeSection,
+  type HomeSectionType,
+} from "@/lib/home-sections";
+import { MarkdownPreview } from "@/components/admin/MarkdownPreview";
+import { TahoeModeToggle } from "@/components/layout/TahoeModeToggle";
+import { adminClient } from "@/lib/admin/client";
+import {
+  validatePostBeforeSave,
+  type EditablePost,
+} from "@/lib/admin/forms";
+import type {
+  ExperienceItem as SharedExperienceItem,
+  PostFrontmatter,
+  Profile,
+  Project,
+  SkillGroup,
+} from "@/lib/content-schema";
+
+// ==========================================
+// Types
+// ==========================================
+
+type ExperienceItem = SharedExperienceItem & {
+  isNewExp?: boolean;
+};
+
+type ProjectItem = Project & {
+  isNewProj?: boolean;
+};
+
+type PostItem = EditablePost;
+
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : String(error);
+}
+
+// ==========================================
+// Main Component
+// ==========================================
+
+export function AdminDashboard() {
+  const [activeTab, setActiveTab] = useState<"profile" | "experience" | "projects" | "skills" | "posts" | "home">("profile");
+
+  // Loaders & Alerts
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [alert, setAlert] = useState<{ type: "success" | "error" | "info"; msg: string } | null>(null);
+
+  // Content States
+  const [profile, setProfile] = useState<Profile>({
+    name: "",
+    nickname: "",
+    title: "",
+    summary: "",
+    bio: [],
+    links: { github: "", blog: "", projects: "", email: "" },
+  });
+  const [experiences, setExperiences] = useState<ExperienceItem[]>([]);
+  const [projects, setProjects] = useState<ProjectItem[]>([]);
+  const [skills, setSkills] = useState<SkillGroup[]>([]);
+  const [posts, setPosts] = useState<PostItem[]>([]);
+  const [homeSections, setHomeSections] = useState<HomeSection[]>(DEFAULT_SECTIONS);
+
+  // Active editors state
+  const [selectedExpIndex, setSelectedExpIndex] = useState<number | null>(null);
+  const [selectedProjIndex, setSelectedProjIndex] = useState<number | null>(null);
+  const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
+  const [pendingDeletePost, setPendingDeletePost] = useState<{ post: PostItem; index: number | null } | null>(null);
+  const [pendingDeleteSkill, setPendingDeleteSkill] = useState<{ index: number; groupName: string } | null>(null);
+  const [pendingConfirm, setPendingConfirm] = useState<{ title: string; message: string; onConfirm: () => void } | null>(null);
+  const [deleteConfirmSlug, setDeleteConfirmSlug] = useState("");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  
+  // Image Uploading state
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+
+  // Alert self-diminish
+  useEffect(() => {
+    if (alert) {
+      const timer = setTimeout(() => setAlert(null), 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [alert]);
+
+  // ==========================================
+  // Local Dev API Calls
+  // ==========================================
+
+  const loadLocalData = async () => {
+    setIsLoading(true);
+    try {
+      const [data, loadedPosts] = await Promise.all([
+        adminClient.loadData(),
+        adminClient.listPosts(),
+      ]);
+      setProfile(data.profile);
+      setExperiences(data.experience);
+      setProjects(data.projects);
+      setSkills(data.skills);
+      if (Array.isArray(data.homeSections) && data.homeSections.length > 0) {
+        setHomeSections(data.homeSections);
+      } else {
+        setHomeSections(DEFAULT_SECTIONS);
+      }
+      setPosts(loadedPosts);
+      
+      setAlert({ type: "success", msg: "成功加载本地文件数据" });
+    } catch (e: unknown) {
+      setAlert({ type: "error", msg: `本地数据加载失败: ${getErrorMessage(e)}` });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const saveLocalData = async (type: "profile" | "experience" | "projects" | "skills" | "post" | "delete-post" | "home-sections", payload: unknown, slug?: string) => {
+    setIsSaving(true);
+    try {
+      await adminClient.save(type, payload, slug);
+      setAlert({ type: "success", msg: "本地保存成功" });
+      return true;
+    } catch (e: unknown) {
+      setAlert({ type: "error", msg: `保存错误: ${getErrorMessage(e)}` });
+      return false;
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const uploadLocalImage = async (file: File): Promise<string | null> => {
+    setIsUploading(true);
+    try {
+      const url = await adminClient.upload(file);
+      setAlert({ type: "success", msg: `图片已转为 WebP 并保存至本地: ${url}` });
+      return url;
+    } catch (e: unknown) {
+      setAlert({ type: "error", msg: `图片上传错误: ${getErrorMessage(e)}` });
+      return null;
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      void loadLocalData();
+    }, 0);
+    return () => window.clearTimeout(timer);
+    // loadLocalData is an event-style loader that intentionally reads current state.
+  }, []);
+
+  // ==========================================
+  // Form Save Actions
+  // ==========================================
+
+  const handleProfileSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await saveLocalData("profile", profile);
+  };
+
+  const handleExperienceSave = async (customExpList?: ExperienceItem[]) => {
+    const targetList = customExpList || experiences;
+    const cleaned = targetList.map(({ period, title, company, description }) => ({
+      period,
+      title,
+      company,
+      description,
+    }));
+    setExperiences(cleaned);
+    await saveLocalData("experience", { experience: cleaned });
+    setSelectedExpIndex(null);
+  };
+
+  const handleProjectsSave = async (customProjList?: ProjectItem[]) => {
+    const targetList = customProjList || projects;
+    const cleaned = targetList.map((project) => ({
+      title: project.title,
+      slug: project.slug.trim(),
+      description: project.description,
+      longDescription: project.longDescription,
+      stack: project.stack,
+      category: project.category,
+      cover: project.cover,
+      github: project.github,
+      demo: project.demo,
+      date: project.date,
+      updated: project.updated,
+      status: project.status,
+      featured: project.featured,
+      pinned: project.pinned,
+    }));
+    setProjects(cleaned);
+    await saveLocalData("projects", { projects: cleaned });
+    setSelectedProjIndex(null);
+  };
+
+  const handleSkillsSave = async () => {
+    await saveLocalData("skills", { skills });
+  };
+
+  const handleHomeSectionsSave = async () => {
+    await saveLocalData("home-sections", { sections: homeSections });
+  };
+
+  const handleEditPost = (idx: number) => {
+    setPosts((current) =>
+      current.map((item, itemIdx) =>
+        itemIdx === idx ? { ...item, originalSlug: item.slug } : item
+      )
+    );
+    setSelectedPostIndex(idx);
+  };
+
+  const handlePostSave = async (post: PostItem) => {
+    if (!post.slug.trim()) {
+      setAlert({ type: "error", msg: "文章的 Slug (路径) 不能为空！" });
+      return;
+    }
+
+    // 网页路径排重校验 (Collision Protection)
+    const targetSlug = post.slug.trim().toLowerCase();
+    const preflight = validatePostBeforeSave(post, targetSlug);
+    if (preflight.errors.length) {
+      setAlert({ type: "error", msg: `发布前检查未通过：${preflight.errors.join("；")}` });
+      return;
+    }
+    if (preflight.warnings.length && !window.confirm(`发布前检查提醒：\n\n${preflight.warnings.join("\n")}\n\n仍然继续保存吗？`)) {
+      return;
+    }
+
+    const isDuplicate = posts.some((p, idx) => idx !== selectedPostIndex && p.slug.trim().toLowerCase() === targetSlug);
+    if (isDuplicate) {
+      setAlert({ type: "error", msg: `❌ 保存失败：网页路径 "/posts/${post.slug}.md" 已被其他文章占用，请使用其他路径！` });
+      return;
+    }
+    
+    // Frontmatter formatter helper
+    const fm = { ...post.frontmatter };
+    if (!fm.date) {
+      fm.date = new Date().toISOString().split("T")[0];
+    }
+    if (!fm.title) {
+      fm.title = post.slug;
+    }
+
+    const isRename = post.originalSlug && post.originalSlug !== targetSlug;
+
+    const savedItem: PostItem = {
+      slug: targetSlug,
+      frontmatter: fm,
+      content: post.content,
+      originalSlug: targetSlug,
+    };
+
+    if (isRename) {
+      await saveLocalData("delete-post", null, post.originalSlug);
+    }
+    const success = await saveLocalData("post", { frontmatter: fm, content: post.content }, targetSlug);
+    if (success) {
+      const updatedPosts = [...posts];
+      updatedPosts[selectedPostIndex!] = savedItem;
+      setPosts(updatedPosts);
+      setSelectedPostIndex(null);
+    }
+  };
+
+  const handlePostDelete = (post: PostItem, index: number | null = selectedPostIndex) => {
+    setPendingDeletePost({ post, index });
+    setDeleteConfirmSlug("");
+  };
+
+  const cancelPostDelete = () => {
+    setPendingDeletePost(null);
+    setDeleteConfirmSlug("");
+  };
+
+  const confirmPostDelete = async () => {
+    if (!pendingDeletePost) return;
+    const { post, index } = pendingDeletePost;
+    const targetSlug = post.originalSlug || post.slug;
+    if (deleteConfirmSlug.trim() !== targetSlug) {
+      setAlert({ type: "error", msg: "请输入完整 slug 后再删除" });
+      return;
+    }
+
+    const removeDeletedPost = () => {
+      setPosts((current) => {
+        if (index !== null) {
+          return current.filter((_, idx) => idx !== index);
+        }
+
+        return current.filter((item) => item.slug !== targetSlug);
+      });
+      cancelPostDelete();
+      setSelectedPostIndex(null);
+    };
+    
+    const success = await saveLocalData("delete-post", null, targetSlug);
+    if (success) {
+      removeDeletedPost();
+    }
+  };
+
+  // ==========================================
+  // Helper list editors
+  // ==========================================
+
+  const handleAddBioLine = () => {
+    setProfile({ ...profile, bio: [...profile.bio, ""] });
+  };
+
+  const handleRemoveBioLine = (index: number) => {
+    const updatedBio = profile.bio.filter((_, i) => i !== index);
+    setProfile({ ...profile, bio: updatedBio });
+  };
+
+  const handleBioLineChange = (index: number, val: string) => {
+    const updatedBio = [...profile.bio];
+    updatedBio[index] = val;
+    setProfile({ ...profile, bio: updatedBio });
+  };
+
+  // Image file handler
+  const handleImageUploadClick = async (e: React.ChangeEvent<HTMLInputElement>, onUrlResult: (url: string) => void) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const uploadedUrl = await uploadLocalImage(file);
+
+    if (uploadedUrl) {
+      onUrlResult(uploadedUrl);
+    }
+  };
+
+  // ==========================================
+  // Sub-forms Render
+  // ==========================================
+
+  const renderProfileForm = () => {
+    return (
+      <form onSubmit={handleProfileSave} className="space-y-6 max-w-4xl">
+        <div className="tahoe-system-card space-y-4 !p-6">
+          <h3 className="text-lg font-semibold pb-2 flex items-center gap-2"
+              style={{ color: "var(--tahoe-text)", borderBottom: "1px solid var(--tahoe-card-border)" }}>
+            <span>👤</span> 基本信息
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>姓名</label>
+              <input
+                type="text"
+                value={profile.name}
+                onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                className="w-full px-3 py-2 rounded-lg focus:outline-none"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>昵称</label>
+              <input
+                type="text"
+                value={profile.nickname}
+                onChange={(e) => setProfile({ ...profile, nickname: e.target.value })}
+                className="w-full px-3 py-2 rounded-lg focus:outline-none"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>职位头衔 (如: Java Backend Engineer)</label>
+            <input
+              type="text"
+              value={profile.title}
+              onChange={(e) => setProfile({ ...profile, title: e.target.value })}
+              className="w-full px-3 py-2 rounded-lg focus:outline-none"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>一句话简介</label>
+            <input
+              type="text"
+              value={profile.summary}
+              onChange={(e) => setProfile({ ...profile, summary: e.target.value })}
+              className="w-full px-3 py-2 rounded-lg focus:outline-none"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+            />
+          </div>
+        </div>
+
+        <div className="tahoe-system-card space-y-4 !p-6">
+          <div className="flex justify-between items-center pb-2"
+              style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
+            <h3 className="text-lg font-semibold flex items-center gap-2"
+              style={{ color: "var(--tahoe-text)" }}>
+              <span>📝</span> 详细段落介绍 (Bio)
+            </h3>
+            <button
+              type="button"
+              onClick={handleAddBioLine}
+              className="px-3 py-1 text-xs font-semibold rounded hover:bg-opacity-80 transition"
+              style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}
+            >
+              ➕ 添加段落
+            </button>
+          </div>
+
+          <div className="space-y-3">
+            {profile.bio.map((line, idx) => (
+              <div key={idx} className="flex gap-2 items-start">
+                <span className="text-xs mt-3 w-6" style={{ color: "var(--tahoe-faint)" }}>{idx + 1}.</span>
+                <textarea
+                  value={line}
+                  onChange={(e) => handleBioLineChange(idx, e.target.value)}
+                  rows={2}
+                  className="flex-1 px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  placeholder="输入一段关于你的介绍..."
+                />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveBioLine(idx)}
+                  className="p-2 text-red-500 hover:bg-red-50 rounded-lg mt-1"
+                  title="删除段落"
+                >
+                  🗑️
+                </button>
+              </div>
+            ))}
+            {profile.bio.length === 0 && (
+              <p className="text-sm italic py-2" style={{ color: "var(--tahoe-faint)" }}>暂无详细段落介绍，请点击“添加段落”按钮。</p>
+            )}
+          </div>
+        </div>
+
+        <div className="tahoe-system-card space-y-4 !p-6">
+          <h3 className="text-lg font-semibold pb-2 flex items-center gap-2"
+              style={{ color: "var(--tahoe-text)", borderBottom: "1px solid var(--tahoe-card-border)" }}>
+            <span>🔗</span> 社交与联系链接
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>GitHub 链接</label>
+              <input
+                type="text"
+                value={profile.links.github}
+                onChange={(e) => setProfile({ ...profile, links: { ...profile.links, github: e.target.value } })}
+                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>Email (如: mailto:test@email.com)</label>
+              <input
+                type="text"
+                value={profile.links.email}
+                onChange={(e) => setProfile({ ...profile, links: { ...profile.links, email: e.target.value } })}
+                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>项目归档链接 (默认: /projects)</label>
+              <input
+                type="text"
+                value={profile.links.projects}
+                onChange={(e) => setProfile({ ...profile, links: { ...profile.links, projects: e.target.value } })}
+                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>博客链接 (默认: /blog)</label>
+              <input
+                type="text"
+                value={profile.links.blog}
+                onChange={(e) => setProfile({ ...profile, links: { ...profile.links, blog: e.target.value } })}
+                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-3 pt-4">
+          <button
+            type="submit"
+            disabled={isSaving}
+            className="tahoe-button tahoe-button-primary px-6 py-2.5 font-semibold disabled:opacity-50"
+          >
+            {isSaving ? "正在保存..." : "💾 保存个人信息"}
+          </button>
+        </div>
+      </form>
+    );
+  };
+
+  const renderExperienceTab = () => {
+    // Render list view or editing view
+    if (selectedExpIndex !== null) {
+      const exp = experiences[selectedExpIndex];
+      const isNew = !!exp?.isNewExp;
+      
+      const handleSave = () => {
+        handleExperienceSave();
+      };
+
+      const handleFieldChange = <K extends keyof Omit<ExperienceItem, "isNewExp">>(
+        field: K,
+        val: ExperienceItem[K]
+      ) => {
+        const updated = [...experiences];
+        updated[selectedExpIndex] = { ...exp, [field]: val };
+        setExperiences(updated);
+      };
+
+      const handleAddBullet = () => {
+        const updated = [...experiences];
+        updated[selectedExpIndex] = { ...exp, description: [...(exp.description || []), ""] };
+        setExperiences(updated);
+      };
+
+      const handleRemoveBullet = (bulletIdx: number) => {
+        const updated = [...experiences];
+        const newDesc = exp.description.filter((_, i) => i !== bulletIdx);
+        updated[selectedExpIndex] = { ...exp, description: newDesc };
+        setExperiences(updated);
+      };
+
+      const handleBulletChange = (bulletIdx: number, val: string) => {
+        const updated = [...experiences];
+        const newDesc = [...exp.description];
+        newDesc[bulletIdx] = val;
+        updated[selectedExpIndex] = { ...exp, description: newDesc };
+        setExperiences(updated);
+      };
+
+      return (
+        <div className="tahoe-system-card space-y-6 max-w-4xl animate-on-scroll visible !p-6">
+          <div className="flex justify-between items-center pb-2"
+              style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
+            <h3 className="text-lg font-bold" style={{ color: "var(--tahoe-text)" }}>
+              {isNew ? "➕ 添加工作经历" : "✏️ 编辑工作经历"}
+            </h3>
+            <button
+              onClick={() => {
+                // If it was new and we cancel, slice it off
+                if (isNew) {
+                  setExperiences(experiences.slice(0, -1));
+                }
+                setSelectedExpIndex(null);
+              }}
+              className="text-sm font-semibold hover:opacity-70" style={{ color: "var(--tahoe-muted)" }}
+            >
+              返回列表
+            </button>
+          </div>
+
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>起止时间 (如: 2022 - 至今)</label>
+                <input
+                  type="text"
+                  value={exp?.period || ""}
+                  onChange={(e) => handleFieldChange("period", e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  placeholder="例如: 2022 - Now"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>公司名称</label>
+                <input
+                  type="text"
+                  value={exp?.company || ""}
+                  onChange={(e) => handleFieldChange("company", e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  placeholder="公司名称"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>职位头衔</label>
+              <input
+                type="text"
+                value={exp?.title || ""}
+                onChange={(e) => handleFieldChange("title", e.target.value)}
+                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                placeholder="例如: Senior Java Developer"
+              />
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex justify-between items-center pb-1">
+                <label className="block text-sm font-medium" style={{ color: "var(--tahoe-muted)" }}>工作职责与详情 (Bullet Points)</label>
+                <button
+                  type="button"
+                  onClick={handleAddBullet}
+                  className="px-2 py-0.5 text-xs font-semibold rounded hover:opacity-80 transition"
+                  style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}
+                >
+                  ➕ 添加详情行
+                </button>
+              </div>
+
+              <div className="space-y-2">
+                {exp?.description?.map((bullet, bulletIdx) => (
+                  <div key={bulletIdx} className="flex gap-2 items-center">
+                    <span className="text-xs w-4" style={{ color: "var(--tahoe-faint)" }}>•</span>
+                    <input
+                      type="text"
+                      value={bullet}
+                      onChange={(e) => handleBulletChange(bulletIdx, e.target.value)}
+                      className="flex-1 px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                      placeholder="编写具体的工作职责、项目成就或技术点..."
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveBullet(bulletIdx)}
+                      className="p-1.5 text-red-500 hover:bg-red-50 rounded"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                ))}
+                {(!exp?.description || exp.description.length === 0) && (
+                  <p className="text-xs italic py-1" style={{ color: "var(--tahoe-faint)" }}>暂无详情项，请点击右侧“添加详情行”。</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 pt-4" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
+            <button
+              onClick={() => {
+                if (isNew) {
+                  setExperiences(experiences.slice(0, -1));
+                }
+                setSelectedExpIndex(null);
+              }}
+              className="px-4 py-2 rounded-lg text-sm transition hover:opacity-70"
+              style={{ border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-muted)" }}
+            >
+              取消
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={isSaving}
+              className="tahoe-button tahoe-button-primary px-5 py-2 font-semibold text-sm disabled:opacity-50"
+            >
+              {isSaving ? "正在保存..." : "💾 保存此经历"}
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    const handleDelete = (index: number) => {
+      setPendingConfirm({
+        title: "删除工作经历",
+        message: "确定要删除这条工作经历吗？",
+        onConfirm: () => {
+          setPendingConfirm(null);
+          const updated = experiences.filter((_, i) => i !== index);
+          setExperiences(updated);
+          void saveLocalData("experience", { experience: updated });
+        },
+      });
+    };
+
+    const handleAddNew = () => {
+      const newExp: ExperienceItem = { period: "", title: "", company: "", description: [], isNewExp: true };
+      setExperiences([...experiences, newExp]);
+      setSelectedExpIndex(experiences.length); // edit the newly appended index
+    };
+
+    const moveItem = (index: number, direction: "up" | "down") => {
+      const updated = [...experiences];
+      const targetIndex = direction === "up" ? index - 1 : index + 1;
+      if (targetIndex < 0 || targetIndex >= updated.length) return;
+      
+      const temp = updated[index];
+      updated[index] = updated[targetIndex];
+      updated[targetIndex] = temp;
+      
+      setExperiences(updated);
+      
+      // Save order
+      void saveLocalData("experience", { experience: updated });
+    };
+
+    return (
+      <div className="space-y-6 max-w-5xl">
+        <div className="flex justify-between items-center">
+          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: "var(--tahoe-text)" }}>
+            <span>💼</span> 简历与经历时间轴
+          </h3>
+          <button
+            onClick={handleAddNew}
+            className="tahoe-button tahoe-button-primary px-4 py-2 text-sm font-semibold"
+          >
+            ➕ 添加工作履历
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {experiences.map((exp, idx) => (
+            <div
+              key={idx}
+              className="tahoe-system-card !p-5 hover:shadow-md transition flex justify-between items-start"
+            >
+              <div className="space-y-2 flex-1 pr-4">
+                <div className="flex items-center gap-3">
+                  <span className="px-2 py-0.5 text-xs font-semibold rounded-md font-mono"
+                  style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}>
+                    {exp.period || "起止时间未定"}
+                  </span>
+                  <h4 className="text-base font-bold" style={{ color: "var(--tahoe-text)" }}>
+                    {exp.title || "暂无职位名称"}
+                  </h4>
+                  <span className="text-sm" style={{ color: "var(--tahoe-faint)" }}>@</span>
+                  <span className="text-sm font-medium" style={{ color: "var(--tahoe-muted)" }}>
+                    {exp.company || "未指明公司"}
+                  </span>
+                </div>
+                
+                <ul className="list-disc list-inside pl-2 space-y-1">
+                  {exp.description?.map((bullet, bulletIdx) => (
+                    <li key={bulletIdx} className="text-xs" style={{ color: "var(--tahoe-muted)" }}>
+                      {bullet}
+                    </li>
+                  ))}
+                  {(!exp.description || exp.description.length === 0) && (
+                    <span className="text-xs italic" style={{ color: "var(--tahoe-faint)" }}>双击编辑以添加详情项</span>
+                  )}
+                </ul>
+              </div>
+
+              <div className="flex gap-2 items-center">
+                <div className="flex flex-col gap-1">
+                  <button
+                    onClick={() => moveItem(idx, "up")}
+                    disabled={idx === 0}
+                    className="p-1 text-xs rounded hover:opacity-80 disabled:opacity-30"
+                    style={{ background: "var(--tahoe-glass-strong)", border: "1px solid var(--tahoe-card-border)" }}
+                    title="上移"
+                  >
+                    ▲
+                  </button>
+                  <button
+                    onClick={() => moveItem(idx, "down")}
+                    disabled={idx === experiences.length - 1}
+                    className="p-1 text-xs rounded hover:opacity-80 disabled:opacity-30"
+                    style={{ background: "var(--tahoe-glass-strong)", border: "1px solid var(--tahoe-card-border)" }}
+                    title="下移"
+                  >
+                    ▼
+                  </button>
+                </div>
+                
+                <button
+                  onClick={() => setSelectedExpIndex(idx)}
+                  className="px-3 py-1.5 text-xs font-semibold rounded-md hover:opacity-80 transition"
+                  style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}
+                >
+                  编辑
+                </button>
+                <button
+                  onClick={() => handleDelete(idx)}
+                  className="px-3 py-1.5 text-xs bg-red-50 text-red-600 font-semibold rounded-md hover:bg-red-100 transition"
+                >
+                  删除
+                </button>
+              </div>
+            </div>
+          ))}
+
+          {experiences.length === 0 && (
+            <div className="text-center py-10 rounded-xl"
+              style={{ background: "var(--tahoe-glass)", border: "1px dashed var(--tahoe-card-border)", color: "var(--tahoe-faint)" }}>
+              📭 暂无简历项，点击右上角“添加工作履历”开始创建！
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const renderProjectsTab = () => {
+    if (selectedProjIndex !== null) {
+      const proj = projects[selectedProjIndex];
+      const isNew = !!proj?.isNewProj;
+
+      const handleSave = () => {
+        handleProjectsSave();
+      };
+
+      const handleFieldChange = <K extends keyof Omit<ProjectItem, "isNewProj">>(
+        field: K,
+        val: ProjectItem[K]
+      ) => {
+        const updated = [...projects];
+        updated[selectedProjIndex] = { ...proj, [field]: val };
+        setProjects(updated);
+      };
+
+      const handleStackChange = (val: string) => {
+        const tags = val.split(",").map((s) => s.trim()).filter(Boolean);
+        handleFieldChange("stack", tags);
+      };
+
+      return (
+        <div className="tahoe-system-card space-y-6 max-w-5xl !p-6">
+          <div className="flex justify-between items-center pb-2"
+              style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
+            <h3 className="text-lg font-bold" style={{ color: "var(--tahoe-text)" }}>
+              {isNew ? "➕ 上传与创建新项目" : "✏️ 编辑项目详情"}
+            </h3>
+            <button
+              onClick={() => {
+                if (isNew) {
+                  setProjects(projects.slice(0, -1));
+                }
+                setSelectedProjIndex(null);
+              }}
+              className="text-sm font-semibold hover:opacity-70" style={{ color: "var(--tahoe-muted)" }}
+            >
+              返回列表
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>项目标题</label>
+                <input
+                  type="text"
+                  value={proj?.title || ""}
+                  onChange={(e) => handleFieldChange("title", e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  placeholder="项目标题"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>Slug 路径名 (URL 标识，如: my-project)</label>
+                <input
+                  type="text"
+                  value={proj?.slug || ""}
+                  onChange={(e) => handleFieldChange("slug", e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  placeholder="my-project"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>一句话简短介绍 (Description)</label>
+                <input
+                  type="text"
+                  value={proj?.description || ""}
+                  onChange={(e) => handleFieldChange("description", e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  placeholder="在卡片中显示的简短一句话介绍"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>项目分类</label>
+                <input
+                  type="text"
+                  value={proj?.category || ""}
+                  onChange={(e) => handleFieldChange("category", e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  placeholder="例如: Personal Site, Web Application"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>项目状态</label>
+                  <select
+                    value={proj?.status || "building"}
+                    onChange={(e) => handleFieldChange("status", e.target.value as ProjectItem["status"])}
+                    className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  >
+                    <option value="planning">规划中 (Planning)</option>
+                    <option value="building">进行中 (Building)</option>
+                    <option value="launched">已上线 (Launched)</option>
+                    <option value="paused">已暂停 (Paused)</option>
+                    <option value="archived">已归档 (Archived)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>开发时间</label>
+                  <input
+                    type="date"
+                    value={proj?.date || ""}
+                    onChange={(e) => handleFieldChange("date", e.target.value)}
+                    className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>技术栈 (用逗号分隔，如: Next.js, Java)</label>
+                <input
+                  type="text"
+                  value={proj?.stack?.join(", ") || ""}
+                  onChange={(e) => handleStackChange(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  placeholder="React, TypeScript, Spring Boot"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>项目封面图链接</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={proj?.cover || ""}
+                    onChange={(e) => handleFieldChange("cover", e.target.value)}
+                    className="flex-1 px-3 py-2 rounded-lg focus:outline-none text-sm"
+                    style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                    placeholder="/images/projects/default.png"
+                  />
+                  <div className="relative">
+                    <button
+                      type="button"
+                      className="px-3 py-2 font-semibold rounded-lg hover:opacity-80 text-sm transition"
+                      style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}
+                    >
+                      {isUploading ? "Uploading..." : "📁 上传"}
+                    </button>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      disabled={isUploading}
+                      onChange={(e) => handleImageUploadClick(e, (url) => handleFieldChange("cover", url))}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>GitHub 链接</label>
+                  <input
+                    type="text"
+                    value={proj?.github || ""}
+                    onChange={(e) => handleFieldChange("github", e.target.value)}
+                    className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                    placeholder="https://..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>Demo 演示链接</label>
+                  <input
+                    type="text"
+                    value={proj?.demo || ""}
+                    onChange={(e) => handleFieldChange("demo", e.target.value)}
+                    className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                    placeholder="https://..."
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-6 items-center pt-2">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={proj?.featured}
+                    onChange={(e) => handleFieldChange("featured", e.target.checked)}
+                    className="w-4 h-4 rounded"
+                    style={{ accentColor: "var(--tahoe-accent)" }}
+                  />
+                  <span className="text-sm font-medium" style={{ color: "var(--tahoe-text)" }}>精选展示 (Featured)</span>
+                </label>
+
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={proj?.pinned}
+                    onChange={(e) => handleFieldChange("pinned", e.target.checked)}
+                    className="w-4 h-4 rounded"
+                    style={{ accentColor: "var(--tahoe-accent)" }}
+                  />
+                  <span className="text-sm font-medium" style={{ color: "var(--tahoe-text)" }}>置顶展示 (Pinned)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>详细描述 (Long Description)</label>
+            <textarea
+              value={proj?.longDescription || ""}
+              onChange={(e) => handleFieldChange("longDescription", e.target.value)}
+              rows={4}
+              className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+              placeholder="编写更详尽的项目技术介绍、业务痛点解决方案及个人贡献..."
+            />
+          </div>
+
+          <div className="flex justify-end gap-3 pt-4" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
+            <button
+              onClick={() => {
+                if (isNew) {
+                  setProjects(projects.slice(0, -1));
+                }
+                setSelectedProjIndex(null);
+              }}
+              className="px-4 py-2 rounded-lg text-sm transition hover:opacity-70"
+              style={{ border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-muted)" }}
+            >
+              取消
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={isSaving}
+              className="tahoe-button tahoe-button-primary px-5 py-2 font-semibold text-sm disabled:opacity-50"
+            >
+              {isSaving ? "正在保存..." : "💾 保存此项目"}
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    const handleDelete = (index: number) => {
+      setPendingConfirm({
+        title: "删除项目",
+        message: "确定要删除此项目吗？",
+        onConfirm: () => {
+          setPendingConfirm(null);
+          const updated = projects.filter((_, i) => i !== index);
+          setProjects(updated);
+          void saveLocalData("projects", { projects: updated });
+        },
+      });
+    };
+
+    const handleAddNew = () => {
+      const newProj: ProjectItem = {
+        title: "",
+        slug: "",
+        description: "",
+        longDescription: "",
+        stack: [],
+        category: "Web Application",
+        cover: "/images/projects/default-cover.jpg",
+        github: "",
+        demo: "",
+        date: new Date().toISOString().split("T")[0],
+        updated: new Date().toISOString().split("T")[0],
+        status: "building",
+        featured: true,
+        pinned: false,
+        isNewProj: true,
+      };
+      setProjects([...projects, newProj]);
+      setSelectedProjIndex(projects.length);
+    };
+
+    const moveItem = (index: number, direction: "up" | "down") => {
+      const updated = [...projects];
+      const targetIndex = direction === "up" ? index - 1 : index + 1;
+      if (targetIndex < 0 || targetIndex >= updated.length) return;
+      
+      const temp = updated[index];
+      updated[index] = updated[targetIndex];
+      updated[targetIndex] = temp;
+      
+      setProjects(updated);
+      
+      // Save order
+      void saveLocalData("projects", { projects: updated });
+    };
+
+    return (
+      <div className="space-y-6 max-w-full animate-on-scroll visible">
+        <div className="flex justify-between items-center">
+          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: "var(--tahoe-text)" }}>
+            <span>🚀</span> 技术项目管理与上传
+          </h3>
+          <button
+            onClick={handleAddNew}
+            className="tahoe-button tahoe-button-primary px-4 py-2 text-sm font-semibold"
+          >
+            ➕ 上传/新增个人项目
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {projects.map((proj, idx) => (
+            <div
+              key={idx}
+              className="tahoe-system-card overflow-hidden hover:shadow-md transition flex flex-col justify-between !p-0"
+            >
+              <div className="p-5 space-y-3">
+                <div className="flex justify-between items-start gap-2">
+                  <h4 className="text-lg font-bold" style={{ color: "var(--tahoe-text)" }}>{proj.title || "未命名项目"}</h4>
+                  <span className={`px-2 py-0.5 text-xs font-semibold rounded-md uppercase font-mono ${
+                    proj.status === "launched" ? "bg-green-100 text-green-800" :
+                    proj.status === "building" ? "bg-orange-100 text-orange-800" :
+                    proj.status === "paused" ? "bg-yellow-100 text-yellow-800" :
+                    proj.status === "archived" ? "bg-gray-100 text-gray-700" :
+                    "bg-blue-100 text-blue-800"
+                  }`}>
+                    {
+                      proj.status === "launched" ? "已上线" :
+                      proj.status === "building" ? "进行中" :
+                      proj.status === "paused" ? "已暂停" :
+                      proj.status === "archived" ? "已归档" :
+                      "规划中"
+                    }
+                  </span>
+                </div>
+
+                {proj.cover && (
+                  // eslint-disable-next-line @next/next/no-img-element -- Admin previews support arbitrary user-entered image URLs.
+                  <img
+                    src={proj.cover}
+                    alt={proj.title}
+                    className="w-full h-36 object-cover rounded-lg" style={{ border: "1px solid var(--tahoe-card-border)" }}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "/images/default-cover.jpg";
+                    }}
+                  />
+                )}
+
+                <p className="text-xs line-clamp-2" style={{ color: "var(--tahoe-muted)" }}>{proj.description || "暂无简短介绍"}</p>
+                
+                <div className="flex flex-wrap gap-1">
+                  {proj.stack?.map((tag, sIdx) => (
+                    <span key={sIdx} className="px-1.5 py-0.5 text-[10px] rounded"
+                      style={{ background: "var(--tahoe-glass-strong)", color: "var(--tahoe-muted)", border: "1px solid var(--tahoe-card-border)" }}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="p-4 flex justify-between items-center gap-2"
+                style={{ background: "var(--tahoe-glass)", borderTop: "1px solid var(--tahoe-card-border)" }}>
+                <span className="text-[10px] font-mono" style={{ color: "var(--tahoe-faint)" }}>/{proj.slug || "no-slug"}</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => moveItem(idx, "up")}
+                    disabled={idx === 0}
+                    className="p-1 text-xs rounded hover:opacity-80 disabled:opacity-30"
+                    style={{ background: "var(--tahoe-card)", border: "1px solid var(--tahoe-card-border)" }}
+                    title="前移"
+                  >
+                    ◀
+                  </button>
+                  <button
+                    onClick={() => moveItem(idx, "down")}
+                    disabled={idx === projects.length - 1}
+                    className="p-1 text-xs rounded hover:opacity-80 disabled:opacity-30"
+                    style={{ background: "var(--tahoe-card)", border: "1px solid var(--tahoe-card-border)" }}
+                    title="后移"
+                  >
+                    ▶
+                  </button>
+                  <button
+                    onClick={() => setSelectedProjIndex(idx)}
+                    className="px-2.5 py-1 text-xs font-semibold rounded hover:opacity-80 transition"
+                    style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}
+                  >
+                    编辑
+                  </button>
+                  <button
+                    onClick={() => handleDelete(idx)}
+                    className="px-2.5 py-1 text-xs bg-red-50 text-red-600 font-semibold rounded hover:bg-red-100 transition"
+                  >
+                    删除
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {projects.length === 0 && (
+            <div className="col-span-2 text-center py-10 rounded-xl"
+              style={{ background: "var(--tahoe-glass)", border: "1px dashed var(--tahoe-card-border)", color: "var(--tahoe-faint)" }}>
+              📭 暂无项目，点击右上角“上传/新增项目”开始展示你的个人成就！
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const confirmSkillDelete = () => {
+    if (pendingDeleteSkill === null) return;
+    setSkills(skills.filter((_, i) => i !== pendingDeleteSkill.index));
+    setPendingDeleteSkill(null);
+  };
+
+  const renderSkillsTab = () => {
+    const handleAddGroup = () => {
+      setSkills([...skills, { group: "新技能分组", items: ["HTML", "CSS"] }]);
+    };
+
+    const handleRemoveGroup = (idx: number) => {
+      setPendingDeleteSkill({ index: idx, groupName: skills[idx].group });
+    };
+
+    const handleGroupNameChange = (idx: number, name: string) => {
+      const updated = [...skills];
+      updated[idx].group = name;
+      setSkills(updated);
+    };
+
+    const handleTagsChange = (idx: number, tagsStr: string) => {
+      const updated = [...skills];
+      updated[idx].items = tagsStr.split(",").map((s) => s.trim()).filter(Boolean);
+      setSkills(updated);
+    };
+
+    return (
+      <div className="space-y-6 max-w-4xl">
+        <div className="flex justify-between items-center pb-2"
+              style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
+          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: "var(--tahoe-text)" }}>
+            <span>🧠</span> 专业技能分类管理
+          </h3>
+          <button
+            onClick={handleAddGroup}
+            className="tahoe-button tahoe-button-primary px-3 py-1.5 text-xs font-semibold"
+          >
+            ➕ 添加技能分组
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {skills.map((group, idx) => (
+            <div key={idx} className="tahoe-system-card !p-5 space-y-4">
+              <div className="flex gap-4 items-center justify-between">
+                <div className="flex-1 max-w-xs">
+                  <label className="block text-xs font-medium mb-1" style={{ color: "var(--tahoe-faint)" }}>分组名称</label>
+                  <input
+                    type="text"
+                    value={group.group}
+                    onChange={(e) => handleGroupNameChange(idx, e.target.value)}
+                    className="w-full px-3 py-1 rounded-lg focus:outline-none text-sm font-semibold"
+                    style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  />
+                </div>
+                <button
+                  onClick={() => handleRemoveGroup(idx)}
+                  className="px-2 py-1 text-xs text-red-500 hover:bg-red-50 rounded"
+                >
+                  删除分组
+                </button>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium mb-1" style={{ color: "var(--tahoe-faint)" }}>包含技能 (逗号分隔，如: Java, Spring Boot, MySQL)</label>
+                <input
+                  type="text"
+                  value={group.items?.join(", ") || ""}
+                  onChange={(e) => handleTagsChange(idx, e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  placeholder="Java, Spring Boot, MySQL"
+                />
+              </div>
+
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {group.items?.map((item, iIdx) => (
+                  <span key={iIdx} className="px-2 py-0.5 text-xs font-medium rounded-full"
+                  style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)", border: "1px solid var(--tahoe-card-border)" }}>
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex justify-end pt-4">
+          <button
+            onClick={handleSkillsSave}
+            disabled={isSaving}
+            className="tahoe-button tahoe-button-primary px-6 py-2 font-semibold disabled:opacity-50"
+          >
+            {isSaving ? "正在保存..." : "💾 保存全部技能"}
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  const renderHomeSectionsTab = () => {
+    const updateSection = (idx: number, patch: Partial<HomeSection>) => {
+      const updated = [...homeSections];
+      updated[idx] = { ...updated[idx], ...patch };
+      setHomeSections(updated);
+    };
+
+    const updateParams = (idx: number, paramPatch: Record<string, unknown>) => {
+      const updated = [...homeSections];
+      updated[idx] = {
+        ...updated[idx],
+        params: { ...(updated[idx].params || {}), ...paramPatch },
+      };
+      setHomeSections(updated);
+    };
+
+    const moveSection = (idx: number, direction: "up" | "down") => {
+      const targetIndex = direction === "up" ? idx - 1 : idx + 1;
+      if (targetIndex < 0 || targetIndex >= homeSections.length) return;
+      const updated = [...homeSections];
+      const tmp = updated[idx];
+      updated[idx] = updated[targetIndex];
+      updated[targetIndex] = tmp;
+      setHomeSections(updated);
+    };
+
+    const removeSection = (idx: number) => {
+      const target = homeSections[idx];
+      const def = getBlockType(target.type);
+      if (def?.singleton) {
+        setAlert({ type: "info", msg: "预设块不可删除，可改成「关闭」隐藏它" });
+        return;
+      }
+      setPendingConfirm({
+        title: "删除自由块",
+        message: "确定要删除这个自由块吗？",
+        onConfirm: () => {
+          setPendingConfirm(null);
+          setHomeSections(homeSections.filter((_, i) => i !== idx));
+        },
+      });
+    };
+
+    const enabledTypes = new Set(homeSections.map((s) => s.type));
+    const availableToAdd = BLOCK_TYPES.filter((def) => !def.singleton || !enabledTypes.has(def.type));
+
+    const addBlock = (type: HomeSectionType) => {
+      const def = getBlockType(type);
+      if (!def) return;
+      const newSection: HomeSection = {
+        id: def.singleton ? def.type : `custom-${Date.now()}`,
+        type: def.type,
+        enabled: true,
+        params: { ...def.defaultParams },
+      };
+      setHomeSections([...homeSections, newSection]);
+    };
+
+    return (
+      <div className="space-y-6 max-w-4xl">
+        <div className="flex justify-between items-center pb-2"
+              style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
+          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: "var(--tahoe-text)" }}>
+            <span>🏠</span> 首页布局配置
+          </h3>
+          <div className="flex items-center gap-2">
+            {availableToAdd.length > 0 && (
+              <select
+                onChange={(e) => {
+                  if (e.target.value) {
+                    addBlock(e.target.value as HomeSectionType);
+                    e.target.value = "";
+                  }
+                }}
+                defaultValue=""
+                className="px-3 py-1.5 text-xs font-medium rounded-lg cursor-pointer hover:opacity-80 transition"
+                style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)", border: "1px solid var(--tahoe-card-border)" }}
+              >
+                <option value="" disabled>
+                  ➕ 添加新区块
+                </option>
+                {availableToAdd.map((def) => (
+                  <option key={def.type} value={def.type}>
+                    {def.label}
+                  </option>
+                ))}
+              </select>
+            )}
+            <button
+              onClick={handleHomeSectionsSave}
+              disabled={isSaving}
+              className="tahoe-button tahoe-button-primary px-4 py-1.5 text-xs font-semibold disabled:opacity-50"
+            >
+              {isSaving ? "正在保存..." : "💾 保存首页布局"}
+            </button>
+          </div>
+        </div>
+
+        <p className="text-xs -mt-2" style={{ color: "var(--tahoe-faint)" }}>
+          顺序、开关、参数都在这里控制。预设块只能关闭不能删除；自由块可任意添加和删除。
+        </p>
+
+        <div className="space-y-3">
+          {homeSections.map((section, idx) => {
+            const def = getBlockType(section.type);
+            if (!def) return null;
+            const isCustom = !def.singleton;
+
+            return (
+              <div
+                key={section.id}
+                className={`tahoe-system-card !p-4 transition ${
+                  section.enabled ? "" : "opacity-60"
+                }`}
+                style={section.enabled ? undefined : { borderStyle: "dashed" }}
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="font-mono text-xs w-6 text-center" style={{ color: "var(--tahoe-faint)" }}>
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={section.enabled}
+                      onChange={(e) => updateSection(idx, { enabled: e.target.checked })}
+                      className="w-4 h-4 rounded"
+                    style={{ accentColor: "var(--tahoe-accent)" }}
+                    />
+                    <span className="text-sm font-semibold" style={{ color: "var(--tahoe-text)" }}>{def.label}</span>
+                  </label>
+                  <span className="font-mono text-[10px]" style={{ color: "var(--tahoe-faint)" }}>/{section.id}</span>
+                  <div className="flex-1" />
+                  <button
+                    onClick={() => moveSection(idx, "up")}
+                    disabled={idx === 0}
+                    className="p-1 text-xs rounded hover:opacity-80 disabled:opacity-30"
+                    style={{ background: "var(--tahoe-glass-strong)", border: "1px solid var(--tahoe-card-border)" }}
+                    title="上移"
+                  >
+                    ▲
+                  </button>
+                  <button
+                    onClick={() => moveSection(idx, "down")}
+                    disabled={idx === homeSections.length - 1}
+                    className="p-1 text-xs rounded hover:opacity-80 disabled:opacity-30"
+                    style={{ background: "var(--tahoe-glass-strong)", border: "1px solid var(--tahoe-card-border)" }}
+                    title="下移"
+                  >
+                    ▼
+                  </button>
+                  {isCustom && (
+                    <button
+                      onClick={() => removeSection(idx)}
+                      className="px-2 py-1 text-xs bg-red-50 text-red-600 font-semibold rounded hover:bg-red-100 transition"
+                    >
+                      🗑️ 删除
+                    </button>
+                  )}
+                </div>
+
+                {def.paramFields.length === 0 ? (
+                  <p className="pl-9 text-xs italic" style={{ color: "var(--tahoe-faint)" }}>此区块无可调参数</p>
+                ) : (
+                  <div className="pl-9 space-y-3">
+                    {def.paramFields.includes("title") && (
+                      <div>
+                        <label className="block text-xs font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>区块标题</label>
+                        <input
+                          type="text"
+                          value={(section.params?.title as string) ?? ""}
+                          onChange={(e) => updateParams(idx, { title: e.target.value })}
+                          placeholder={def.defaultParams.title as string}
+                          className="w-full max-w-md px-3 py-1.5 rounded-lg focus:outline-none text-sm"
+                          style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                        />
+                      </div>
+                    )}
+                    {def.paramFields.includes("count") && (
+                      <div>
+                        <label className="block text-xs font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>展示条数</label>
+                        <input
+                          type="number"
+                          min={1}
+                          max={20}
+                          value={(section.params?.count as number) ?? (def.defaultParams.count as number) ?? 3}
+                          onChange={(e) => {
+                            const n = parseInt(e.target.value, 10);
+                            updateParams(idx, { count: Number.isFinite(n) ? Math.max(1, n) : 3 });
+                          }}
+                          className="w-24 px-3 py-1.5 rounded-lg focus:outline-none text-sm"
+                          style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                        />
+                      </div>
+                    )}
+                    {def.paramFields.includes("body") && (
+                      <div>
+                        <label className="block text-xs font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>内容（Markdown，支持 GFM、代码高亮）</label>
+                        <textarea
+                          value={(section.params?.body as string) ?? ""}
+                          onChange={(e) => updateParams(idx, { body: e.target.value })}
+                          rows={6}
+                          className="w-full px-3 py-2 rounded-lg focus:outline-none font-mono text-xs leading-relaxed"
+                          style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                          placeholder="## 子标题&#10;&#10;支持 markdown 语法、链接、列表、代码块..."
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {homeSections.length === 0 && (
+            <div className="text-center py-10 rounded-xl"
+              style={{ background: "var(--tahoe-glass)", border: "1px dashed var(--tahoe-card-border)", color: "var(--tahoe-faint)" }}>
+              📭 没有任何区块。从右上角下拉菜单添加。
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const renderPostsTab = () => {
+    // Article editor or list
+    if (selectedPostIndex !== null) {
+      const post = posts[selectedPostIndex];
+      const isNew = selectedPostIndex === posts.length || !!post.isNewPost;
+
+      const handleSave = () => {
+        handlePostSave(post);
+      };
+
+      const handleFieldChange = <K extends keyof PostFrontmatter>(
+        field: K,
+        val: PostFrontmatter[K]
+      ) => {
+        const updated = [...posts];
+        const updatedPost = {
+          ...post,
+          frontmatter: { ...post.frontmatter, [field]: val },
+        };
+
+        updated[selectedPostIndex] = updatedPost;
+        setPosts(updated);
+      };
+
+      const handleSlugChange = (val: string) => {
+        const updated = [...posts];
+        updated[selectedPostIndex] = { ...post, slug: val.toLowerCase().replace(/[^a-z0-9-_]/g, "-") };
+        setPosts(updated);
+      };
+
+      const handleContentChange = (val: string) => {
+        const updated = [...posts];
+        updated[selectedPostIndex] = { ...post, content: val };
+        setPosts(updated);
+      };
+
+      const insertImageAtCursor = (url: string) => {
+        const textarea = textareaRef.current;
+        const content = post?.content || "";
+        const imageMarkdown = `\n![图片描述](${url})\n`;
+
+        if (textarea) {
+          const startPos = textarea.selectionStart;
+          const endPos = textarea.selectionEnd;
+          
+          const newContent = 
+            content.substring(0, startPos) + 
+            imageMarkdown + 
+            content.substring(endPos);
+          
+          handleContentChange(newContent);
+          
+          // Focus back and set selection
+          setTimeout(() => {
+            textarea.focus();
+            const cursorPosition = startPos + imageMarkdown.length;
+            textarea.setSelectionRange(cursorPosition, cursorPosition);
+          }, 50);
+        } else {
+          handleContentChange(content ? `${content}\n${imageMarkdown}` : imageMarkdown);
+        }
+      };
+
+      const handleEditorPaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+        const items = e.clipboardData?.items;
+        if (!items) return;
+
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].type.indexOf("image") !== -1) {
+            const file = items[i].getAsFile();
+            if (!file) continue;
+
+            e.preventDefault(); // Stop default text paste
+            
+            const uploadedUrl = await uploadLocalImage(file);
+
+            if (uploadedUrl) {
+              insertImageAtCursor(uploadedUrl);
+            }
+            break;
+          }
+        }
+      };
+
+      const handleEditorDrop = async (e: React.DragEvent<HTMLTextAreaElement>) => {
+        const files = e.dataTransfer?.files;
+        if (!files || files.length === 0) return;
+
+        for (let i = 0; i < files.length; i++) {
+          if (files[i].type.indexOf("image") !== -1) {
+            e.preventDefault();
+            
+            const uploadedUrl = await uploadLocalImage(files[i]);
+
+            if (uploadedUrl) {
+              insertImageAtCursor(uploadedUrl);
+            }
+            break;
+          }
+        }
+      };
+
+      const handleTagsChange = (val: string) => {
+        const tagsList = val.split(",").map((s) => s.trim()).filter(Boolean);
+        handleFieldChange("tags", tagsList);
+      };
+
+      return (
+        <div className="space-y-6 max-w-7xl animate-on-scroll visible">
+          <div className="flex justify-between items-center pb-2"
+              style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}>
+            <h3 className="text-lg font-bold" style={{ color: "var(--tahoe-text)" }}>
+              {isNew ? "✍️ 撰写新文章" : "📝 编辑技术博文"}
+            </h3>
+            <div className="flex items-center gap-3">
+              {!isNew && (
+                <button
+                  onClick={() => handlePostDelete(post, selectedPostIndex)}
+                  className="px-3 py-1.5 text-xs text-red-600 bg-red-50 hover:bg-red-100 rounded-md font-semibold transition"
+                >
+                  🗑️ 删除文章
+                </button>
+              )}
+              <button
+                onClick={() => {
+                  if (isNew) {
+                    setPosts(posts.filter((_, idx) => idx !== selectedPostIndex));
+                  }
+                  setSelectedPostIndex(null);
+                }}
+                className="text-sm font-semibold hover:opacity-70" style={{ color: "var(--tahoe-muted)" }}
+              >
+                返回文章列表
+              </button>
+            </div>
+          </div>
+
+          {/* Editor Meta Form */}
+          <div className="tahoe-system-card !p-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="md:col-span-2 space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>文章标题</label>
+                <input
+                  type="text"
+                  value={post?.frontmatter?.title || ""}
+                  onChange={(e) => handleFieldChange("title", e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm font-semibold"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  placeholder="输入文章标题..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>Slug 网页路径 (英文/拼音/数字连字符，例如: java-high-concurrency)</label>
+                <input
+                  type="text"
+                  value={post?.slug || ""}
+                  onChange={(e) => handleSlugChange(e.target.value)}
+                  disabled={false}
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm font-mono disabled:opacity-50"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  placeholder="java-high-concurrency"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>简介简介 (Description)</label>
+                <input
+                  type="text"
+                  value={post?.frontmatter?.description || ""}
+                  onChange={(e) => handleFieldChange("description", e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  placeholder="简短一两句总结文章内容..."
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>发布日期</label>
+                  <input
+                    type="date"
+                    value={post?.frontmatter?.date || ""}
+                    onChange={(e) => handleFieldChange("date", e.target.value)}
+                    className="w-full px-3 py-1.5 rounded-lg focus:outline-none text-xs"
+                    style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>分类 (Category)</label>
+                  <input
+                    type="text"
+                    value={post?.frontmatter?.category || ""}
+                    onChange={(e) => handleFieldChange("category", e.target.value)}
+                    className="w-full px-3 py-1.5 rounded-lg focus:outline-none text-xs"
+                    style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                    placeholder="如: Java, Frontend"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>标签 Tags (逗号分隔，如: Spring, SQL)</label>
+                <input
+                  type="text"
+                  value={post?.frontmatter?.tags?.join(", ") || ""}
+                  onChange={(e) => handleTagsChange(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
+                  style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  placeholder="Java, Concurrency, SpringBoot"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>封面图链接</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={post?.frontmatter?.cover || ""}
+                    onChange={(e) => handleFieldChange("cover", e.target.value)}
+                    className="flex-1 px-3 py-2 rounded-lg focus:outline-none text-sm"
+                    style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                    placeholder="/images/uploads/my-cover.webp"
+                  />
+                  <div className="relative">
+                    <button
+                      type="button"
+                      className="px-3 py-2 font-semibold rounded-lg hover:opacity-80 text-sm transition"
+                      style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}
+                    >
+                      上传
+                    </button>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      disabled={isUploading}
+                      onChange={(e) => handleImageUploadClick(e, (url) => handleFieldChange("cover", url))}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-4 pt-1">
+                <label className="flex items-center gap-1.5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={post?.frontmatter?.published}
+                    onChange={(e) => handleFieldChange("published", e.target.checked)}
+                    className="w-4 h-4 rounded"
+                    style={{ accentColor: "var(--tahoe-accent)" }}
+                  />
+                  <span className="text-xs font-semibold" style={{ color: "var(--tahoe-text)" }}>公开发布 (Published)</span>
+                </label>
+
+                <label className="flex items-center gap-1.5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={post?.frontmatter?.featured}
+                    onChange={(e) => handleFieldChange("featured", e.target.checked)}
+                    className="w-4 h-4 rounded"
+                    style={{ accentColor: "var(--tahoe-accent)" }}
+                  />
+                  <span className="text-xs font-semibold" style={{ color: "var(--tahoe-text)" }}>置顶推荐 (Featured)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Double Pane Writing Block */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-[500px]">
+            {/* Editor Textarea */}
+            <div className="flex flex-col h-full tahoe-system-card overflow-hidden !p-0">
+              <div className="px-4 py-2 flex justify-between items-center"
+                style={{ background: "var(--tahoe-glass)", borderBottom: "1px solid var(--tahoe-card-border)" }}>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-semibold" style={{ color: "var(--tahoe-muted)" }}>Markdown 编辑器</span>
+                  <div className="relative flex items-center justify-center">
+                    <button
+                      type="button"
+                      disabled={isUploading}
+                      className="px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition"
+                      style={{ background: "var(--tahoe-card)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                    >
+                      <span>📷</span>
+                      <span>{isUploading ? "正在上传..." : "插入图片"}</span>
+                    </button>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      disabled={isUploading}
+                      onChange={(e) => handleImageUploadClick(e, insertImageAtCursor)}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full"
+                    />
+                  </div>
+                </div>
+                <span className="text-[10px]" style={{ color: "var(--tahoe-faint)" }}>支持拖拽、截图粘贴或标准 MD 格式</span>
+              </div>
+              <textarea
+                ref={textareaRef}
+                value={post?.content || ""}
+                onChange={(e) => handleContentChange(e.target.value)}
+                onPaste={handleEditorPaste}
+                onDrop={handleEditorDrop}
+                onDragOver={(e) => e.preventDefault()}
+                className="flex-1 w-full p-4 bg-transparent resize-none font-mono text-sm focus:outline-none overflow-y-auto leading-relaxed"
+                style={{ color: "var(--tahoe-text)" }}
+                placeholder="在此处开始使用 Markdown 编写你的高质量技术文章内容... (支持截图粘贴或拖拽图片到此处上传)"
+              />
+            </div>
+
+            {/* Live Preview */}
+            <div className="flex flex-col h-full tahoe-system-card overflow-hidden !p-0">
+              <div className="px-4 py-2 flex justify-between items-center"
+                style={{ background: "var(--tahoe-glass)", borderBottom: "1px solid var(--tahoe-card-border)" }}>
+                <span className="text-xs font-semibold" style={{ color: "var(--tahoe-muted)" }}>实时双栏预览</span>
+                <span className="text-[10px]" style={{ color: "var(--tahoe-faint)" }}>Notion 优雅渲染</span>
+              </div>
+              <div className="flex-1 p-5 overflow-y-auto bg-[#fffdf8]">
+                <div className="markdown-body">
+                  <h1 className="text-2xl font-bold pb-2" style={{ borderBottom: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}>{post?.frontmatter?.title || "未命名博文"}</h1>
+                  <div className="flex gap-2 items-center text-xs my-3" style={{ color: "var(--tahoe-faint)" }}>
+                    <span>🗓️ {post?.frontmatter?.date}</span>
+                    <span>📂 {post?.frontmatter?.category || "未分类"}</span>
+                  </div>
+                  {post?.frontmatter?.cover && (
+                    // eslint-disable-next-line @next/next/no-img-element -- Admin previews support arbitrary user-entered image URLs.
+                    <img src={post.frontmatter.cover} alt="Cover Preview" className="w-full h-44 object-cover rounded-lg my-3" style={{ border: "1px solid var(--tahoe-card-border)" }} />
+                  )}
+                  <div className="mt-4 prose prose-sm max-w-none leading-relaxed" style={{ color: "var(--tahoe-muted)" }}>
+                    <MarkdownPreview markdown={post?.content || ""} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 pt-2">
+            <button
+              onClick={() => {
+                if (isNew) {
+                  setPosts(posts.filter((_, idx) => idx !== selectedPostIndex));
+                }
+                setSelectedPostIndex(null);
+              }}
+              className="px-5 py-2.5 rounded-lg text-sm transition"
+              style={{ border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-muted)" }}
+            >
+              取消
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={isSaving}
+              className="tahoe-button tahoe-button-primary px-6 py-2.5 font-semibold disabled:opacity-50 text-sm"
+            >
+              {isSaving ? "正在提交发布..." : "🚀 保存并发布文章"}
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    const handleAddNew = () => {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
+      const dd = String(today.getDate()).padStart(2, "0");
+      const targetDateStr = `${yyyy}-${mm}-${dd}`;
+
+      // Count how many existing posts on the same date (both published and drafts)
+      const sameDayPosts = posts.filter((p) => p.frontmatter?.date && p.frontmatter.date.startsWith(targetDateStr));
+      const seq = String(sameDayPosts.length + 1).padStart(2, "0");
+      const autoSlug = `${yyyy}${mm}${dd}${seq}`;
+
+      const newPost: PostItem = {
+        slug: autoSlug,
+        isNewPost: true,
+        frontmatter: {
+          title: "",
+          date: targetDateStr,
+          description: "",
+          tags: ["Backend"],
+          published: true,
+          featured: false,
+        },
+        content: "",
+      };
+      setPosts([newPost, ...posts]);
+      setSelectedPostIndex(0);
+    };
+
+    return (
+      <div className="space-y-6 max-w-full animate-on-scroll visible">
+        <div className="flex justify-between items-center">
+          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: "var(--tahoe-text)" }}>
+            <span>✍️</span> 博文文章管理
+          </h3>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => void loadLocalData()}
+              className="px-4 py-2 text-sm font-semibold rounded-lg transition flex items-center gap-1.5"
+              style={{ color: "var(--tahoe-muted)", background: "var(--tahoe-card)", border: "1px solid var(--tahoe-card-border)" }}
+            >
+              🔄 刷新同步
+            </button>
+            <button
+              onClick={handleAddNew}
+              className="tahoe-button tahoe-button-primary px-4 py-2 text-sm font-semibold"
+            >
+              ➕ 撰写新博文
+            </button>
+          </div>
+        </div>
+
+        <div className="tahoe-system-card overflow-hidden !p-0">
+          <table className="w-full text-left border-collapse table-fixed">
+            <colgroup>
+              <col style={{ width: '33%' }} />
+              <col style={{ width: '27%' }} />
+              <col style={{ width: '11%' }} />
+              <col style={{ width: '10%' }} />
+              <col style={{ width: '19%' }} />
+            </colgroup>
+            <thead>
+              <tr className="font-medium text-xs"
+              style={{ background: "var(--tahoe-glass)", color: "var(--tahoe-muted)", borderBottom: "1px solid var(--tahoe-card-border)" }}>
+                <th className="p-4 pl-6">文章标题</th>
+                <th className="p-4">路径 (Slug)</th>
+                <th className="p-4">日期</th>
+                <th className="p-4">状态</th>
+                <th className="p-4 text-right pr-6">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {posts.map((post, idx) => (
+                <tr
+                  key={idx}
+                  className="last:border-0 transition text-sm hover:bg-[color:var(--tahoe-glass-strong)]"
+                  style={{ borderBottom: "1px solid var(--tahoe-card-border)" }}
+                >
+                  <td className="p-4 pl-6 font-semibold truncate" style={{ color: "var(--tahoe-text)" }} title={post.frontmatter?.title || "未命名博文"}>
+                    {post.frontmatter?.title || "未命名博文"}
+                  </td>
+                  <td className="p-4 font-mono text-xs truncate" style={{ color: "var(--tahoe-faint)" }} title={`/${post.slug}.md`}>/{post.slug}.md</td>
+                  <td className="p-4 text-xs" style={{ color: "var(--tahoe-muted)" }}>{post.frontmatter?.date}</td>
+                  <td className="p-4">
+                    <span className={`px-2 py-0.5 text-xs font-semibold rounded ${
+                      post.frontmatter?.published ? "bg-green-50 text-green-700 border border-green-200" : "bg-gray-100 text-gray-500 border"
+                    }`}>
+                      {post.frontmatter?.published ? "公开" : "草稿"}
+                    </span>
+                  </td>
+                  <td className="p-4 text-right pr-6">
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => handleEditPost(idx)}
+                        className="px-3 py-1 font-semibold rounded hover:opacity-80 transition text-xs"
+                        style={{ color: "var(--tahoe-accent)", background: "var(--tahoe-accent-soft)" }}
+                      >
+                        编辑
+                      </button>
+                      <button
+                        onClick={() => handlePostDelete(post, idx)}
+                        className="px-3 py-1 bg-red-50 text-red-600 font-semibold rounded hover:bg-red-100 transition text-xs"
+                      >
+                        删除
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+
+              {posts.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="text-center py-10" style={{ color: "var(--tahoe-faint)" }}>
+                    📭 暂无文章，点击右上角“撰写新博文”开始分享你的技术洞察吧！
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  };
+
+  // ==========================================
+  // Layout Render
+  // ==========================================
+
+  return (
+    <div data-tahoe-preview className="min-h-screen font-sans relative" style={{ color: "var(--tahoe-text)", background: "var(--tahoe-bg)" }}>
+      {/* Subtle gradient background for glass blur to work against */}
+      <div
+        className="fixed inset-0 pointer-events-none"
+        aria-hidden
+        style={{
+          background: `
+            radial-gradient(circle at 12% 15%, rgba(255,183,197,0.18), transparent 40%),
+            radial-gradient(circle at 88% 12%, rgba(160,200,255,0.2), transparent 42%),
+            radial-gradient(circle at 75% 85%, rgba(191,145,255,0.14), transparent 45%),
+            radial-gradient(circle at 20% 90%, rgba(165,245,215,0.16), transparent 45%)`,
+        }}
+      />
+      {/* Toast Alert */}
+      {alert && (
+        <div className={`admin-toast fixed bottom-5 right-5 z-50 flex items-center gap-3 rounded-xl border px-5 py-3 text-sm shadow-lg ${
+          alert.type === "success" ? "bg-green-50 text-green-800 border-green-200" :
+          alert.type === "error" ? "bg-red-50 text-red-800 border-red-200" :
+          "bg-blue-50 text-blue-800 border-blue-200"
+        }`}>
+          <span>{alert.type === "success" ? "✅" : alert.type === "error" ? "❌" : "ℹ️"}</span>
+          <span className="font-medium">{alert.msg}</span>
+        </div>
+      )}
+
+      {pendingDeleteSkill && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-4">
+          <div className="w-full max-w-md tahoe-system-card !p-6">
+            <div className="mb-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "var(--tahoe-accent)" }}>删除技能分组</p>
+              <h2 className="mt-2 text-xl font-bold" style={{ color: "var(--tahoe-text)" }}>
+                {pendingDeleteSkill.groupName}
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--tahoe-muted)" }}>
+                删除后将移除该分组及其包含的所有技能标签。是否确认删除？
+              </p>
+            </div>
+
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                onClick={() => setPendingDeleteSkill(null)}
+                className="rounded-lg px-4 py-2 text-sm font-medium transition"
+                style={{ border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-muted)" }}
+              >
+                取消
+              </button>
+              <button
+                onClick={confirmSkillDelete}
+                className="tahoe-button tahoe-button-primary px-4 py-2 text-sm font-semibold"
+                style={{ background: "linear-gradient(180deg, #ef4444, #dc2626)" }}
+              >
+                确认删除
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {pendingConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-4">
+          <div className="w-full max-w-md tahoe-system-card !p-6">
+            <div className="mb-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "var(--tahoe-accent)" }}>{pendingConfirm.title}</p>
+              <p className="mt-3 text-sm leading-relaxed whitespace-pre-wrap" style={{ color: "var(--tahoe-muted)" }}>{pendingConfirm.message}</p>
+            </div>
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                onClick={() => setPendingConfirm(null)}
+                className="rounded-lg px-4 py-2 text-sm font-medium transition"
+                style={{ border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-muted)" }}
+              >
+                取消
+              </button>
+              <button
+                onClick={pendingConfirm.onConfirm}
+                className="tahoe-button tahoe-button-primary px-4 py-2 text-sm font-semibold"
+              >
+                确认删除
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {pendingDeletePost && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-4">
+          <div className="w-full max-w-md tahoe-system-card !p-6" style={{ borderColor: "rgba(239, 68, 68, 0.3)" }}>
+            <div className="mb-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "var(--tahoe-accent)" }}>删除文章</p>
+              <h2 className="mt-2 text-xl font-bold" style={{ color: "var(--tahoe-text)" }}>
+                {pendingDeletePost.post.frontmatter.title || pendingDeletePost.post.slug}
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--tahoe-muted)" }}>
+                删除后会移除对应 Markdown 文件。请再次确认，并输入文章 slug：
+                <span className="ml-1 font-mono font-semibold" style={{ color: "var(--tahoe-accent)" }}>
+                  {pendingDeletePost.post.originalSlug || pendingDeletePost.post.slug}
+                </span>
+              </p>
+            </div>
+
+            <input
+              value={deleteConfirmSlug}
+              onChange={(event) => setDeleteConfirmSlug(event.target.value)}
+              className="w-full rounded-lg px-3 py-2 font-mono text-sm outline-none"
+              style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+              placeholder="输入文章 slug"
+              autoFocus
+            />
+
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                onClick={cancelPostDelete}
+                disabled={isSaving}
+                className="rounded-lg px-4 py-2 text-sm font-medium transition disabled:opacity-50"
+                style={{ border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-muted)" }}
+              >
+                取消
+              </button>
+              <button
+                onClick={confirmPostDelete}
+                disabled={isSaving || deleteConfirmSlug.trim() !== (pendingDeletePost.post.originalSlug || pendingDeletePost.post.slug)}
+                className="tahoe-button tahoe-button-primary px-4 py-2 text-sm font-semibold disabled:opacity-45"
+                style={isSaving ? {} : { background: "linear-gradient(180deg, #ef4444, #dc2626)" }}
+              >
+                {isSaving ? "正在删除..." : "确认删除"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Collapsible Sidebar */}
+      <aside
+        className="fixed left-4 top-4 bottom-4 z-50 flex flex-col select-none transition-[background-color,border-color,box-shadow] duration-200 ease-out"
+        style={{
+          width: sidebarCollapsed ? "48px" : "200px",
+          background: "var(--tahoe-glass)",
+          border: "1px solid var(--tahoe-card-border)",
+          borderRadius: "22px",
+          boxShadow: "inset 0 1px 0 var(--tahoe-highlight), 0 8px 32px -12px var(--tahoe-shadow)",
+          backdropFilter: "blur(32px) saturate(200%)",
+          WebkitBackdropFilter: "blur(32px) saturate(200%)",
+        }}
+      >
+        {/* Header / Collapse Toggle */}
+        <div className="flex items-center justify-between p-4 pb-2">
+          {!sidebarCollapsed && (
+            <h1 className="text-base font-bold" style={{ color: "var(--tahoe-text)" }}>
+              Studio Admin
+            </h1>
+          )}
+          <button
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className="flex h-7 w-7 items-center justify-center rounded-full ml-auto transition-transform duration-150 ease-out hover:bg-[color:var(--tahoe-glass-strong)] hover:scale-105"
+            style={{ color: "var(--tahoe-muted)" }}
+            title={sidebarCollapsed ? "展开侧栏" : "收起侧栏"}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {sidebarCollapsed
+                ? <><polyline points="9 18 15 12 9 6" /></>
+                : <><polyline points="15 18 9 12 15 6" /></>
+              }
+            </svg>
+          </button>
+        </div>
+
+        {/* Nav Items */}
+        <nav className="flex-1 overflow-y-auto px-2 space-y-1">
+          {[
+            { key: "home", icon: "🏠", label: "首页布局" },
+            { key: "profile", icon: "👤", label: "个人介绍" },
+            { key: "experience", icon: "💼", label: "经历履历" },
+            { key: "projects", icon: "🚀", label: "技术项目" },
+            { key: "skills", icon: "🧠", label: "专业技能" },
+            { key: "posts", icon: "✍️", label: "文章博文" },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => { setActiveTab(tab.key as typeof activeTab); setSelectedPostIndex(null); setSelectedProjIndex(null); setSelectedExpIndex(null); }}
+              className="w-full flex items-center gap-2.5 rounded-xl text-sm transition hover:bg-[color:var(--tahoe-glass-strong)] hover:text-[color:var(--tahoe-text)]"
+              style={{
+                color: activeTab === tab.key ? "#fff" : "var(--tahoe-muted)",
+                background: activeTab === tab.key ? "var(--tahoe-accent)" : "transparent",
+                padding: sidebarCollapsed ? "8px" : "8px 12px",
+                justifyContent: sidebarCollapsed ? "center" : "flex-start",
+                fontWeight: activeTab === tab.key ? 600 : 400,
+              }}
+              title={sidebarCollapsed ? tab.label : undefined}
+            >
+              <span className="shrink-0 text-base">{tab.icon}</span>
+              {!sidebarCollapsed && <span>{tab.label}</span>}
+            </button>
+          ))}
+        </nav>
+
+        {/* Footer */}
+        <div className="p-3 shrink-0" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
+          {!sidebarCollapsed ? (
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <Link href="/" className="text-xs font-semibold hover:underline flex items-center gap-1" style={{ color: "var(--tahoe-accent)" }}>
+                  🏠 返回主页
+                </Link>
+                <div style={{ transform: "scale(0.9)", transformOrigin: "right center" }}>
+                  <TahoeModeToggle iconOnly />
+                </div>
+              </div>
+              <div className="flex items-center justify-between pt-2" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold" style={{ color: "var(--tahoe-text)" }}>
+                  <span className="w-1.5 h-1.5 rounded-full shrink-0 bg-blue-500" />
+                  <span>本地模式</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-3">
+              <Link href="/" className="text-sm hover:underline" style={{ color: "var(--tahoe-accent)" }} title="返回主页">
+                🏠
+              </Link>
+              <div style={{ transform: "scale(0.9)", transformOrigin: "center" }}>
+                <TahoeModeToggle iconOnly />
+              </div>
+              <span className="w-1.5 h-1.5 rounded-full shrink-0 bg-blue-500" title="本地" />
+            </div>
+          )}
+        </div>
+      </aside>
+
+      {/* Main Workspace Area */}
+      <main
+        className="min-h-screen p-6"
+        style={{ paddingLeft: sidebarCollapsed ? "80px" : "232px" }}
+      >
+        <div className="max-w-4xl mx-auto">
+        {isLoading ? (
+          <div className="h-full w-full flex flex-col justify-center items-center space-y-3">
+            <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: "var(--tahoe-accent)", borderTopColor: "transparent" }}></div>
+            <p className="text-xs" style={{ color: "var(--tahoe-muted)" }}>正在加载数据，请稍候...</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {activeTab === "profile" && renderProfileForm()}
+            {activeTab === "experience" && renderExperienceTab()}
+            {activeTab === "projects" && renderProjectsTab()}
+            {activeTab === "skills" && renderSkillsTab()}
+            {activeTab === "posts" && renderPostsTab()}
+            {activeTab === "home" && renderHomeSectionsTab()}
+          </div>
+        )}
+        </div>
+      </main>
+    </div>
+  );
+}

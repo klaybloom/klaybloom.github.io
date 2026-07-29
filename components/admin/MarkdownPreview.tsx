@@ -15,8 +15,8 @@ export function MarkdownPreview({ markdown }: { markdown: string }) {
     <ReactMarkdown
       urlTransform={safeUrlTransform}
       components={{
-        a: ({ children, href, node: _node, ...props }) => (
-          <a {...props} href={href || undefined} rel="noreferrer">
+        a: ({ children, href, title }) => (
+          <a href={href || undefined} rel="noreferrer" title={title}>
             {children}
           </a>
         ),
