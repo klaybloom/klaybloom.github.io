@@ -8,11 +8,11 @@ tags:
   - 智能体
   - 模型更新
 category: "AI"
-cover: "/images/posts/2026-06-12-ai-daily-report/cover.png"
+cover: "/images/posts/2026-06-12-ai-daily-report/cover.webp"
 published: true
 featured: false
 ---
-![封面图](/images/posts/2026-06-12-ai-daily-report/cover.png)
+![封面图](/images/posts/2026-06-12-ai-daily-report/cover.webp)
 
 今天这份 AIHOT 日报没有主编导语，但信息密度很高。
 
@@ -44,7 +44,7 @@ Midjourney 将默认模型从 V7 升级到 V8.1。官方更新提到，V8.1 在�
 
 ## 二、产品发布与更新：智能体进入权限、安全和本地运行阶段
 
-![产品与工具图](/images/posts/2026-06-12-ai-daily-report/image-01.png)
+![产品与工具图](/images/posts/2026-06-12-ai-daily-report/image-01.webp)
 
 今天产品版块最值得关注，里面有开源推理算子、智能体权限管理、模型评测、本地模型运行、图像控制和 AI 音乐检测。
 
@@ -157,7 +157,7 @@ BBVA 与 OpenAI 合作，将 ChatGPT Enterprise 推广到 10 万名员工，加�
 
 ## 四、论文研究：高风险决策不能只看模型表现
 
-![风险与治理图](/images/posts/2026-06-12-ai-daily-report/image-02.png)
+![风险与治理图](/images/posts/2026-06-12-ai-daily-report/image-02.webp)
 
 今天论文研究版块只有一条，但值得单独看。
 

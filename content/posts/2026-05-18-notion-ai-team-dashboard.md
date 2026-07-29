@@ -6,12 +6,12 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-18-notion-ai-team-dashboard/cover.png"
+cover: "/images/posts/2026-05-18-notion-ai-team-dashboard/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-18-notion-ai-team-dashboard/cover.png)
+![封面图](/images/posts/2026-05-18-notion-ai-team-dashboard/cover.webp)
 
 很多团队现在的 AI 工作流，并不缺模型。
 
@@ -33,7 +33,7 @@ Notion 5 月 13 日发布的 Developer Platform，值得创业者、开发者和
 
 第四是 External Agents API 和外部 Agent。Notion 希望让 Claude Code、Cursor、Codex、Decagon，以及企业自研 Agent，成为工作区里的参与者。这里要注意：外部 Agent 相关能力仍带 Alpha 或等待名单属性，不应理解成所有团队今天都能完整使用。
 
-![Workers 数据流示意图](/images/posts/2026-05-18-notion-ai-team-dashboard/image-01.png)
+![Workers 数据流示意图](/images/posts/2026-05-18-notion-ai-team-dashboard/image-01.webp)
 
 | 能力 | 当前状态 | 对团队的意义 |
 | --- | --- | --- |
@@ -56,7 +56,7 @@ Notion 这套平台的变化，是把「数据进入工作区」「代码逻辑�
 
 一个 SaaS 团队可以先同步付费客户、工单和产品需求，让产品经理每天看到真实客户上下文。一个咨询团队可以把客户资料、会议纪要和交付清单放进同一套 Notion database，再让 Agent 按规则生成周报。一个开发团队可以让 GitHub 事件触发 Notion 任务更新，减少重复录入。
 
-![团队与 Agent 协作示意图](/images/posts/2026-05-18-notion-ai-team-dashboard/image-02.png)
+![团队与 Agent 协作示意图](/images/posts/2026-05-18-notion-ai-team-dashboard/image-02.webp)
 
 **Notion 不是替你判断业务优先级，但它正在把 Agent 做事所需的材料放到同一张桌面上。**
 

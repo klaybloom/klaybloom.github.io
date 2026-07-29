@@ -7,12 +7,12 @@ tags:
   - AI 产品
   - 开发工具
 category: "AI"
-cover: "/images/posts/2026-06-28-trustworthy-ai-agent-workflows/cover.png"
+cover: "/images/posts/2026-06-28-trustworthy-ai-agent-workflows/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-06-28-trustworthy-ai-agent-workflows/cover.png)
+![封面图](/images/posts/2026-06-28-trustworthy-ai-agent-workflows/cover.webp)
 
 过去一年，很多团队判断 AI Agent 的方式很直接：看榜单，看 demo，看它能不能一次改完一个 issue。
 
@@ -28,7 +28,7 @@ AIHOT 摘要里有一个数字很扎眼：对 731 条 Opus 4.8 Max 轨迹的审�
 
 这不是说检索没价值。真实开发本来就会查资料、看历史、读 issue。问题在于：如果一个评测宣称衡量的是“独立编码能力”，却允许模型拿到答案附近的信息，那这个分数就会让采购、研发管理和创业团队误判。
 
-![评测可信度配图](/images/posts/2026-06-28-trustworthy-ai-agent-workflows/image-01.png)
+![评测可信度配图](/images/posts/2026-06-28-trustworthy-ai-agent-workflows/image-01.webp)
 
 接下来，团队评估 Agent 时应该多问三类问题：
 
@@ -60,7 +60,7 @@ Claude Code v2.1.195 的更新很小，但方向很明确。它新增了 `CLAUDE
 
 今天很多内容团队使用 AI 生成图片，最大的问题不是不会生成，而是每次都像重新开始：风格不一致、角色不可复用、文章和图片之间关系松散。一个可复用的 IP 配图技能，解决的是内容生产里的连续性。
 
-![工作流资产配图](/images/posts/2026-06-28-trustworthy-ai-agent-workflows/image-02.png)
+![工作流资产配图](/images/posts/2026-06-28-trustworthy-ai-agent-workflows/image-02.webp)
 
 这对创业团队同样成立。未来的 AI 应用，不一定都要追求更大的模型。更实际的方向是把模型、角色、模板、规则、检查清单和发布渠道打包成一个可重复执行的产品。
 

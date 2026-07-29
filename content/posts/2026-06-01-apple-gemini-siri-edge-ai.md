@@ -8,12 +8,12 @@ tags:
   - Gemini
   - Edge AI
 category: "AI"
-cover: "/images/posts/2026-06-01-apple-gemini-siri-edge-ai/cover.png"
+cover: "/images/posts/2026-06-01-apple-gemini-siri-edge-ai/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-06-01-apple-gemini-siri-edge-ai/cover.png)
+![封面图](/images/posts/2026-06-01-apple-gemini-siri-edge-ai/cover.webp)
 
 今年 WWDC 前，苹果的 AI 叙事变得很微妙。
 
@@ -29,7 +29,7 @@ AIHOT 6 月 1 日日报里有一条行业动态：苹果据称会把从 Google G
 
 手机上的小模型适合做改写、摘要、轻量工具调用、上下文理解；但真正需要长上下文、多轮规划、复杂推理的任务，仍然会把算力、内存、延迟和电池压力推到设备边界之外。
 
-![端侧与云端协同示意图](/images/posts/2026-06-01-apple-gemini-siri-edge-ai/image-01.png)
+![端侧与云端协同示意图](/images/posts/2026-06-01-apple-gemini-siri-edge-ai/image-01.webp)
 
 对开发者来说，“端侧优先”不该被理解为所有请求都在本地完成。更实际的设计是：哪些任务必须本地，哪些任务可以云端，哪些数据永远不能离开设备，哪些数据可以在用户授权后短暂进入可信执行环境。
 
@@ -57,7 +57,7 @@ AIHOT 6 月 1 日日报里有一条行业动态：苹果据称会把从 Google G
 
 比如，用户数据进入了哪里？保存多久？谁能访问？是否用于训练？发生失败时如何降级？企业客户能不能审计？这些问题如果只用一句“我们重视隐私”带过，用户不会买账。
 
-![隐私与能力取舍图](/images/posts/2026-06-01-apple-gemini-siri-edge-ai/image-02.png)
+![隐私与能力取舍图](/images/posts/2026-06-01-apple-gemini-siri-edge-ai/image-02.webp)
 
 ## 给创业者的三个判断
 

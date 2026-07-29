@@ -8,12 +8,12 @@ tags:
   - Computer Vision
   - Engineering
 category: "AI Engineering"
-cover: "/images/posts/2026-06-08-opencv-5-ai-vision/cover.png"
+cover: "/images/posts/2026-06-08-opencv-5-ai-vision/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-06-08-opencv-5-ai-vision/cover.png)
+![封面图](/images/posts/2026-06-08-opencv-5-ai-vision/cover.webp)
 
 这两年做 AI 应用，有一个变化很明显：
 
@@ -33,7 +33,7 @@ OpenCV 5 的方向就是把这件事做得更顺。
 
 官方 Wiki 提到，新 DNN 引擎采用计算图架构，目标是提高模型兼容性、可扩展性和后端优化空间。AIHOT 日报整理的重点也很清楚：ONNX 算子覆盖率从 4.x 时代不到 23% 提升到超过 80%，并开始原生支持 Transformer、视觉语言模型和大语言模型相关工作流。
 
-![OpenCV 5 DNN 升级示意图](/images/posts/2026-06-08-opencv-5-ai-vision/image-01.png)
+![OpenCV 5 DNN 升级示意图](/images/posts/2026-06-08-opencv-5-ai-vision/image-01.webp)
 
 这不是“多支持几个模型格式”这么简单。
 

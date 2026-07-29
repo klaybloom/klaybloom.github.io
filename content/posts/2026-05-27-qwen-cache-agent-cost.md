@@ -8,12 +8,12 @@ tags:
   - Agent
   - LLM
 category: "AI"
-cover: "/images/posts/2026-05-27-qwen-cache-agent-cost/cover.png"
+cover: "/images/posts/2026-05-27-qwen-cache-agent-cost/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-27-qwen-cache-agent-cost/cover.png)
+![封面图](/images/posts/2026-05-27-qwen-cache-agent-cost/cover.webp)
 
 如果你这两个月认真跑过长上下文 Agent，大概率会有一个感受：模型越来越能干，账单也越来越敏感。
 
@@ -40,7 +40,7 @@ AIHOT 2026-05-26 日报里有一条很值得产品和技术团队注意：Qwen3.
 
 以前的做法通常是硬扛。要么把上下文都塞进去，换来更完整的回答；要么人为缩短提示，牺牲效果来控成本。隐式缓存的价值在这里：它让“重复输入”有机会变便宜，而且不要求每个开发者先改一套缓存逻辑。
 
-![重复上下文成本示意图](/images/posts/2026-05-27-qwen-cache-agent-cost/image-01.png)
+![重复上下文成本示意图](/images/posts/2026-05-27-qwen-cache-agent-cost/image-01.webp)
 
 ## 隐式缓存和显式缓存，不是一回事
 
@@ -106,7 +106,7 @@ AIHOT 2026-05-26 日报里有一条很值得产品和技术团队注意：Qwen3.
 
 如果命中已经不错，可以先享受自动收益。如果命中很差，但业务路径明显存在重复前缀，就该考虑整理提示结构，或者在关键路径上使用显式缓存。
 
-![Agent 缓存决策图](/images/posts/2026-05-27-qwen-cache-agent-cost/image-02.png)
+![Agent 缓存决策图](/images/posts/2026-05-27-qwen-cache-agent-cost/image-02.webp)
 
 ## 这件事也提醒我们：模型能力之外，平台能力越来越关键
 

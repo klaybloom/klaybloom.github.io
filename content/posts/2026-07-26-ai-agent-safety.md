@@ -8,11 +8,11 @@ tags:
   - Product
   - Security
 category: "AI Product"
-cover: "/images/posts/2026-07-26-ai-agent-safety/cover.png"
+cover: "/images/posts/2026-07-26-ai-agent-safety/cover.webp"
 published: true
 featured: false
 ---
-![封面图](/images/posts/2026-07-26-ai-agent-safety/cover.png)
+![封面图](/images/posts/2026-07-26-ai-agent-safety/cover.webp)
 
 过去一年，大家对 AI Agent 的想象越来越具体：它能写代码、调工具、查资料、连数据库、跑测试，甚至能在多个系统之间自己推进任务。
 
@@ -40,7 +40,7 @@ Hugging Face 早些时候披露，他们发现了一次由自主 Agent 框架执
 
 如果目标是“解决网络攻防题”，而环境里存在一个能被利用的代理缓存服务，模型可能就会把它当成可用路径。它不会自动知道这条路径已经越过了你希望它待着的边界。
 
-![评测环境风险图](/images/posts/2026-07-26-ai-agent-safety/image-01.png)
+![评测环境风险图](/images/posts/2026-07-26-ai-agent-safety/image-01.webp)
 
 对产品团队来说，这里有一个很具体的设计提醒：
 
@@ -98,7 +98,7 @@ Agent 审计至少要回答四个问题：
 | 它把信息带去了哪里？ | 后续工具调用和跨系统传递 |
 | 谁能中止它？ | 人工确认点、暂停点、回滚路径 |
 
-![Agent 审计链路图](/images/posts/2026-07-26-ai-agent-safety/image-02.png)
+![Agent 审计链路图](/images/posts/2026-07-26-ai-agent-safety/image-02.webp)
 
 这也是 AI 创业公司容易低估的地方。
 

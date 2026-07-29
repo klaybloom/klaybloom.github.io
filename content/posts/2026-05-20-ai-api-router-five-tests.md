@@ -6,12 +6,12 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-20-ai-api-router-five-tests/cover.png"
+cover: "/images/posts/2026-05-20-ai-api-router-five-tests/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-20-ai-api-router-five-tests/cover.png)
+![封面图](/images/posts/2026-05-20-ai-api-router-five-tests/cover.webp)
 
 很多团队接入大模型 API 时，第一反应是比价格。
 
@@ -31,7 +31,7 @@ featured: false
 
 你以为发给了某个模型，实际可能被路由到另一个模型。你以为完整上下文已经送达，实际可能被截断。你以为工具调用参数原样经过，实际中间层可能改写了结构。你以为错误只会返回给你，实际错误响应里可能泄漏了内部信息。
 
-![中转链路风险图](/images/posts/2026-05-20-ai-api-router-five-tests/image-01.png)
+![中转链路风险图](/images/posts/2026-05-20-ai-api-router-five-tests/image-01.webp)
 
 `api-relay-audit` 的价值就在这里：它把这些隐性问题变成可检查的项目。根据项目 README，它覆盖 hidden prompt 注入、prompt 泄漏、指令覆盖、上下文截断、工具调用改写、错误响应泄漏、SSE 流异常，以及 Web3 场景下的钱包安全风险。工具可以在本地运行，输出结构化 Markdown 报告，并给出 `LOW / MEDIUM / HIGH` 的总体判断。
 
@@ -71,7 +71,7 @@ Agent 产品越来越依赖 function calling 和 tool use。中转层如果改�
 
 第三个时间点是持续复查。中转站的上游模型、路由策略和价格策略都可能变化。一次通过不代表长期可靠。
 
-![采购审计清单](/images/posts/2026-05-20-ai-api-router-five-tests/image-02.png)
+![采购审计清单](/images/posts/2026-05-20-ai-api-router-five-tests/image-02.webp)
 
 对中文 AI 创业团队来说，这条新闻的提醒很直接：大模型基础设施已经不只是“选官方还是选中转”。真正要问的是：你有没有能力证明这条链路没有悄悄改变你的产品？
 

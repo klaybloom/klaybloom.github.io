@@ -6,12 +6,12 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-21-claude-hosted-agents-enterprise/cover.png"
+cover: "/images/posts/2026-05-21-claude-hosted-agents-enterprise/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图：企业智能体安全边界](/images/posts/2026-05-21-claude-hosted-agents-enterprise/cover.png)
+![封面图：企业智能体安全边界](/images/posts/2026-05-21-claude-hosted-agents-enterprise/cover.webp)
 
 过去一年，很多团队聊智能体时，最容易被演示打动：它会写代码，会操作网页，会调用工具，会自己处理一串任务。
 
@@ -33,7 +33,7 @@ Anthropic 官方博客把这次更新拆成两部分：
 
 官方状态也值得注意：自托管沙箱是 public beta，MCP 隧道是 research preview。前者已经面向更广的企业试用，后者还处在更早阶段。
 
-![正文配图：托管代理架构变化](/images/posts/2026-05-21-claude-hosted-agents-enterprise/image-01.png)
+![正文配图：托管代理架构变化](/images/posts/2026-05-21-claude-hosted-agents-enterprise/image-01.webp)
 
 这里的关键点不是“Claude 又多了两个功能”，而是托管代理的责任边界被重新划分了。
 
@@ -67,7 +67,7 @@ MCP 这件事，本质上是给模型和工具之间定义一个更统一的连�
 
 MCP 隧道的价值在于：代理可以通过轻量网关访问私有网络里的 MCP servers。内部服务仍在企业网络中，外部平台不需要直接拿到数据库或 API 的公网入口。
 
-![正文配图：MCP 隧道访问内网资源](/images/posts/2026-05-21-claude-hosted-agents-enterprise/image-02.png)
+![正文配图：MCP 隧道访问内网资源](/images/posts/2026-05-21-claude-hosted-agents-enterprise/image-02.webp)
 
 对产品经理来说，这会影响企业版产品设计。你不能只写“支持内部工具调用”，还要回答三个问题：
 

@@ -8,12 +8,12 @@ tags:
   - Product
   - Safety
 category: "AI Product"
-cover: "/images/posts/2026-06-06-openai-moderation-scores/cover.png"
+cover: "/images/posts/2026-06-06-openai-moderation-scores/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-06-06-openai-moderation-scores/cover.png)
+![封面图](/images/posts/2026-06-06-openai-moderation-scores/cover.webp)
 
 昨天看 AIHOT 日报时，有一条消息不算最热闹，却很值得开发者停下来：OpenAI API 新增了内容审核评分，Responses API 和 Chat Completions API 都能在生成请求里返回 moderation scores。
 
@@ -51,7 +51,7 @@ const outputModeration = response.moderation.output;
 
 > 对产品团队来说，审核结果的价值不在于替你做最终决定，而在于把风险信号提前放到可记录、可复查、可调整的位置。
 
-![流程配图](/images/posts/2026-06-06-openai-moderation-scores/image-01.png)
+![流程配图](/images/posts/2026-06-06-openai-moderation-scores/image-01.webp)
 
 ## 产品团队该怎么用
 
@@ -93,7 +93,7 @@ const outputModeration = response.moderation.output;
 
 比如社区产品可能对骚扰类内容更敏感，教育产品可能更关注自伤、危险行为和未成年人相关内容。一个统一阈值通常不够精细。
 
-![策略配图](/images/posts/2026-06-06-openai-moderation-scores/image-02.png)
+![策略配图](/images/posts/2026-06-06-openai-moderation-scores/image-02.webp)
 
 ## 对开发者的一个现实提醒
 

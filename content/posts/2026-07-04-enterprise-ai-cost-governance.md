@@ -8,12 +8,12 @@ tags:
   - AI Coding
   - Cost Governance
 category: "AI"
-cover: "/images/posts/2026-07-04-enterprise-ai-cost-governance/cover.png"
+cover: "/images/posts/2026-07-04-enterprise-ai-cost-governance/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-07-04-enterprise-ai-cost-governance/cover.png)
+![封面图](/images/posts/2026-07-04-enterprise-ai-cost-governance/cover.webp)
 
 过去一年，很多团队对 AI 的态度很像开了一个无限量自助餐：先让每个人都用起来，先把流程改起来，先看效率是不是真的能上去。
 
@@ -35,7 +35,7 @@ Anthropic 这次给 Claude Enterprise 加的功能，重点不在聊天体验，
 
 现在的问题是：哪个团队真的用出了结果？哪类任务值得用高阶模型？哪些调用只是习惯性浪费？
 
-![AI 成本仪表盘示意](/images/posts/2026-07-04-enterprise-ai-cost-governance/image-01.png)
+![AI 成本仪表盘示意](/images/posts/2026-07-04-enterprise-ai-cost-governance/image-01.webp)
 
 对创业公司也是一样。哪怕团队只有十几个人，只要 AI 编程、客服、运营、销售资料生成开始常态化，费用也会从“软件订阅”变成“按任务变化的资源账单”。这类账单如果没有任务标签、团队归属和模型分层，月底只会变成一串说不清楚的数字。
 
@@ -73,7 +73,7 @@ GitHub 的 Kimi K2.7 Code 消息也很值得看。
 - 哪些代码路径只能用企业批准的模型？
 - 高成本模型的调用是否要绑定 issue、PR 或工单？
 
-![模型选择矩阵](/images/posts/2026-07-04-enterprise-ai-cost-governance/image-02.png)
+![模型选择矩阵](/images/posts/2026-07-04-enterprise-ai-cost-governance/image-02.webp)
 
 当模型越来越多，真正的竞争点就不只是模型榜单，而是路由、权限、审计、预算和效果评估。谁能把这些组合好，谁的 AI 工具才会在企业里长期留下来。
 

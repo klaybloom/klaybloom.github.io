@@ -6,12 +6,12 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-22-openai-yc-compute-credits/cover.png"
+cover: "/images/posts/2026-05-22-openai-yc-compute-credits/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-22-openai-yc-compute-credits/cover.png)
+![封面图](/images/posts/2026-05-22-openai-yc-compute-credits/cover.webp)
 
 昨天 AI 圈里最值得创业者认真看的，不是某个模型又快了多少，也不是某个产品又加了一个按钮。
 
@@ -39,7 +39,7 @@ AIHOT 2026-05-21 日报把它放在“行业动态”里。TechCrunch 的报道�
 
 **我愿不愿意用未来公司的一部分，换今天更便宜、更充足的推理和开发资源？**
 
-![算力换股权的交易结构](/images/posts/2026-05-22-openai-yc-compute-credits/image-01.png)
+![算力换股权的交易结构](/images/posts/2026-05-22-openai-yc-compute-credits/image-01.webp)
 
 ## 为什么 OpenAI 要做这件事？
 
@@ -98,7 +98,7 @@ uncapped SAFE 的含义是，今天不先定估值上限，等下一轮定价融
 
 这几个问题连在一起，就不只是技术选型，而是商业位置。
 
-![AI 创业公司的四层依赖](/images/posts/2026-05-22-openai-yc-compute-credits/image-02.png)
+![AI 创业公司的四层依赖](/images/posts/2026-05-22-openai-yc-compute-credits/image-02.webp)
 
 对中文团队来说，这里有三个提醒。
 

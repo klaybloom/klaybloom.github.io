@@ -8,7 +8,7 @@ tags:
   - Image Generation
   - AI Product
 category: "AI"
-cover: "/images/posts/2026-07-23-qwen-image-production/cover.png"
+cover: "/images/posts/2026-07-23-qwen-image-production/cover.webp"
 published: true
 featured: false
 ---
@@ -18,7 +18,7 @@ featured: false
 
 所以我今天更关注通义千问发布的 Qwen-Image-3.0。不是因为它又“更会画”了，而是它在往一个更实用的方向走：**把图像生成从灵感工具，推向可放进产品流程的生产力工具。**
 
-![封面图](/images/posts/2026-07-23-qwen-image-production/cover.png)
+![封面图](/images/posts/2026-07-23-qwen-image-production/cover.webp)
 
 根据 AIHOT 2026-07-22 日报，Qwen-Image-3.0 的核心关键词是“实”。它支持最长 4.5k token 指令输入，可以一次生成包含 9 个复杂信息图的 3×3 网格布局；文本渲染精度达到 10px，并支持 12 种语言原生渲染。
 
@@ -41,7 +41,7 @@ featured: false
 
 这对小团队尤其重要。创业公司不缺想法，缺的是把想法快速变成可用素材的人力。模型能直接处理长指令和文字排版，意味着运营同学不需要把需求拆成十几轮提示词，开发者也更容易把图片生成包装成产品功能。
 
-![正文配图：从灵感图到生产图](/images/posts/2026-07-23-qwen-image-production/image-01.png)
+![正文配图：从灵感图到生产图](/images/posts/2026-07-23-qwen-image-production/image-01.webp)
 
 ## 关键不是好看，而是可控
 
@@ -88,7 +88,7 @@ Qwen-Image-3.0 如果能把中文、小字、信息图和多语言排版做得�
 - 教育产品里的知识卡片；
 - 出海团队的多语言营销素材。
 
-![正文配图：产品流程中的图片模型](/images/posts/2026-07-23-qwen-image-production/image-02.png)
+![正文配图：产品流程中的图片模型](/images/posts/2026-07-23-qwen-image-production/image-02.webp)
 
 ## 真正的机会在工作流
 

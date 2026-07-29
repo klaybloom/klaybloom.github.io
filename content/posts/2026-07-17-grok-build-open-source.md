@@ -7,12 +7,12 @@ tags:
   - 开源
   - 开发工具
 category: "AI 产品观察"
-cover: "/images/posts/2026-07-17-grok-build-open-source/cover.png"
+cover: "/images/posts/2026-07-17-grok-build-open-source/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-07-17-grok-build-open-source/cover.png)
+![封面图](/images/posts/2026-07-17-grok-build-open-source/cover.webp)
 
 昨天的 AIHOT 日报里，最容易被忽略的一条消息，不是某个模型在榜单上超过了谁，而是 xAI 把 Grok Build 开源了。
 
@@ -30,7 +30,7 @@ featured: false
 
 Grok Build 的开源信号在于：至少在工具层，团队可以把终端 UI、任务执行、配置方式和模型接口分离开。你可以接 xAI，也可以指向本地推理引擎；你可以用它，也可以改它。
 
-![正文配图：从聊天工具到工程基础设施](/images/posts/2026-07-17-grok-build-open-source/image-01.png)
+![正文配图：从聊天工具到工程基础设施](/images/posts/2026-07-17-grok-build-open-source/image-01.webp)
 
 这对创业团队尤其重要。早期团队追求速度，但速度不能建立在完全不可解释的黑盒上。一个能本地运行、能看源码、能改配置的工具，未必马上比闭源 SaaS 更好用，但它给团队留了选择权。
 
@@ -73,7 +73,7 @@ Grok Build 的开源信号在于：至少在工具层，团队可以把终端 UI
 
 Telegram Serverless 的方向很值得看。它把 Bot、Mini App、数据库和执行环境放得更近，减少开发者维护服务器的成本。未来很多 AI 应用可能不是“先买云服务器，再搭框架”，而是在一个已有生态里直接部署小后端，让 agent 和用户入口自然连起来。
 
-![正文配图：三条产品边界](/images/posts/2026-07-17-grok-build-open-source/image-02.png)
+![正文配图：三条产品边界](/images/posts/2026-07-17-grok-build-open-source/image-02.webp)
 
 ## 给开发者的判断
 

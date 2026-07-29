@@ -7,12 +7,12 @@ tags:
   - Product
   - Infrastructure
 category: "AI"
-cover: "/images/posts/2026-07-02-ai-agent-routing/cover.png"
+cover: "/images/posts/2026-07-02-ai-agent-routing/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-07-02-ai-agent-routing/cover.png)
+![封面图](/images/posts/2026-07-02-ai-agent-routing/cover.webp)
 
 这两天很多团队聊智能体，第一反应还是问同一个问题：该用哪个模型？
 
@@ -34,7 +34,7 @@ Tunguz 的说法是，路由器是一小段决定“哪个请求交给哪一层�
 
 今天换一个便宜模型，可能下个月又要重测。可是如果系统已经知道哪些任务可以慢一点、哪些任务必须实时、哪些任务有写权限风险、哪些任务需要完整仓库上下文，后面接入任何模型都会更容易。
 
-![三层路由结构](/images/posts/2026-07-02-ai-agent-routing/image-01.png)
+![三层路由结构](/images/posts/2026-07-02-ai-agent-routing/image-01.webp)
 
 ## 三层结构：分类、路由、模型选择
 
@@ -84,7 +84,7 @@ Tunguz 的说法是，路由器是一小段决定“哪个请求交给哪一层�
 
 这些问题回答清楚，AI 产品才从“会调用模型”变成“会经营成本和质量”。
 
-![成本分层与任务队列](/images/posts/2026-07-02-ai-agent-routing/image-02.png)
+![成本分层与任务队列](/images/posts/2026-07-02-ai-agent-routing/image-02.webp)
 
 ## 给团队的一个检查清单
 

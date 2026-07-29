@@ -8,12 +8,12 @@ tags:
   - Developer Tools
   - Product
 category: "AI Tools"
-cover: "/images/posts/2026-06-20-claude-code-artifacts/cover.png"
+cover: "/images/posts/2026-06-20-claude-code-artifacts/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-06-20-claude-code-artifacts/cover.png)
+![封面图](/images/posts/2026-06-20-claude-code-artifacts/cover.webp)
 
 昨天的 AIHOT 日报里，有一条消息很值得开发者和产品团队停下来看看：Claude Code 现在支持 artifacts 了。
 
@@ -29,7 +29,7 @@ featured: false
 
 Claude Code artifacts 想解决的正是这个问题。
 
-![从私聊到页面化协作](/images/posts/2026-06-20-claude-code-artifacts/image-01.png)
+![从私聊到页面化协作](/images/posts/2026-06-20-claude-code-artifacts/image-01.webp)
 
 ## 它改变的是交付形态
 
@@ -55,7 +55,7 @@ Claude Code artifacts 想解决的正是这个问题。
 
 从今天的产品形态看，artifacts 对四类工作最有价值。
 
-![适用场景矩阵](/images/posts/2026-06-20-claude-code-artifacts/image-02.png)
+![适用场景矩阵](/images/posts/2026-06-20-claude-code-artifacts/image-02.webp)
 
 第一类是 PR 走查。
 

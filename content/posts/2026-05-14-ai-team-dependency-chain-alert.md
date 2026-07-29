@@ -6,12 +6,12 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-14-ai-team-dependency-chain-alert/cover.png"
+cover: "/images/posts/2026-05-14-ai-team-dependency-chain-alert/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-14-ai-team-dependency-chain-alert/cover.png)
+![封面图](/images/posts/2026-05-14-ai-team-dependency-chain-alert/cover.webp)
 
 昨天的 AI 新闻里，有一条不如模型发布热闹，但更值得团队负责人停下来看的消息：
 
@@ -29,7 +29,7 @@ AIHOT 2026-05-13 日报把这条新闻放在“行业动态”里，标题是“
 
 公开信息里，GitHub Advisory 记录了 TanStack 相关事件：2026-05-11 19:20 到 19:26 UTC 之间，42 个 `@tanstack/*` 包出现 84 个恶意版本。SecurityWeek、Socket、SafeDep 等安全团队的汇总也提到，事件随后牵涉到 Mistral AI SDK、UiPath、OpenSearch、Guardrails AI 等开发者生态组件。
 
-![依赖链风险图](/images/posts/2026-05-14-ai-team-dependency-chain-alert/image-01.png)
+![依赖链风险图](/images/posts/2026-05-14-ai-team-dependency-chain-alert/image-01.webp)
 
 危险不在于“某个包名很大”。危险在于这些包经常出现在真实开发机、CI runner、AI 应用后端、自动化脚本和内部工具里。它们所在的位置，天然接近密钥。
 
@@ -77,7 +77,7 @@ grep -E '@tanstack|mistral|uipath|opensearch|guardrails' package-lock.json pnpm-
 
 这里有一个容易忽视的点：**如果泄露的是 CI/CD 凭据，换依赖版本还不够。** 攻击者拿到的是发布或部署权限，后续动作可能发生在你的仓库、包管理账号、云账号或自动化平台里。
 
-![处置流程图](/images/posts/2026-05-14-ai-team-dependency-chain-alert/image-02.png)
+![处置流程图](/images/posts/2026-05-14-ai-team-dependency-chain-alert/image-02.webp)
 
 ## 给小团队的一套低成本规则
 

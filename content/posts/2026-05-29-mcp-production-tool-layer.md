@@ -8,12 +8,12 @@ tags:
   - AI 产品
   - 开发者工具
 category: "AI"
-cover: "/images/posts/2026-05-29-mcp-production-tool-layer/cover.png"
+cover: "/images/posts/2026-05-29-mcp-production-tool-layer/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-29-mcp-production-tool-layer/cover.png)
+![封面图](/images/posts/2026-05-29-mcp-production-tool-layer/cover.webp)
 
 这两天有一个变化，表面看是两条产品新闻，放在一起看，其实是在提醒 AI 应用团队：工具层要重新设计了。
 
@@ -40,7 +40,7 @@ AI 一旦可以读内部知识库、写业务系统、调用第三方服务，�
 
 MCP 的价值就在这里：它把“模型怎么调用外部能力”变成一个相对统一的协议。产品团队不必为每个模型、每个客户端、每个业务入口重复设计一套工具接入方式。
 
-![正文配图：工具层架构](/images/posts/2026-05-29-mcp-production-tool-layer/image-01.png)
+![正文配图：工具层架构](/images/posts/2026-05-29-mcp-production-tool-layer/image-01.webp)
 
 ## Runway MCP 说明了什么
 
@@ -99,7 +99,7 @@ admin: 不给 Agent
 
 这不是完整安全方案，但足够让团队从“能不能接”进入“怎么可控地接”。
 
-![正文配图：落地清单](/images/posts/2026-05-29-mcp-production-tool-layer/image-02.png)
+![正文配图：落地清单](/images/posts/2026-05-29-mcp-production-tool-layer/image-02.webp)
 
 ## 真正的竞争点会变成工具体验
 

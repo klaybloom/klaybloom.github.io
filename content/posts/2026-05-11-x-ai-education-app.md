@@ -6,12 +6,12 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-11-x-ai-education-app/cover.png"
+cover: "/images/posts/2026-05-11-x-ai-education-app/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-11-x-ai-education-app/cover.png)
+![封面图](/images/posts/2026-05-11-x-ai-education-app/cover.webp)
 
 今天刷 X，最让我停下来的不是哪家又发了一个更大的模型，而是一条互动数非常夸张的小演示帖。
 
@@ -19,7 +19,7 @@ featured: false
 
 这条内容能冲这么高，不是因为它炫，而是因为它把一件很多人已经隐约感觉到、但还没完全说透的事摆到了台面上：**AI 正在把“做一个垂直小应用”的门槛，从会不会写一整套软件，改成你是否足够理解具体场景。**
 
-![X 热帖与新工作流示意图](/images/posts/2026-05-11-x-ai-education-app/hotness-map.png)
+![X 热帖与新工作流示意图](/images/posts/2026-05-11-x-ai-education-app/hotness-map.webp)
 
 ## 先看重点
 
@@ -43,7 +43,7 @@ featured: false
 
 这也是为什么这条内容会比很多“又变强了”的发布更能打动人。因为读者会立刻联想到自己的行业：如果生物教学应用能这样做，那化学实验、法律案例、财务培训、历史时间线，是不是也都能这样做？
 
-![AI 让个人做教育应用成为现实](/images/posts/2026-05-11-x-ai-education-app/creator-workflow.png)
+![AI 让个人做教育应用成为现实](/images/posts/2026-05-11-x-ai-education-app/creator-workflow.webp)
 
 ## 真正的变化，不是省几小时，而是角色变了
 

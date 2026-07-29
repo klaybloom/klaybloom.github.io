@@ -8,12 +8,12 @@ tags:
   - Engineering
   - Security
 category: "AI Engineering"
-cover: "/images/posts/2026-07-19-claude-code-security/cover.png"
+cover: "/images/posts/2026-07-19-claude-code-security/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-07-19-claude-code-security/cover.png)
+![封面图](/images/posts/2026-07-19-claude-code-security/cover.webp)
 
 这两年，AI 编程工具最容易让人兴奋的地方，是它可以很快写代码、改文件、跑命令。
 
@@ -35,7 +35,7 @@ Claude Code v2.1.214 修了几类问题。
 
 第四类是可观测性。新增的 `message.uuid`、`client_request_id`、`tool_source`，以及 OpenTelemetry 内容截断配置，都更像是给团队排查和审计准备的基础字段。
 
-![权限检查示意图](/images/posts/2026-07-19-claude-code-security/image-01.png)
+![权限检查示意图](/images/posts/2026-07-19-claude-code-security/image-01.webp)
 
 | 更新方向 | 对团队意味着什么 |
 | --- | --- |
@@ -68,7 +68,7 @@ Claude Code v2.1.214 修了几类问题。
 
 日志里只有“调用成功”远远不够。你至少需要知道是哪条用户请求、哪个 agent、哪个工具、哪个参数触发了动作。等到客户开始追责时再补日志，通常已经太晚。
 
-![团队审计看板](/images/posts/2026-07-19-claude-code-security/image-02.png)
+![团队审计看板](/images/posts/2026-07-19-claude-code-security/image-02.webp)
 
 ## 这不是小修小补，而是行业成熟的信号
 

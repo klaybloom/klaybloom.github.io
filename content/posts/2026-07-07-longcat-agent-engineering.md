@@ -8,12 +8,12 @@ tags:
   - Open Source
   - LLM
 category: "AI"
-cover: "/images/posts/2026-07-07-longcat-agent-engineering/cover.jpg"
+cover: "/images/posts/2026-07-07-longcat-agent-engineering/cover.webp"
 published: true
 featured: false
 ---
 
-![LongCat-2.0 封面](/images/posts/2026-07-07-longcat-agent-engineering/cover.jpg)
+![LongCat-2.0 封面](/images/posts/2026-07-07-longcat-agent-engineering/cover.webp)
 
 昨天的 AIHOT 日报里，最值得中文开发者停下来看的，不是一个更热闹的标题，而是美团 LongCat-2.0 完全开源。
 
@@ -35,7 +35,7 @@ Agent 编程最难的部分，经常不是补一个函数，而是理解整个�
 
 LongCat-2.0 明确面向 agentic coding、代码库理解、自动任务执行和复杂工具调用，1M 上下文的意义就在这里。
 
-![长上下文 Agent 工作流](/images/posts/2026-07-07-longcat-agent-engineering/image-01.jpg)
+![长上下文 Agent 工作流](/images/posts/2026-07-07-longcat-agent-engineering/image-01.webp)
 
 第三，MoE 架构和动态激活说明一件事：下一阶段不是单纯堆参数，而是让推理成本可控。
 
@@ -67,7 +67,7 @@ LongCat-2.0 明确面向 agentic coding、代码库理解、自动任务执行�
 | 许可证和部署边界 | 是否允许商用、私有化、二次开发和深度集成 |
 | 中文场景表现 | 是否适配中文需求、中文代码注释、中文业务文档 |
 
-![模型评估清单](/images/posts/2026-07-07-longcat-agent-engineering/image-02.jpg)
+![模型评估清单](/images/posts/2026-07-07-longcat-agent-engineering/image-02.webp)
 
 这张表比“哪个模型最强”更有用。因为真实产品里，最强模型未必是最适合的模型；最适合的模型，往往是质量、成本、延迟、可控性之间最合适的组合。
 

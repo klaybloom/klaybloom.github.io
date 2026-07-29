@@ -6,12 +6,12 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-20-google-io-2026-gemini-execution-layer/cover.png"
+cover: "/images/posts/2026-05-20-google-io-2026-gemini-execution-layer/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-20-google-io-2026-gemini-execution-layer/cover.png)
+![封面图](/images/posts/2026-05-20-google-io-2026-gemini-execution-layer/cover.webp)
 
 昨晚的 Google I/O 2026，看完之后最明显的感受是：Google 不想再把 Gemini 讲成一个聊天机器人。
 
@@ -27,7 +27,7 @@ Google 发布了 `Gemini 3.5`，首发版本是 `Gemini 3.5 Flash`。Google 给�
 
 这次模型升级的重点不只是更聪明，而是更适合长任务。比如读一批文档、维护一段代码、处理一个企业流程、管理多个子任务。换句话说，Google 想让模型从“问答能力”变成“工作能力”。
 
-![Google I/O 2026 的核心结构](/images/posts/2026-05-20-google-io-2026-gemini-execution-layer/image-01.png)
+![Google I/O 2026 的核心结构](/images/posts/2026-05-20-google-io-2026-gemini-execution-layer/image-01.webp)
 
 另一个大模型是 `Gemini Omni`。它是新的多模态生成模型，第一步从视频开始。你可以把文字、图片、音频、视频混合作为输入，然后生成或编辑视频。Google 说它会先进入 Gemini App、Google Flow 和 YouTube Shorts，开发者 API 会在未来几周开放。
 
@@ -45,7 +45,7 @@ CLI 面向喜欢终端的开发者。SDK 则更关键，它允许开发者把同
 
 这会改变很多应用的形态。以前你做 AI 功能，通常是向模型发请求，然后自己处理工具调用、文件状态、执行环境和权限。现在 Google 想把这些通用部分托管起来，让开发者更快做出可执行任务的应用。
 
-![开发工具链变化](/images/posts/2026-05-20-google-io-2026-gemini-execution-layer/image-02.png)
+![开发工具链变化](/images/posts/2026-05-20-google-io-2026-gemini-execution-layer/image-02.webp)
 
 ## Search、Chrome、Workspace 都在变成入口
 

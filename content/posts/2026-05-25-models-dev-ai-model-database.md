@@ -7,12 +7,12 @@ tags:
   - AI
   - Models
 category: AI
-cover: /images/posts/2026-05-25-models-dev-ai-model-database/cover.png
+cover: /images/posts/2026-05-25-models-dev-ai-model-database/cover.webp
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-25-models-dev-ai-model-database/cover.png)
+![封面图](/images/posts/2026-05-25-models-dev-ai-model-database/cover.webp)
 
 这两年做 AI 产品，最容易被低估的工作不是接 API，而是选模型。
 
@@ -40,7 +40,7 @@ Models.dev 的价值不在于告诉你“哪个模型最强”，而是把选型
 
 这对创业团队很实用。很多产品不是输在模型能力，而是输在早期估算太粗：Demo 用高价模型很顺，真实用户一上来，单用户成本压不住；客服、检索、代码、图片理解都塞给同一个模型，体验和费用一起失控。
 
-![成本和能力对照图](/images/posts/2026-05-25-models-dev-ai-model-database/image-01.png)
+![成本和能力对照图](/images/posts/2026-05-25-models-dev-ai-model-database/image-01.webp)
 
 ## 更适合放进团队工作流
 
@@ -78,7 +78,7 @@ curl https://models.dev/api.json
 
 第三类是“更新提醒”。每周检查一次核心供应商和默认模型的变化。模型更新不一定意味着要马上换，但团队至少要知道还有哪些更便宜、更快或能力更合适的选择。
 
-![模型选型流程图](/images/posts/2026-05-25-models-dev-ai-model-database/image-02.png)
+![模型选型流程图](/images/posts/2026-05-25-models-dev-ai-model-database/image-02.webp)
 
 ## 最后
 

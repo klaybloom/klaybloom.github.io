@@ -8,12 +8,12 @@ tags:
   - Developer Tools
   - Supply Chain
 category: "AI"
-cover: "/images/posts/2026-05-26-trapdoor-ai-coding-assistant-security/cover.png"
+cover: "/images/posts/2026-05-26-trapdoor-ai-coding-assistant-security/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-26-trapdoor-ai-coding-assistant-security/cover.png)
+![封面图](/images/posts/2026-05-26-trapdoor-ai-coding-assistant-security/cover.webp)
 
 这几年，很多团队把 Claude Code、Cursor、Codex 这类工具当成了第二个开发者。
 
@@ -33,7 +33,7 @@ TrapDoor 在这个基础上又往前走了一步。[The Hacker News](https://the
 
 `CLAUDE.md` 里写项目规范，合理；`.cursorrules` 里写代码风格，合理；`AGENTS.md` 里写执行边界，也合理。问题是，AI 助手不会只看“我们自己写的那部分”。只要文件被污染，或者依赖包、PR、脚手架把隐藏内容带进仓库，AI 就有机会把攻击者的指令也当成上下文。
 
-![攻击路径示意图](/images/posts/2026-05-26-trapdoor-ai-coding-assistant-security/image-01.png)
+![攻击路径示意图](/images/posts/2026-05-26-trapdoor-ai-coding-assistant-security/image-01.webp)
 
 ## 对 AI 团队来说，危险点变了
 
@@ -75,7 +75,7 @@ TrapDoor 相关报道提到过零宽 Unicode 字符。普通编辑器里，人�
 
 不要只看包名像不像。看发布时间、维护者、下载量、仓库链接、install 脚本、构建脚本和近期版本变化。AI 推荐的包也一样要查。AI 能帮你找到库，但不能替你承担供应链风险。
 
-![团队检查清单图](/images/posts/2026-05-26-trapdoor-ai-coding-assistant-security/image-02.png)
+![团队检查清单图](/images/posts/2026-05-26-trapdoor-ai-coding-assistant-security/image-02.webp)
 
 ## 这件事对产品团队也有意义
 

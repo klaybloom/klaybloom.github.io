@@ -7,12 +7,12 @@ tags:
   - Engineering
   - Security
 category: "Engineering"
-cover: "/images/posts/2026-07-16-ai-ide-security/cover.png"
+cover: "/images/posts/2026-07-16-ai-ide-security/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-07-16-ai-ide-security/cover.png)
+![封面图](/images/posts/2026-07-16-ai-ide-security/cover.webp)
 
 昨天看 AIHOT 日报时，我本来以为最值得写的是端侧模型：Bonsai 27B 能装进手机，混元 Hy3 量化到单卡可部署，Pixel 10 继续把 AI 往设备端推。
 
@@ -36,7 +36,7 @@ Cursor 这次被关注的点，不只是某个 `git.exe` 搜索路径问题，�
 
 陌生仓库一旦可以触发本机执行，AI IDE 的便利就会放大供应链攻击。
 
-![工作流风险示意图](/images/posts/2026-07-16-ai-ide-security/image-01.png)
+![工作流风险示意图](/images/posts/2026-07-16-ai-ide-security/image-01.webp)
 
 ## Agent 越能干，越要限制它的手
 
@@ -90,7 +90,7 @@ Codex 周活跃用户超过 700 万，两个月更新 150 多项，这说明 AI 
 
 第六，团队要写清楚 Agent 使用规则。哪些目录不能碰，哪些命令必须确认，哪些环境不能连接，什么情况下必须找人复核。规则写给人看，也写给 Agent 看。
 
-![团队 Agent 权限清单](/images/posts/2026-07-16-ai-ide-security/image-02.png)
+![团队 Agent 权限清单](/images/posts/2026-07-16-ai-ide-security/image-02.webp)
 
 ## 真正的机会在“可信自动化”
 

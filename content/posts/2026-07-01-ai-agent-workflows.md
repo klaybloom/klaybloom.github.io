@@ -8,12 +8,12 @@ tags:
   - MCP
   - 开发者工具
 category: "AI 日报"
-cover: "/images/posts/2026-07-01-ai-agent-workflows/cover.png"
+cover: "/images/posts/2026-07-01-ai-agent-workflows/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图：AI Agent 工作流控制台](/images/posts/2026-07-01-ai-agent-workflows/cover.png)
+![封面图：AI Agent 工作流控制台](/images/posts/2026-07-01-ai-agent-workflows/cover.webp)
 
 今天的 AIHOT 日报没有 lead，但信息密度很高。最值得中文 AI 创业者、开发者和产品人看的，不是单条模型发布，而是一组同时出现的变化：
 
@@ -38,7 +38,7 @@ AIHOT 今天的模型版块里，最重要的是 Claude Sonnet 5。日报摘要�
 - 是否能稳定使用浏览器、终端、文件系统和业务 API；
 - 同样任务下，人工复核时间是否真的减少。
 
-![配图：Agent 成本与能力评估矩阵](/images/posts/2026-07-01-ai-agent-workflows/image-01.png)
+![配图：Agent 成本与能力评估矩阵](/images/posts/2026-07-01-ai-agent-workflows/image-01.webp)
 
 ## 2. X MCP：实时信息源正在变成智能体接口
 
@@ -74,7 +74,7 @@ AIHOT 摘要里提到几个关键词：基于图的工作流引擎、人工参�
 
 所以，开发者看 ADK Go 2.0，不一定要马上换框架。更应该借它反推自己的 Agent 架构：有没有显式流程图？有没有人工确认点？有没有状态持久化？有没有可观察性？
 
-![配图：多智能体工作流从输入到验证](/images/posts/2026-07-01-ai-agent-workflows/image-02.png)
+![配图：多智能体工作流从输入到验证](/images/posts/2026-07-01-ai-agent-workflows/image-02.webp)
 
 ## 4. shot-scraper video：AI 也开始生成“工作证据”
 

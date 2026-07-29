@@ -8,12 +8,12 @@ tags:
   - Document AI
   - Mistral
 category: "AI"
-cover: "/images/posts/2026-06-24-mistral-ocr-4/cover.png"
+cover: "/images/posts/2026-06-24-mistral-ocr-4/cover.webp"
 published: true
 featured: false
 ---
 
-![Mistral OCR 4 文档智能封面](/images/posts/2026-06-24-mistral-ocr-4/cover.png)
+![Mistral OCR 4 文档智能封面](/images/posts/2026-06-24-mistral-ocr-4/cover.webp)
 
 很多团队做企业知识库时，最先遇到的麻烦并不是大模型不会回答，而是文档进系统之前就已经乱了。
 
@@ -36,7 +36,7 @@ Mistral 在 2026 年 6 月 23 日发布 OCR 4，官方定位是面向 Document I
 - 在 OlmOCRBench 上得分 **85.20**，官方称人工标注者平均偏好率 **72%**。
 - API 定价是 **每 1000 页 4 美元**，Batch API 享 50% 折扣。
 
-![从文档到结构化索引的流程](/images/posts/2026-06-24-mistral-ocr-4/image-01.png)
+![从文档到结构化索引的流程](/images/posts/2026-06-24-mistral-ocr-4/image-01.webp)
 
 这里真正重要的是“结构”。过去很多 OCR 只给你一堆文本，接下来还要自己判断哪些是标题、哪些是表格、哪些是脚注、哪些内容可信度不够。OCR 4 把这些信息作为输出的一部分交出来，后续系统就能更容易做高亮、引用、审校和检索。
 
@@ -65,7 +65,7 @@ OCR 4 的方向是让文档进入向量库之前，就保留更多上下文：
 
 我会用五个问题来判断它是否适合进入团队选型清单。
 
-![企业 OCR 选型检查清单](/images/posts/2026-06-24-mistral-ocr-4/image-02.png)
+![企业 OCR 选型检查清单](/images/posts/2026-06-24-mistral-ocr-4/image-02.webp)
 
 第一，文档类型是不是复杂。纯文本 PDF 没必要过度设计；表格、扫描件、合同、论文、票据、手写签名越多，结构化 OCR 的价值越高。
 

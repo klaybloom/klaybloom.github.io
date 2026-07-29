@@ -7,7 +7,7 @@ tags:
   - Office
   - Automation
 category: "AI Engineering"
-cover: "/images/posts/2026-07-08-officecli-ai-agent-office/cover.png"
+cover: "/images/posts/2026-07-08-officecli-ai-agent-office/cover.webp"
 published: true
 featured: false
 ---
@@ -20,7 +20,7 @@ featured: false
 
 这件事真正有价值的地方，不在于“AI 又能写 PPT 了”。更关键的是，它把 Agent 从文本框和代码仓库里往外推了一步，推到真实工作里最常见、也最麻烦的一类交付物：办公文档。
 
-![OfficeCLI 封面](/images/posts/2026-07-08-officecli-ai-agent-office/cover.png)
+![OfficeCLI 封面](/images/posts/2026-07-08-officecli-ai-agent-office/cover.webp)
 
 ## Agent 做 Office，难点不是写文件
 
@@ -44,7 +44,7 @@ Agent 面对 Office 文件时，麻烦通常出在三件事上：
 
 这要求 Agent 能读结构、改局部、看结果，再继续修。
 
-![Agent 文档反馈循环](/images/posts/2026-07-08-officecli-ai-agent-office/image-01.png)
+![Agent 文档反馈循环](/images/posts/2026-07-08-officecli-ai-agent-office/image-01.webp)
 
 ## OfficeCLI 的关键，是给 Agent 一个反馈循环
 
@@ -86,7 +86,7 @@ OfficeCLI 的 README 里给了一个很典型的例子：创建一个 PowerPoint
 
 谁能让 Agent 稳定处理这些文件，谁就更接近真实付费场景。
 
-![Office Agent 工具边界](/images/posts/2026-07-08-officecli-ai-agent-office/image-02.png)
+![Office Agent 工具边界](/images/posts/2026-07-08-officecli-ai-agent-office/image-02.webp)
 
 ## 对产品团队来说，机会不在“AI 做 PPT”
 

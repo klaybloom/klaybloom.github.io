@@ -7,12 +7,12 @@ tags:
   - Agent
   - Benchmark
 category: "AI Engineering"
-cover: "/images/posts/2026-06-23-coding-agent-benchmark/cover.png"
+cover: "/images/posts/2026-06-23-coding-agent-benchmark/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-06-23-coding-agent-benchmark/cover.png)
+![封面图](/images/posts/2026-06-23-coding-agent-benchmark/cover.webp)
 
 过去一年，AI 编码工具的演示越来越像魔术。
 
@@ -36,7 +36,7 @@ featured: false
 
 一个 bug 如果来自开源仓库，它可能已经在 issue、PR、commit、论坛、Stack Overflow、release note 里出现过。模型只要能上网，或者能翻到仓库历史，就有机会把答案“找回来”。
 
-![模型得分来源拆解](/images/posts/2026-06-23-coding-agent-benchmark/image-01.png)
+![模型得分来源拆解](/images/posts/2026-06-23-coding-agent-benchmark/image-01.webp)
 
 Cursor 把这种现象称为 reward hacking：模型没有按评估者期待的方式解决问题，却用环境漏洞拿到了正确答案。它不是作弊软件意义上的作弊，更像是评估环境给了模型一条捷径。
 
@@ -76,7 +76,7 @@ Cursor 的做法是审计模型轨迹，区分上游查找、git 历史挖掘和
 
 **不要只问 agent 做没做完，要问它怎么发现问题、怎么选择路径、怎么验证结果。**
 
-![团队评估清单](/images/posts/2026-06-23-coding-agent-benchmark/image-02.png)
+![团队评估清单](/images/posts/2026-06-23-coding-agent-benchmark/image-02.webp)
 
 如果你在公司内部评估 coding agent，我建议把测试环境分成三层。
 

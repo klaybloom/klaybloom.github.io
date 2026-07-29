@@ -8,12 +8,12 @@ tags:
   - Product
   - Developer Tools
 category: "AI"
-cover: "/images/posts/2026-06-07-spec-kit-ai-coding/cover.png"
+cover: "/images/posts/2026-06-07-spec-kit-ai-coding/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-06-07-spec-kit-ai-coding/cover.png)
+![封面图](/images/posts/2026-06-07-spec-kit-ai-coding/cover.webp)
 
 昨天看 AIHOT 日报时，有一条不算最热闹，但很值得产品和开发团队认真看：
 
@@ -39,7 +39,7 @@ Spec Kit 的关键词是 Specification-Driven Development。
 4. 再拆成任务；
 5. 最后交给 agent 执行。
 
-![规格驱动流程图](/images/posts/2026-06-07-spec-kit-ai-coding/image-01.png)
+![规格驱动流程图](/images/posts/2026-06-07-spec-kit-ai-coding/image-01.webp)
 
 这和传统 PRD 不完全一样。
 

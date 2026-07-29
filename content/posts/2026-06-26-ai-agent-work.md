@@ -7,12 +7,12 @@ tags:
   - AI Product
   - Productivity
 category: "AI"
-cover: "/images/posts/2026-06-26-ai-agent-work/cover.png"
+cover: "/images/posts/2026-06-26-ai-agent-work/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-06-26-ai-agent-work/cover.png)
+![封面图](/images/posts/2026-06-26-ai-agent-work/cover.webp)
 
 昨天的 AI 日报里，有几条消息放在一起看，味道很明显。
 
@@ -32,7 +32,7 @@ featured: false
 
 如果 AI 只是回答，用户会拿它和搜索、资料库、免费模型比较。可一旦 AI 能连续操作工具，用户比较的对象就变了：外包、实习生、自动化脚本、SaaS 插件，甚至自己半天的工作时间。
 
-![Agent 价值转移示意图](/images/posts/2026-06-26-ai-agent-work/image-01.png)
+![Agent 价值转移示意图](/images/posts/2026-06-26-ai-agent-work/image-01.webp)
 
 ## Notion 的选择，给开发者一个提醒
 
@@ -56,7 +56,7 @@ Agent 能操作电脑之后，价值变大，风险也变大。一个能替你�
 
 这也是为什么 Agent 产品的收费会更像生产力工具，而不是内容工具。它处理的不是一次问答，而是一段有目标、有权限、有成本、有风险的工作过程。
 
-![Agent 产品栈示意图](/images/posts/2026-06-26-ai-agent-work/image-02.png)
+![Agent 产品栈示意图](/images/posts/2026-06-26-ai-agent-work/image-02.webp)
 
 ## 该怎么判断一个 Agent 产品值不值得做
 

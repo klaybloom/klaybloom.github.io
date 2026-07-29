@@ -8,11 +8,11 @@ tags:
   - Product
   - Google Cloud
 category: "AI"
-cover: "/images/posts/2026-06-18-open-knowledge-format-agent-context/cover.png"
+cover: "/images/posts/2026-06-18-open-knowledge-format-agent-context/cover.webp"
 published: true
 featured: false
 ---
-![封面图：Agent 读取结构化知识目录](/images/posts/2026-06-18-open-knowledge-format-agent-context/cover.png)
+![封面图：Agent 读取结构化知识目录](/images/posts/2026-06-18-open-knowledge-format-agent-context/cover.webp)
 
 过去一年，很多团队做 AI 应用时都遇到过同一个问题：
 
@@ -59,7 +59,7 @@ freshness: weekly
 
 同样是 Markdown，差别在这里。
 
-![正文配图：OKF 如何把零散知识变成 Agent 可读目录](/images/posts/2026-06-18-open-knowledge-format-agent-context/image-01.png)
+![正文配图：OKF 如何把零散知识变成 Agent 可读目录](/images/posts/2026-06-18-open-knowledge-format-agent-context/image-01.webp)
 
 ## 对创业团队的价值：少一点平台依赖，多一点可迁移资产
 
@@ -125,7 +125,7 @@ freshness: daily | weekly | monthly | ad-hoc
 
 到这一步，你会很快看出哪些知识真的有用，哪些只是“看起来应该有”的文档。
 
-![正文配图：团队落地 OKF 的三步清单](/images/posts/2026-06-18-open-knowledge-format-agent-context/image-02.png)
+![正文配图：团队落地 OKF 的三步清单](/images/posts/2026-06-18-open-knowledge-format-agent-context/image-02.webp)
 
 ## 真正的变化：知识开始像代码一样交付
 

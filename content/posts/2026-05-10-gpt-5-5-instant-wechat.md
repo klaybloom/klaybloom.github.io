@@ -6,18 +6,18 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-10-gpt-5-5-instant-wechat/cover.png"
+cover: "/images/posts/2026-05-10-gpt-5-5-instant-wechat/cover.webp"
 published: true
 featured: false
 ---
 
-![GPT-5.5 Instant 封面图](/images/posts/2026-05-10-gpt-5-5-instant-wechat/cover.png)
+![GPT-5.5 Instant 封面图](/images/posts/2026-05-10-gpt-5-5-instant-wechat/cover.webp)
 
 这两天如果你在 X 上刷 AI 圈，很难错过 OpenAI 这条发布。4 月 23 日，OpenAI 官号发出 GPT-5.5 的主发布帖；到我今天整理时，这条帖子的公开页面显示已经来到 **4M Views**。热度高不是因为名字多唬人，而是因为它不是那种“离你很远”的研究模型，而是会直接改掉你每天打开 ChatGPT 时的默认体验。
 
 很多人对 AI 新模型已经有点麻了：分数涨一点、榜单上去一点、演示再炫一点，和普通用户没太大关系。但 GPT-5.5 Instant 这次不太一样。它盯着的是一个更现实的问题：**ChatGPT 能不能少说废话、少编一点、在高频日用场景里更像个靠谱工具。**
 
-![X 热点与产品升级示意图](/images/posts/2026-05-10-gpt-5-5-instant-wechat/hotness-chart.png)
+![X 热点与产品升级示意图](/images/posts/2026-05-10-gpt-5-5-instant-wechat/hotness-chart.webp)
 
 ## 先看结论
 
@@ -62,7 +62,7 @@ GPT-5.5 Instant 在医学、法律、金融等高风险提示中，
 
 这个数字不意味着以后就能无脑信 AI，更不意味着可以跳过专业审核。它真正说明的是，OpenAI 开始更认真地打磨“默认模型能不能拿来干正事”。
 
-![默认模型体验变化示意图](/images/posts/2026-05-10-gpt-5-5-instant-wechat/default-experience.png)
+![默认模型体验变化示意图](/images/posts/2026-05-10-gpt-5-5-instant-wechat/default-experience.webp)
 
 ## 为什么这条消息能在 X 上冲这么高
 

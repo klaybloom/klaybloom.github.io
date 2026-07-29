@@ -6,12 +6,12 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-16-codex-team-workflow-hooks-tokens/cover.png"
+cover: "/images/posts/2026-05-16-codex-team-workflow-hooks-tokens/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-16-codex-team-workflow-hooks-tokens/cover.png)
+![封面图](/images/posts/2026-05-16-codex-team-workflow-hooks-tokens/cover.webp)
 
 过去一年，很多团队对 AI 编码的感受很矛盾。
 
@@ -49,7 +49,7 @@ Hooks 最直接的用法，是在 Codex 调用工具前后插入确定性检查�
 
 这类检查不需要模型“自觉”。脚本通过就继续，脚本发现问题就阻止或提醒。对团队来说，这比把所有规则都写进提示词更可靠。
 
-![Hooks 事件流](/images/posts/2026-05-16-codex-team-workflow-hooks-tokens/image-01.png)
+![Hooks 事件流](/images/posts/2026-05-16-codex-team-workflow-hooks-tokens/image-01.webp)
 
 一个早期可用的配置思路是：
 

@@ -7,12 +7,12 @@ tags:
   - Codex
   - Developer Tools
 category: "AI"
-cover: "/images/posts/2026-06-04-codex-python-sdk/cover.png"
+cover: "/images/posts/2026-06-04-codex-python-sdk/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-06-04-codex-python-sdk/cover.png)
+![封面图](/images/posts/2026-06-04-codex-python-sdk/cover.webp)
 
 这几天最值得开发者盯一下的 AI 更新，不是又多了一个聊天入口，而是 Codex 开始有了更清晰的 Python SDK 路径。
 
@@ -34,7 +34,7 @@ AIHOT 2026-06-03 日报里提到：`openai-codex` 已经可以通过 `pip instal
 
 Codex Python SDK 想做的，正好卡在第二种和第三种之间：保留 Codex 作为代码 Agent 的能力，又让开发者可以用 Python 把它接到自己的产品流程里。
 
-![工作流示意](/images/posts/2026-06-04-codex-python-sdk/image-01.png)
+![工作流示意](/images/posts/2026-06-04-codex-python-sdk/image-01.webp)
 
 官方 quickstart 很短：从 `openai_codex` import `Codex`，启动一个 thread，然后运行一句任务，例如让它用三条 bullet 解释当前仓库。`thread.run(...)` 会返回 `TurnResult`，里面包含最终回复、收集到的 items 和 token usage。
 
@@ -66,7 +66,7 @@ Codex Python SDK 想做的，正好卡在第二种和第三种之间：保留 Co
 
 另一层是给现有产品加“工程执行能力”。很多 B2B 产品会遇到客户定制、数据接入、脚本适配、报表迁移。以前这些能力靠实施团队。以后可以把一部分流程设计成：用户提交需求，系统生成方案和改动，人工审核后执行。
 
-![产品机会图](/images/posts/2026-06-04-codex-python-sdk/image-02.png)
+![产品机会图](/images/posts/2026-06-04-codex-python-sdk/image-02.webp)
 
 真正有价值的点，不是把“AI 写代码”四个字贴到首页，而是把它放进具体业务节点里：
 

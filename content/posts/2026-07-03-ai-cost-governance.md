@@ -7,12 +7,12 @@ tags:
   - AI Agents
   - Product
 category: "AI"
-cover: "/images/posts/2026-07-03-ai-cost-governance/cover.png"
+cover: "/images/posts/2026-07-03-ai-cost-governance/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-07-03-ai-cost-governance/cover.png)
+![封面图](/images/posts/2026-07-03-ai-cost-governance/cover.webp)
 
 过去一年，很多团队买 AI 工具的理由很简单：别人都在用，不能落后。
 
@@ -28,7 +28,7 @@ featured: false
 
 试用阶段，团队关心的是“能不能做”。规模化阶段，团队关心的是“谁在用、用来做什么、花了多少钱、产出能不能解释”。当 AI 从个人效率工具变成组织级基础设施，预算部门、法务、安全和管理层都会进场。
 
-![企业 AI 成本治理示意图](/images/posts/2026-07-03-ai-cost-governance/image-01.png)
+![企业 AI 成本治理示意图](/images/posts/2026-07-03-ai-cost-governance/image-01.webp)
 
 对 AI 产品来说，这意味着只给一个好看的聊天入口不够了。企业客户会要用量报表、权限策略、模型路由、预算提醒、审计记录，以及不同岗位的默认配置。谁能帮客户管住成本，谁就更容易留下来。
 
@@ -50,7 +50,7 @@ Senior SWE-Bench 也出现在今天日报里。这个基准测试想衡量 AI �
 
 这对团队使用 AI 编码工具很关键。AI 适合承担信息搜集、初稿、局部修改、测试补充、重复性迁移等工作，但还不能替代资深工程师对架构边界、质量标准、长期维护和上线风险的判断。
 
-![AI 编码助手与工程审查](/images/posts/2026-07-03-ai-cost-governance/image-02.png)
+![AI 编码助手与工程审查](/images/posts/2026-07-03-ai-cost-governance/image-02.webp)
 
 如果企业一边花很多钱买 AI，一边缺少审查、回归测试、权限和成本策略，最后很容易出现两个问题：账单上升，质量没有同步上升。
 

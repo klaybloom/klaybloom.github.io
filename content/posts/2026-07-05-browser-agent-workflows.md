@@ -8,12 +8,12 @@ tags:
   - 前端开发
   - 安全
 category: "AI"
-cover: "/images/posts/2026-07-05-browser-agent-workflows/cover.png"
+cover: "/images/posts/2026-07-05-browser-agent-workflows/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-07-05-browser-agent-workflows/cover.png)
+![封面图](/images/posts/2026-07-05-browser-agent-workflows/cover.webp)
 
 昨天的 AIHOT 日报里，有两条消息放在一起看很有意思。
 
@@ -35,7 +35,7 @@ Safari MCP Server 改变的是这个接口。
 
 它不再只根据源码推测一个按钮为什么没反应，而是可以检查 DOM 是否存在、请求是否失败、控制台有没有错误、截图里元素是否遮挡。对前端开发者来说，这不是一个小功能，而是把浏览器变成了 agent 的工作台。
 
-![浏览器智能体工具接口](/images/posts/2026-07-05-browser-agent-workflows/image-01.png)
+![浏览器智能体工具接口](/images/posts/2026-07-05-browser-agent-workflows/image-01.webp)
 
 ## 真正的价值在调试和验收
 
@@ -70,7 +70,7 @@ AIHOT 摘要提到，这次攻击利用暴露的 Langflow 服务漏洞，执行 
 - 它能不能拿到云密钥和数据库连接串？
 - 它执行危险操作前，是否需要人工确认？
 
-![智能体安全边界](/images/posts/2026-07-05-browser-agent-workflows/image-02.png)
+![智能体安全边界](/images/posts/2026-07-05-browser-agent-workflows/image-02.webp)
 
 ## 开发团队应该怎么用
 

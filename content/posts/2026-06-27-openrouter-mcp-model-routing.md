@@ -8,12 +8,12 @@ tags:
   - Developer Tools
   - Product
 category: "AI"
-cover: "/images/posts/2026-06-27-openrouter-mcp-model-routing/cover.png"
+cover: "/images/posts/2026-06-27-openrouter-mcp-model-routing/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-06-27-openrouter-mcp-model-routing/cover.png)
+![封面图](/images/posts/2026-06-27-openrouter-mcp-model-routing/cover.webp)
 
 过去一年，很多 AI 产品团队都有同一种焦虑：
 
@@ -25,7 +25,7 @@ AIHOT 6 月 26 日日报里，OpenRouter 发布 MCP 服务器这条消息值得�
 
 换句话说，模型选择不再只发生在浏览器标签页、Notion 表格和微信群讨论里，它开始进入 IDE、Agent 和自动化工作流。
 
-![从浏览器查表到 Agent 内选型](/images/posts/2026-06-27-openrouter-mcp-model-routing/image-01.png)
+![从浏览器查表到 Agent 内选型](/images/posts/2026-06-27-openrouter-mcp-model-routing/image-01.webp)
 
 ## 以前选模型，像在维护一张永远过期的表
 
@@ -61,7 +61,7 @@ OpenRouter 这次有点不一样。它接入的不是业务工具，而是模型
 
 对创业团队来说，这会降低试错成本。小团队最怕的是把时间花在错误的模型组合上：贵、慢、不稳定，或者一开始很好，规模上来后成本压不住。模型情报进入 Agent 后，选型可以变成持续动作，而不是项目开始时的一次决定。
 
-![模型选型变成持续工程](/images/posts/2026-06-27-openrouter-mcp-model-routing/image-02.png)
+![模型选型变成持续工程](/images/posts/2026-06-27-openrouter-mcp-model-routing/image-02.webp)
 
 ## 真正值得关注的是“动态路由”会变得更普通
 

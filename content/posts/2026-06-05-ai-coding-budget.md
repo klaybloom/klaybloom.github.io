@@ -8,12 +8,12 @@ tags:
   - Product
   - Startups
 category: "AI"
-cover: "/images/posts/2026-06-05-ai-coding-budget/cover.png"
+cover: "/images/posts/2026-06-05-ai-coding-budget/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-06-05-ai-coding-budget/cover.png)
+![封面图](/images/posts/2026-06-05-ai-coding-budget/cover.webp)
 
 过去一年，很多团队对 AI 编程工具的态度很像买咖啡机：先放进办公室，让所有人尽量用起来，再看看会发生什么。
 
@@ -37,7 +37,7 @@ TechCrunch 的报道提到，Uber 今年前四个月就用完了全年 AI 预算
 
 这套做法对创业公司也有参考价值。预算小的团队更不能只靠热情推进 AI 工具使用。越早把“谁在用、用在哪、产出了什么”看清楚，越不容易等到账单失控时才处理。
 
-![团队 AI 工具预算看板](/images/posts/2026-06-05-ai-coding-budget/image-01.png)
+![团队 AI 工具预算看板](/images/posts/2026-06-05-ai-coding-budget/image-01.webp)
 
 ## 使用量不等于生产力
 
@@ -71,7 +71,7 @@ TechCrunch 的报道提到，Uber 今年前四个月就用完了全年 AI 预算
 
 第四，给低价值场景降级。不是所有任务都要用最贵模型，也不是所有提示都要进入长上下文。把简单任务分配给便宜模型，把关键任务留给高能力模型，往往比单纯限额更有效。
 
-![AI 工具使用决策树](/images/posts/2026-06-05-ai-coding-budget/image-02.png)
+![AI 工具使用决策树](/images/posts/2026-06-05-ai-coding-budget/image-02.webp)
 
 ## AI 工具的下一场竞争：谁能证明价值
 

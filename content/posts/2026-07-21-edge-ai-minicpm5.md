@@ -8,12 +8,12 @@ tags:
   - Product
   - MiniCPM
 category: "AI"
-cover: "/images/posts/2026-07-21-edge-ai-minicpm5/cover.png"
+cover: "/images/posts/2026-07-21-edge-ai-minicpm5/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-07-21-edge-ai-minicpm5/cover.png)
+![封面图](/images/posts/2026-07-21-edge-ai-minicpm5/cover.webp)
 
 过去一年，很多团队谈端侧 AI，谈到最后都会回到同一个问题：能不能真的放进产品里？
 
@@ -37,7 +37,7 @@ MiniCPM5-2B 的一个重点，是把 Agent 能力放进端侧模型叙事里：�
 - 智能座舱、机器人、边缘网关，可以在弱网或断网场景下保持基础推理能力。
 - 企业设备和专有终端，可以把敏感数据留在本地，只把必要结果同步到云端。
 
-![端侧 AI 产品架构](/images/posts/2026-07-21-edge-ai-minicpm5/image-01.png)
+![端侧 AI 产品架构](/images/posts/2026-07-21-edge-ai-minicpm5/image-01.webp)
 
 过去产品团队设计 AI 功能，常常默认“请求发到云端，结果再回来”。如果端侧模型能处理更多任务，产品架构就会变成另一种形态：本地先理解、本地先执行，云端只负责更重的推理、同步和模型更新。
 
@@ -73,7 +73,7 @@ AIHOT 日报提到，MiniCPM5-2B 已完成华为昇腾、英伟达等 9 款芯�
 
 如果一个模型家族能更早适配多种芯片，产品团队就可以更早做设备分层：高性能设备跑完整 Agent，普通设备跑摘要和检索，低算力设备只做意图识别和安全过滤。
 
-![产品决策清单](/images/posts/2026-07-21-edge-ai-minicpm5/image-02.png)
+![产品决策清单](/images/posts/2026-07-21-edge-ai-minicpm5/image-02.webp)
 
 ## 产品团队现在可以做什么
 

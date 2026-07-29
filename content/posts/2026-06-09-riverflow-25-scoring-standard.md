@@ -8,12 +8,12 @@ tags:
   - Product
   - Workflow
 category: "AI"
-cover: "/images/posts/2026-06-09-riverflow-25-scoring-standard/cover.png"
+cover: "/images/posts/2026-06-09-riverflow-25-scoring-standard/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-06-09-riverflow-25-scoring-standard/cover.png)
+![封面图](/images/posts/2026-06-09-riverflow-25-scoring-standard/cover.webp)
 
 前几天我在 AIHOT 日报里看到 Riverflow 2.5 的那条更新时，第一反应不是“又来了一个生图模型”，而是：图像模型终于开始像产品系统了。
 
@@ -31,7 +31,7 @@ AIHOT 的摘要写得很直接：这是“首个拥有独立评分标准的图�
 
 意味着它不再只是一个一次性出图工具，而是一个可以被运营、被约束、被回改的生产环节。
 
-![Riverflow 2.5 评分标准与编辑流程图](/images/posts/2026-06-09-riverflow-25-scoring-standard/image-01.png)
+![Riverflow 2.5 评分标准与编辑流程图](/images/posts/2026-06-09-riverflow-25-scoring-standard/image-01.webp)
 
 过去很多图像工具的逻辑很简单：你给提示词，它吐图；你不满意，再换提示词。
 

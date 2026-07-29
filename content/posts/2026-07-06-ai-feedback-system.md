@@ -8,12 +8,12 @@ tags:
   - Product
   - Workflow
 category: "AI"
-cover: "/images/posts/2026-07-06-ai-feedback-system/cover.png"
+cover: "/images/posts/2026-07-06-ai-feedback-system/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-07-06-ai-feedback-system/cover.png)
+![封面图](/images/posts/2026-07-06-ai-feedback-system/cover.webp)
 
 今天的 AIHOT 日报里，有两条消息放在一起看很有意思。
 
@@ -41,7 +41,7 @@ featured: false
 
 一个产品经理每天用 AI 写 PRD，但从不复盘哪些判断是错的；一个开发者每天让 AI 生成代码，但不读 diff、不写测试；一个运营同学每天让 AI 写内容，但不看转化数据。短期看都更快，长期看可能只是把判断力、表达力、工程能力外包出去了。
 
-![外包式使用与反馈式使用对比](/images/posts/2026-07-06-ai-feedback-system/image-01.png)
+![外包式使用与反馈式使用对比](/images/posts/2026-07-06-ai-feedback-system/image-01.webp)
 
 ## AI 用得越多，越需要测评
 
@@ -68,7 +68,7 @@ ASPIRE 的启发在这里。
 
 前一种用法会省时间。后一种用法才会积累能力。
 
-![AI 反馈闭环](/images/posts/2026-07-06-ai-feedback-system/image-02.png)
+![AI 反馈闭环](/images/posts/2026-07-06-ai-feedback-system/image-02.webp)
 
 ## 对创业者来说，AI 工作流要有三件东西
 

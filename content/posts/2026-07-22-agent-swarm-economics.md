@@ -8,12 +8,12 @@ tags:
   - Cursor
   - AI 安全
 category: "AI"
-cover: "/images/posts/2026-07-22-agent-swarm-economics/cover.png"
+cover: "/images/posts/2026-07-22-agent-swarm-economics/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图：AI 智能体团队协作控制台](/images/posts/2026-07-22-agent-swarm-economics/cover.png)
+![封面图：AI 智能体团队协作控制台](/images/posts/2026-07-22-agent-swarm-economics/cover.webp)
 
 过去一年，很多团队对 AI 编程工具的期待很直接：给它一个需求，它最好能把代码写完。
 
@@ -34,7 +34,7 @@ Cursor 这次披露的实验很典型：把任务交给一个最强模型做规�
 - 监督者负责看日志、管预算、识别重复失败。
 - 环境层负责权限、网络、文件、密钥和审批。
 
-![正文配图：规划者与执行者分工](/images/posts/2026-07-22-agent-swarm-economics/image-01.png)
+![正文配图：规划者与执行者分工](/images/posts/2026-07-22-agent-swarm-economics/image-01.webp)
 
 这也是为什么“模型经济学”开始重要。最贵的模型不一定适合做每一步；最便宜的模型也不一定应该独立决策。真正的产品能力，是把不同模型放在合适的位置上，让质量、速度和成本一起可控。
 
@@ -67,7 +67,7 @@ Hugging Face 遭自主 AI 智能体入侵的消息，则给了另一面镜子。
 
 这对做 AI 产品的人很现实。只要你的产品允许模型调用工具、处理用户上传内容、访问文件或连接第三方服务，就已经进入了新的安全区间。传统的“用户输入校验”还不够，还要加入任务轨迹审计、工具调用隔离、凭证最小授权、异常行为检测。
 
-![正文配图：长时智能体的权限边界](/images/posts/2026-07-22-agent-swarm-economics/image-02.png)
+![正文配图：长时智能体的权限边界](/images/posts/2026-07-22-agent-swarm-economics/image-02.webp)
 
 Claude Code v2.1.216 的更新也在往这个方向走：修复长会话卡顿、OAuth token 过期后的判断问题、后台子智能体配置恢复问题，以及工作树隔离相关行为。新增的 `sandbox.filesystem.disabled` 看起来只是一个设置项，但背后是同一个问题：AI 编程工具需要更清晰地区分文件系统隔离、网络出口控制和用户授权。
 

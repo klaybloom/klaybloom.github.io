@@ -8,7 +8,7 @@ tags:
   - Productivity
   - AI Tools
 category: "AI"
-cover: "/images/posts/2026-06-19-bytedance-ai-work-network/cover.png"
+cover: "/images/posts/2026-06-19-bytedance-ai-work-network/cover.webp"
 published: true
 featured: false
 ---
@@ -42,7 +42,7 @@ featured: false
 
 它更像是一个正在长出来的，面向普通办公人群和开发者的 AI 工作层。
 
-![扣子编程首页](/images/posts/2026-06-19-bytedance-ai-work-network/image-01-coze-programming.png)
+![扣子编程首页](/images/posts/2026-06-19-bytedance-ai-work-network/image-01-coze-programming.webp)
 
 这也是我最近越来越看好字节系的原因。
 
@@ -156,7 +156,7 @@ Trae 一开始给我的感觉，是一个挺清晰的 AI IDE。
 
 这也是 AI 从玩具变成生产力时，迟早要跨过去的一步。
 
-![Trae Work 多场景办公任务](/images/posts/2026-06-19-bytedance-ai-work-network/image-03-trae-work.png)
+![Trae Work 多场景办公任务](/images/posts/2026-06-19-bytedance-ai-work-network/image-03-trae-work.webp)
 
 回到扣子。
 
@@ -194,7 +194,7 @@ Trae 一开始给我的感觉，是一个挺清晰的 AI IDE。
 
 这一下给我整得有点懵。
 
-![扣子桌面端对话界面](/images/posts/2026-06-19-bytedance-ai-work-network/image-02-coze-desktop.png)
+![扣子桌面端对话界面](/images/posts/2026-06-19-bytedance-ai-work-network/image-02-coze-desktop.webp)
 
 因为这个变化背后，其实是 AI 产品形态的一次转向。
 
@@ -466,7 +466,7 @@ Trae 是开发现场。
 
 你可以用 Trae 处理开发任务。
 
-![Trae Code 开发任务界面](/images/posts/2026-06-19-bytedance-ai-work-network/image-04-trae-code.png)
+![Trae Code 开发任务界面](/images/posts/2026-06-19-bytedance-ai-work-network/image-04-trae-code.webp)
 
 你可以用扣子做 Agent 和项目。
 
@@ -574,7 +574,7 @@ AI 现在可能也在走到这个阶段。
 
 你打开 Trae，发现它不只是补代码，而是开始替你组织项目了。
 
-![Trae 与 Agent 协作界面](/images/posts/2026-06-19-bytedance-ai-work-network/image-05-trae-agent.png)
+![Trae 与 Agent 协作界面](/images/posts/2026-06-19-bytedance-ai-work-network/image-05-trae-agent.webp)
 
 你打开即梦，发现视频生成已经不像玩具了。
 
@@ -584,7 +584,7 @@ AI 现在可能也在走到这个阶段。
 
 原来那张网，已经在你脚下了。
 
-![SOLO Agent 项目开发界面](/images/posts/2026-06-19-bytedance-ai-work-network/image-06-solo-agent.png)
+![SOLO Agent 项目开发界面](/images/posts/2026-06-19-bytedance-ai-work-network/image-06-solo-agent.webp)
 
 以上，既然看到这里了，如果觉得不错，随手点个赞、在看、转发三连吧，如果想第一时间收到推送，也可以给我个星标⭐～
 谢谢你看我的文章，我们，下次再见。

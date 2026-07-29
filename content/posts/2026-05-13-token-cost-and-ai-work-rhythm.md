@@ -6,7 +6,7 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-13-token-cost-and-ai-work-rhythm/01-ai-time-paradox.png"
+cover: "/images/posts/2026-05-13-token-cost-and-ai-work-rhythm/01-ai-time-paradox.webp"
 published: true
 featured: false
 ---
@@ -17,7 +17,7 @@ AI 刚出现的时候，我以为它会提高我的工作效率。
 
 但用到现在，我发现情况好像并不是这样。AI 并没有让我休息变多，反而让我越来越忙。
 
-![AI 没有减少工作，反而改变了工作节奏](/images/posts/2026-05-13-token-cost-and-ai-work-rhythm/01-ai-time-paradox.png)
+![AI 没有减少工作，反而改变了工作节奏](/images/posts/2026-05-13-token-cost-and-ai-work-rhythm/01-ai-time-paradox.webp)
 
 第一，AI 相关的新知识一直在涌出来。
 
@@ -25,7 +25,7 @@ AI 刚出现的时候，我以为它会提高我的工作效率。
 
 这本身就变成了一种新的工作量。
 
-![AI 新知识不断涌来](/images/posts/2026-05-13-token-cost-and-ai-work-rhythm/02-ai-knowledge-flood.png)
+![AI 新知识不断涌来](/images/posts/2026-05-13-token-cost-and-ai-work-rhythm/02-ai-knowledge-flood.webp)
 
 第二，我开始被 Token 额度影响自己的工作方式。
 
@@ -37,7 +37,7 @@ AI 刚出现的时候，我以为它会提高我的工作效率。
 
 本来 AI 是来帮我干活的，结果我却开始替 AI 分担工作，帮它节省 Token，像是在帮它保存体力。
 
-![Token 额度开始反过来影响工作安排](/images/posts/2026-05-13-token-cost-and-ai-work-rhythm/03-token-quota-anxiety.png)
+![Token 额度开始反过来影响工作安排](/images/posts/2026-05-13-token-cost-and-ai-work-rhythm/03-token-quota-anxiety.webp)
 
 第三，我甚至会为了不浪费额度而主动增加工作。
 
@@ -65,7 +65,7 @@ AI 刚出现的时候，我以为它会提高我的工作效率。
 
 如果 5 个小时过去，Token 也刚好用完，下午额度又刷新了，那我又会想：现在不用是不是浪费？如果继续用，是不是又意味着我要再工作 5 个小时？
 
-![额度刷新周期影响个人节奏](/images/posts/2026-05-13-token-cost-and-ai-work-rhythm/04-refresh-cycle-rhythm.png)
+![额度刷新周期影响个人节奏](/images/posts/2026-05-13-token-cost-and-ai-work-rhythm/04-refresh-cycle-rhythm.webp)
 
 最后我发现，AI 原本应该是帮我节省时间的工具，但在实际使用中，它也可能制造新的焦虑和新的工作压力。
 

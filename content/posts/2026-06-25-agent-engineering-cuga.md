@@ -8,12 +8,12 @@ tags:
   - 开源
   - 企业 AI
 category: "AI 工具"
-cover: "/images/posts/2026-06-25-agent-engineering-cuga/cover.png"
+cover: "/images/posts/2026-06-25-agent-engineering-cuga/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-06-25-agent-engineering-cuga/cover.png)
+![封面图](/images/posts/2026-06-25-agent-engineering-cuga/cover.webp)
 
 过去一年，很多团队做 Agent 产品时，都有一个相似的起点：先选模型，再写 Prompt，再接几个工具。
 
@@ -58,7 +58,7 @@ CUGA 关心的是：这个工具调错了、失败了、要人工批准、要被
 
 但只要 Agent 开始接触客户数据、业务系统、内部知识库和生产工具，这些问题就会一起出现。
 
-![Agent 从演示走向生产的四层变化](/images/posts/2026-06-25-agent-engineering-cuga/image-01.png)
+![Agent 从演示走向生产的四层变化](/images/posts/2026-06-25-agent-engineering-cuga/image-01.webp)
 
 ## 为什么“单文件示例”有价值
 

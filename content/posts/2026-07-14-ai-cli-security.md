@@ -7,11 +7,11 @@ tags:
   - Security
   - Developer Tools
 category: "AI Engineering"
-cover: "/images/posts/2026-07-14-ai-cli-security/cover.png"
+cover: "/images/posts/2026-07-14-ai-cli-security/cover.webp"
 published: true
 featured: false
 ---
-![封面图](/images/posts/2026-07-14-ai-cli-security/cover.png)
+![封面图](/images/posts/2026-07-14-ai-cli-security/cover.webp)
 
 这两天，AI 编程工具圈最值得开发者认真看的新闻，不是哪个模型又多刷了几分，而是一款官方 CLI 被曝会把代码库打包上传。
 
@@ -33,7 +33,7 @@ AI 编程工具当然需要读代码。它不读代码，就无法理解项目�
 
 第三，敏感信息是否会被一并带走。开发者的机器上经常有 `.env`、云服务凭证、内部文档、客户数据、私有规则和历史会话。很多内容并不在当前任务里，却可能因为工具按仓库或会话维度打包而被带走。
 
-![代码库上传边界示意](/images/posts/2026-07-14-ai-cli-security/image-01.png)
+![代码库上传边界示意](/images/posts/2026-07-14-ai-cli-security/image-01.webp)
 
 ## 对创业团队来说，这是采购问题
 
@@ -73,7 +73,7 @@ AI 编程工具当然需要读代码。它不读代码，就无法理解项目�
 
 如果代码或密钥已经被上传，供应商是否能说明范围、删除路径、保留时间和审计证据？这个问题比演示视频里的速度更重要。
 
-![AI 编程工具采购检查清单](/images/posts/2026-07-14-ai-cli-security/image-02.png)
+![AI 编程工具采购检查清单](/images/posts/2026-07-14-ai-cli-security/image-02.webp)
 
 ## 这不是反 AI 编程
 

@@ -8,11 +8,11 @@ tags:
   - Product
   - LLM
 category: "AI"
-cover: "/images/posts/2026-06-16-ai-platform-risk/cover.png"
+cover: "/images/posts/2026-06-16-ai-platform-risk/cover.webp"
 published: true
 featured: false
 ---
-![封面图](/images/posts/2026-06-16-ai-platform-risk/cover.png)
+![封面图](/images/posts/2026-06-16-ai-platform-risk/cover.webp)
 
 这两天最值得 AI 创业者盯住的，不是某个新榜单，也不是某个参数又涨了。
 
@@ -40,7 +40,7 @@ Anthropic 暂停新模型访问，引发印度科技领袖讨论，不只是印�
 
 过去接一个模型 API 就能上线 demo。现在，如果核心能力只绑定一家模型供应商，产品就会有一个很明显的单点风险。
 
-![模型平台风险地图](/images/posts/2026-06-16-ai-platform-risk/image-01.png)
+![模型平台风险地图](/images/posts/2026-06-16-ai-platform-risk/image-01.webp)
 
 ## 产品团队真正该积累的不是 prompt
 
@@ -85,7 +85,7 @@ Nadella 提到的“人力资本”和“token 资本”值得细看。我的理
 
 这就是 Nadella 所说的学习循环：人不是被模型替代，而是把判断能力持续注入系统。
 
-![企业 AI 学习循环](/images/posts/2026-06-16-ai-platform-risk/image-02.png)
+![企业 AI 学习循环](/images/posts/2026-06-16-ai-platform-risk/image-02.webp)
 
 ## 监管和平台博弈会越来越频繁
 

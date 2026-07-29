@@ -6,12 +6,12 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-13-android-ai-execution-layer/cover.png"
+cover: "/images/posts/2026-05-13-android-ai-execution-layer/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-13-android-ai-execution-layer/cover.png)
+![封面图](/images/posts/2026-05-13-android-ai-execution-layer/cover.webp)
 
 如果只看 Android Show 的标题，你会以为 Google 又发了一组手机新功能。
 
@@ -51,7 +51,7 @@ Gemini Intelligence 想改的是中间这段路径。
 
 系统需要理解意图，找到邮件，提取食材，再调用购物清单 App 的添加能力。
 
-![Gemini Intelligence 与 AppFunctions 关系图](/images/posts/2026-05-13-android-ai-execution-layer/image-01.png)
+![Gemini Intelligence 与 AppFunctions 关系图](/images/posts/2026-05-13-android-ai-execution-layer/image-01.webp)
 
 这就是 AppFunctions 出现的原因。
 

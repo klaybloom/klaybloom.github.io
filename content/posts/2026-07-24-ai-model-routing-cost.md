@@ -8,12 +8,12 @@ tags:
   - Cursor
   - AI Cost
 category: "AI"
-cover: "/images/posts/2026-07-24-ai-model-routing-cost/cover.png"
+cover: "/images/posts/2026-07-24-ai-model-routing-cost/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-07-24-ai-model-routing-cost/cover.png)
+![封面图](/images/posts/2026-07-24-ai-model-routing-cost/cover.webp)
 
 过去一年，很多团队用 AI 的方式很粗放：把最强模型设成默认值，然后祈祷账单不要涨得太快。
 
@@ -48,7 +48,7 @@ Cursor 给出的测试结果很直接：Auto Intelligence 模式在接近高端�
 
 真正的产品化，是把这个判断放回系统里。
 
-![任务路由示意图](/images/posts/2026-07-24-ai-model-routing-cost/image-01.png)
+![任务路由示意图](/images/posts/2026-07-24-ai-model-routing-cost/image-01.webp)
 
 ## 成本不是 token 价格这么简单
 
@@ -83,7 +83,7 @@ Cursor 用用户满意度、代码保留率、cost per commit 这类指标衡量
 
 问题是，成本下降不会自动变成产品优势。只有当产品能把任务分类、模型路由、缓存、批处理、失败重试和质量验证连在一起，便宜下来的能力才会变成更高的毛利，或者更好的用户体验。
 
-![成本结构示意图](/images/posts/2026-07-24-ai-model-routing-cost/image-02.png)
+![成本结构示意图](/images/posts/2026-07-24-ai-model-routing-cost/image-02.webp)
 
 ## 创业团队现在可以做三件事
 

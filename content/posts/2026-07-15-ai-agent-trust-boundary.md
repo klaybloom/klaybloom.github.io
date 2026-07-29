@@ -8,12 +8,12 @@ tags:
   - 安全
   - 产品
 category: "AI"
-cover: "/images/posts/2026-07-15-ai-agent-trust-boundary/cover.png"
+cover: "/images/posts/2026-07-15-ai-agent-trust-boundary/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-07-15-ai-agent-trust-boundary/cover.png)
+![封面图](/images/posts/2026-07-15-ai-agent-trust-boundary/cover.webp)
 
 昨天的 AIHOT 日报里，有几条消息放在一起看，很像同一件事的三个侧面。
 
@@ -62,7 +62,7 @@ Cloudflare 在 7 月 13 日宣布 Precursor 正式可用。官方说法是，它
 
 所以 Precursor 这种产品的方向，不只是“反机器人”。它背后是一个更大的判断：未来的产品需要区分不同类型的机器访问，而不是简单地把机器全挡掉。
 
-![正文配图：Agent 权限边界](/images/posts/2026-07-15-ai-agent-trust-boundary/image-01.png)
+![正文配图：Agent 权限边界](/images/posts/2026-07-15-ai-agent-trust-boundary/image-01.webp)
 
 ## 模型越强，权限设计越重要
 

@@ -6,12 +6,12 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-12-ai-era-dont-only-watch-gpu/cover.png"
+cover: "/images/posts/2026-05-12-ai-era-dont-only-watch-gpu/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-12-ai-era-dont-only-watch-gpu/cover.png)
+![封面图](/images/posts/2026-05-12-ai-era-dont-only-watch-gpu/cover.webp)
 
 最近这轮 AI 基建热，最显眼的是算力。
 
@@ -31,7 +31,7 @@ AI 时代涨价的不是一个零件，而是一整条基础设施链。
 
 NVIDIA GB200 NVL72 已经不是单卡概念，而是 72 张 Blackwell GPU 组成的液冷机柜。到 Vera Rubin NVL72，NVIDIA 给出的方向更明确，机柜级系统会继续围绕更大显存、更高速互连、更低推理成本演进。
 
-![AI 基础设施链路图](/images/posts/2026-05-12-ai-era-dont-only-watch-gpu/image-01.png)
+![AI 基础设施链路图](/images/posts/2026-05-12-ai-era-dont-only-watch-gpu/image-01.webp)
 
 第二，电力成为硬约束。
 
@@ -55,7 +55,7 @@ AI 以前像是在吃算力，现在更像是在吃数据、吃内存、吃带�
 
 IDC 的 Global DataSphere 预测经 Statista 汇总后显示，全球数据规模到 2028 年会达到约 394 ZB。数据不一定全部长期保存，但企业真正头疼的是，哪些数据值得留，留在哪里，怎么被模型安全地调用。
 
-![数据进入模型的路径](/images/posts/2026-05-12-ai-era-dont-only-watch-gpu/image-02.png)
+![数据进入模型的路径](/images/posts/2026-05-12-ai-era-dont-only-watch-gpu/image-02.webp)
 
 这也是为什么我会把存储分成三层看。
 

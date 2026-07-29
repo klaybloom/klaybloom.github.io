@@ -6,7 +6,7 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-12-openai-daybreak/cover.png"
+cover: "/images/posts/2026-05-12-openai-daybreak/cover.webp"
 published: true
 featured: false
 ---
@@ -21,7 +21,7 @@ featured: false
 
 > AI 的竞争，正在从“谁更会回答问题”，转向“谁能真正进入生产系统，并承担明确责任”。
 
-![Daybreak 封面图](/images/posts/2026-05-12-openai-daybreak/cover.png)
+![Daybreak 封面图](/images/posts/2026-05-12-openai-daybreak/cover.webp)
 
 ## Daybreak 到底是什么
 
@@ -49,7 +49,7 @@ OpenAI 官方对 Daybreak 的定义很直接：它是一个面向网络安全防
 
 换句话说，Daybreak 不是单独冒出来的一个页面，它更像是 OpenAI 把前面几步安全布局收束成一个可卖、可接入、可合作的产品入口。
 
-![Daybreak 工作流示意](/images/posts/2026-05-12-openai-daybreak/daybreak-flow.png)
+![Daybreak 工作流示意](/images/posts/2026-05-12-openai-daybreak/daybreak-flow.webp)
 
 ## 它和普通“AI 编程助手”差在哪
 
@@ -129,7 +129,7 @@ Daybreak 这类方案，如果真能和仓库、CI、审计系统接稳，价值
 
 这点对创业公司尤其重要。很多团队并没有一整套成熟的安全工程组织，但它们又必须给企业客户交代自己的安全能力。AI 如果能把部分专家流程产品化，门槛会被拉低很多。
 
-![安全能力左移示意图](/images/posts/2026-05-12-openai-daybreak/security-shift.png)
+![安全能力左移示意图](/images/posts/2026-05-12-openai-daybreak/security-shift.webp)
 
 ## 但这里也有两个不能跳过的问题
 

@@ -6,12 +6,12 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-15-ai-products-beyond-chatbox/cover.png"
+cover: "/images/posts/2026-05-15-ai-products-beyond-chatbox/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-15-ai-products-beyond-chatbox/cover.png)
+![封面图](/images/posts/2026-05-15-ai-products-beyond-chatbox/cover.webp)
 
 昨天的 AIHOT 日报里，有两条 Anthropic 相关消息放在一起看很有意思。
 
@@ -38,7 +38,7 @@ Anthropic 官方列出的场景很具体：
 
 它把“任务是什么、需要哪些工具、步骤怎样走、哪些动作需要人确认”提前做进产品里。用户看到的是业务结果，不是模型能力清单。
 
-![产品结构图](/images/posts/2026-05-15-ai-products-beyond-chatbox/image-01.png)
+![产品结构图](/images/posts/2026-05-15-ai-products-beyond-chatbox/image-01.webp)
 
 ## 中文 AI 产品容易卡在“万能助手”
 
@@ -106,7 +106,7 @@ AI 要进入财务、销售、合同、客户服务这些场景，不能只靠�
 
 这不是把流程做复杂，而是在降低用户把业务交给 AI 的心理成本。
 
-![工作流示意图](/images/posts/2026-05-15-ai-products-beyond-chatbox/image-02.png)
+![工作流示意图](/images/posts/2026-05-15-ai-products-beyond-chatbox/image-02.webp)
 
 ## 对中文创业者的三条启发
 

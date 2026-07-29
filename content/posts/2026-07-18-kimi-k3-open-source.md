@@ -7,12 +7,12 @@ tags:
   - 开源
   - AI 产品
 category: "AI 产品观察"
-cover: "/images/posts/2026-07-18-kimi-k3-open-source/cover.png"
+cover: "/images/posts/2026-07-18-kimi-k3-open-source/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-07-18-kimi-k3-open-source/cover.png)
+![封面图](/images/posts/2026-07-18-kimi-k3-open-source/cover.webp)
 
 今天 AIHOT 日报里，最值得中文 AI 团队认真看的消息，是月之暗面发布 Kimi K3。
 
@@ -32,7 +32,7 @@ Kimi K3 的价值，也应该从这里看。
 
 以前很多团队默认先做 RAG，再想模型怎么用。以后更合理的顺序可能是：先判断哪些任务可以直接放进长上下文，哪些任务需要检索、缓存和索引，再决定系统架构。也就是说，长上下文不是替代 RAG，而是让产品经理和工程师多了一种更直接的方案。
 
-![正文配图：长上下文改变产品架构](/images/posts/2026-07-18-kimi-k3-open-source/image-01.png)
+![正文配图：长上下文改变产品架构](/images/posts/2026-07-18-kimi-k3-open-source/image-01.webp)
 
 对创业团队来说，这个变化很实际。早期产品最贵的不是模型调用费，而是把一个能演示的 demo 做成稳定流程的工程成本。上下文窗口越大，很多“先把材料喂进去看看”的场景就越容易验证，产品迭代速度也会更快。
 
@@ -68,7 +68,7 @@ Kimi K3 作为开源模型，对国内开发者还有另一层意义。
 
 这比“又一个模型发布”更重要。它让创业团队可以认真讨论：哪些环节用闭源 API 追求速度，哪些环节用开源模型保留控制权，哪些环节需要本地化部署。
 
-![正文配图：开源模型的产品选择权](/images/posts/2026-07-18-kimi-k3-open-source/image-02.png)
+![正文配图：开源模型的产品选择权](/images/posts/2026-07-18-kimi-k3-open-source/image-02.webp)
 
 ## 真正要看的不是榜单，是可用性
 

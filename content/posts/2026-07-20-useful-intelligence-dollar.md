@@ -8,11 +8,11 @@ tags:
   - Startup
   - LLM
 category: "AI Product"
-cover: "/images/posts/2026-07-20-useful-intelligence-dollar/cover.png"
+cover: "/images/posts/2026-07-20-useful-intelligence-dollar/cover.webp"
 published: true
 featured: false
 ---
-![封面图](/images/posts/2026-07-20-useful-intelligence-dollar/cover.png)
+![封面图](/images/posts/2026-07-20-useful-intelligence-dollar/cover.webp)
 
 这两天的 AI 新闻看起来很热闹：Kimi K3 登顶前端编码榜，2.8T 参数 MoE、百万上下文窗口，API 定价直接对标前沿闭源模型；OpenAI 又提出一个企业 AI 投资指标，叫 Useful Intelligence per Dollar；GitHub 则提醒大家，AI 让写代码变便宜了，但拥有代码的成本没有消失。
 
@@ -36,7 +36,7 @@ Kimi K3 这次的信号很明显。它不是用“开源模型就应该低价”
 
 如果一个模型价格便宜，但每次都需要人反复改提示词、补上下文、验结果，真实成本会转移到团队时间里。如果一个模型单价更高，却能稳定完成高价值任务，并且减少返工，它反而可能更便宜。
 
-![配图：AI 成本记分卡](/images/posts/2026-07-20-useful-intelligence-dollar/image-01.png)
+![配图：AI 成本记分卡](/images/posts/2026-07-20-useful-intelligence-dollar/image-01.webp)
 
 ## “有用智能每美元”该怎么落到产品里
 
@@ -71,7 +71,7 @@ GitHub 那篇关于小需求成本的文章讲得很直接：写代码的成本�
 
 记录哪些任务可以自动完成，哪些任务必须人工确认，哪些任务只能作为草稿。模型能力越强，这张表越应该细，因为你要知道哪里可以放权，哪里必须设权限边界。
 
-![配图：从调用成本到任务成本](/images/posts/2026-07-20-useful-intelligence-dollar/image-02.png)
+![配图：从调用成本到任务成本](/images/posts/2026-07-20-useful-intelligence-dollar/image-02.webp)
 
 ## 开源模型也会进入高价值定价
 

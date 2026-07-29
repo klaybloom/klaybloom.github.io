@@ -6,12 +6,12 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-17-openrouter-byok-model-key-management/cover.png"
+cover: "/images/posts/2026-05-17-openrouter-byok-model-key-management/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-17-openrouter-byok-model-key-management/cover.png)
+![封面图](/images/posts/2026-05-17-openrouter-byok-model-key-management/cover.webp)
 
 很多 AI 产品团队现在都有一个相似的问题：模型越来越多，调用入口也越来越多。
 
@@ -57,7 +57,7 @@ OpenRouter 文档还提到一个关键点：当 BYOK 和 provider ordering 同�
 
 这对产品负责人很重要。因为“模型调用失败”经常不是模型能力问题，而是 key、限流、额度、供应商状态和路由配置共同造成的。
 
-![多密钥路由示意](/images/posts/2026-05-17-openrouter-byok-model-key-management/image-01.png)
+![多密钥路由示意](/images/posts/2026-05-17-openrouter-byok-model-key-management/image-01.webp)
 
 如果团队没有把这些变量显性管理，排查时只会看到一句笼统的“AI 功能不可用”。
 
@@ -99,7 +99,7 @@ BYOK 多密钥和工作区治理的意义就在这里：它让这些分层可以
 
 第三，给关键功能设置失败策略。不要只写“重试 3 次”。应该明确：先用哪把 key，限流后换哪把 key，是否允许换供应商，是否允许用共享容量，失败后给用户什么提示。
 
-![上线前检查清单](/images/posts/2026-05-17-openrouter-byok-model-key-management/image-02.png)
+![上线前检查清单](/images/posts/2026-05-17-openrouter-byok-model-key-management/image-02.webp)
 
 可以用这张表做一次内部检查：
 

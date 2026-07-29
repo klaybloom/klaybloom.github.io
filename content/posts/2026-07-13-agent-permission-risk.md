@@ -7,12 +7,12 @@ tags:
   - Security
   - Developer Tools
 category: "AI Engineering"
-cover: "/images/posts/2026-07-13-agent-permission-risk/cover.png"
+cover: "/images/posts/2026-07-13-agent-permission-risk/cover.webp"
 published: true
 featured: false
 ---
 
-![本地 Agent 权限风险封面](/images/posts/2026-07-13-agent-permission-risk/cover.png)
+![本地 Agent 权限风险封面](/images/posts/2026-07-13-agent-permission-risk/cover.webp)
 
 今天看 AIHOT 日报，最让我停下来的不是新模型评测，也不是某个工具版本更新。
 
@@ -46,7 +46,7 @@ featured: false
 
 脚本通常是确定性的。Agent 不是。
 
-![事故链路示意](/images/posts/2026-07-13-agent-permission-risk/image-01.png)
+![事故链路示意](/images/posts/2026-07-13-agent-permission-risk/image-01.webp)
 
 ## Full Access 不该是产品默认值
 
@@ -91,7 +91,7 @@ Agent 应该明确知道当前工作区在哪里。默认只能读写项目目�
 
 这三道门不复杂，但很少有产品认真做好。
 
-![Agent 权限三道门](/images/posts/2026-07-13-agent-permission-risk/image-02.png)
+![Agent 权限三道门](/images/posts/2026-07-13-agent-permission-risk/image-02.webp)
 
 ## 创业团队该把安全做成体验
 

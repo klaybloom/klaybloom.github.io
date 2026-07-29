@@ -8,12 +8,12 @@ tags:
   - AI Agent
   - 产品策略
 category: "AI"
-cover: "/images/posts/2026-06-03-ai-cost-routing/cover.png"
+cover: "/images/posts/2026-06-03-ai-cost-routing/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-06-03-ai-cost-routing/cover.png)
+![封面图](/images/posts/2026-06-03-ai-cost-routing/cover.webp)
 
 过去一年，很多团队做 AI 产品时都有一个共同困扰：模型越强，账单越难预测；模型越便宜，关键任务又容易掉质量。于是产品经理、开发者和创业团队被迫在“全部用强模型”和“到处省钱”之间反复摇摆。
 
@@ -31,7 +31,7 @@ OpenRouter 文档现在给了一个更明确的开关：`cost_quality_tradeoff`�
 
 这件事的价值不在参数本身，而在它给产品团队留下了一个可配置的空间。以前很多团队会把模型选择写死在代码里：客服用某个模型，文案用某个模型，代码任务用某个模型。现在更合理的做法是把任务分层，把不同任务交给不同预算策略。
 
-![任务分层路由示意图](/images/posts/2026-06-03-ai-cost-routing/image-01.png)
+![任务分层路由示意图](/images/posts/2026-06-03-ai-cost-routing/image-01.webp)
 
 ## 对创业团队有什么用
 
@@ -58,7 +58,7 @@ OpenRouter 文档现在给了一个更明确的开关：`cost_quality_tradeoff`�
 - 给内部工具开放更宽的模型范围，给线上用户只开放经过验证的模型。
 - 对含有敏感信息的输入先做拦截或脱敏，再进入模型请求。
 
-![预算和安全边界示意图](/images/posts/2026-06-03-ai-cost-routing/image-02.png)
+![预算和安全边界示意图](/images/posts/2026-06-03-ai-cost-routing/image-02.webp)
 
 ## 产品人应该怎么想
 

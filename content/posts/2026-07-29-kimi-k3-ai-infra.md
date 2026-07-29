@@ -8,12 +8,12 @@ tags:
   - AI Infra
   - Agent
 category: "AI"
-cover: "/images/posts/2026-07-29-kimi-k3-ai-infra/cover.png"
+cover: "/images/posts/2026-07-29-kimi-k3-ai-infra/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图：Kimi K3 开放权重与 AI 产品基础设施](/images/posts/2026-07-29-kimi-k3-ai-infra/cover.png)
+![封面图：Kimi K3 开放权重与 AI 产品基础设施](/images/posts/2026-07-29-kimi-k3-ai-infra/cover.webp)
 
 这两天最值得 AI 产品团队认真看的，不是又多了一个大模型名字，而是 Kimi K3 开放日给出的信号：
 
@@ -47,7 +47,7 @@ AIHOT 摘要里提到，月之暗面发布了 2.8 万亿参数的混合专家模
 
 很多 AI 产品失败，不是因为模型完全不会，而是因为团队没有把能力边界拆细。比如一个教育产品要识别学生手写答案，你不能只问“模型视觉强不强”，而要拆成：能不能识别公式、能不能区分擦除痕迹、能不能读懂图表、能不能发现步骤缺失。
 
-![正文配图：从模型能力到产品验证流程](/images/posts/2026-07-29-kimi-k3-ai-infra/image-01.png)
+![正文配图：从模型能力到产品验证流程](/images/posts/2026-07-29-kimi-k3-ai-infra/image-01.webp)
 
 同样，100 万 token 上下文也不是“把所有资料塞进去”这么简单。长上下文可以让产品减少切片和检索的工程复杂度，但也会带来新的问题：输入噪声、注意力偏移、成本增长、用户隐私边界、结果可解释性。
 
@@ -91,7 +91,7 @@ GitHub Copilot 的 “Harness” 工作流和 Copilot app 入门指南，也出�
 
 未来的 AI Infra 不只包括推理框架、上下文窗口、Agent 环境，也会包括权限、审计、安全评测和防御工具。尤其当 Agent 能调用文件、浏览器、数据库、支付接口时，安全就不是合规部门最后补的文档，而是产品功能本身。
 
-![正文配图：AI Agent 产品的基础设施分层](/images/posts/2026-07-29-kimi-k3-ai-infra/image-02.png)
+![正文配图：AI Agent 产品的基础设施分层](/images/posts/2026-07-29-kimi-k3-ai-infra/image-02.webp)
 
 一个更实际的判断标准是：如果你的 Agent 出错，它会造成什么后果？只是答错一句话，还是会改错数据、泄露文件、误发消息、触发真实交易？
 

@@ -8,11 +8,11 @@ tags:
   - Developer Tools
   - AI Coding
 category: "AI"
-cover: "/images/posts/2026-05-30-claude-code-dynamic-workflows/cover.png"
+cover: "/images/posts/2026-05-30-claude-code-dynamic-workflows/cover.webp"
 published: true
 featured: false
 ---
-![封面图](/images/posts/2026-05-30-claude-code-dynamic-workflows/cover.png)
+![封面图](/images/posts/2026-05-30-claude-code-dynamic-workflows/cover.webp)
 
 如果你这两年一直在用 AI 写代码，大概率会有一个很熟悉的瞬间：
 
@@ -24,7 +24,7 @@ Anthropic 这次发布 Claude Opus 4.8，表面看是一次模型升级。官方
 
 更关键的是 Claude Code 同时推出了 dynamic workflows。它的意思不是“回答更长一点”，而是 Claude 可以为一个复杂任务动态写出编排脚本，在一个会话里调度几十到上百个子 Agent，并在把结果交给你之前做检查。
 
-![动态工作流示意](/images/posts/2026-05-30-claude-code-dynamic-workflows/image-01.png)
+![动态工作流示意](/images/posts/2026-05-30-claude-code-dynamic-workflows/image-01.webp)
 
 ## 这不是更聪明的单次回答
 
@@ -52,7 +52,7 @@ Anthropic 官方给的例子很夸张：Bun 从 Zig 到 Rust 的迁移实验里�
 
 dynamic workflows 暴露了一个趋势：未来的 Agent 产品，竞争点不只是模型接入数量，而是任务编排、权限边界、成本控制、结果复核和中断恢复。
 
-![团队使用场景](/images/posts/2026-05-30-claude-code-dynamic-workflows/image-02.png)
+![团队使用场景](/images/posts/2026-05-30-claude-code-dynamic-workflows/image-02.webp)
 
 ## 它适合什么，不适合什么
 

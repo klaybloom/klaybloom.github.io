@@ -8,12 +8,12 @@ tags:
   - Edge AI
   - Open Source
 category: "AI Engineering"
-cover: "/images/posts/2026-05-28-minicpm5-edge-ai/cover.png"
+cover: "/images/posts/2026-05-28-minicpm5-edge-ai/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-28-minicpm5-edge-ai/cover.png)
+![封面图](/images/posts/2026-05-28-minicpm5-edge-ai/cover.webp)
 
 过去一年，很多团队谈 AI 产品时，默认答案还是“接一个最强闭源模型”。
 
@@ -27,7 +27,7 @@ OpenBMB 的官方仓库把 MiniCPM5-1B 定位为面向端侧、本地部署和�
 
 ## 它改变的不是大模型，而是产品预算
 
-![正文配图：模型分工](/images/posts/2026-05-28-minicpm5-edge-ai/image-01.png)
+![正文配图：模型分工](/images/posts/2026-05-28-minicpm5-edge-ai/image-01.webp)
 
 MiniCPM5-1B 不会让创业团队明天就停用 Claude、Gemini 或 GPT。它真正影响的是另一类场景：
 
@@ -90,7 +90,7 @@ python -m sglang.launch_server \
 
 ## 最值得警惕的地方
 
-![正文配图：部署检查](/images/posts/2026-05-28-minicpm5-edge-ai/image-02.png)
+![正文配图：部署检查](/images/posts/2026-05-28-minicpm5-edge-ai/image-02.webp)
 
 小模型的兴奋点很明显，但风险也不能省略。
 

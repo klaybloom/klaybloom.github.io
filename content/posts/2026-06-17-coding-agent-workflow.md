@@ -7,12 +7,12 @@ tags:
   - 开发工具
   - Agent
 category: "AI 工具"
-cover: "/images/posts/2026-06-17-coding-agent-workflow/cover.png"
+cover: "/images/posts/2026-06-17-coding-agent-workflow/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-06-17-coding-agent-workflow/cover.png)
+![封面图](/images/posts/2026-06-17-coding-agent-workflow/cover.webp)
 
 这两天的 AI 工具更新，有一个很明显的信号：编码 Agent 不再只是一个聊天框。
 
@@ -35,7 +35,7 @@ xAI 给 Grok Build 推出了 Agent Dashboard。
 
 过去这些会话散在不同终端和网页里，开发者要不断切换上下文。Dashboard 把它们变成队列，等待输入的任务可以直接回复，新的任务可以从底部输入框继续分派。
 
-![多个编码 Agent 会话被集中管理](/images/posts/2026-06-17-coding-agent-workflow/image-01.png)
+![多个编码 Agent 会话被集中管理](/images/posts/2026-06-17-coding-agent-workflow/image-01.webp)
 
 这说明编码 Agent 的产品形态正在从“人和一个助手对话”，转向“人调度一组助手工作”。
 
@@ -76,7 +76,7 @@ xAI 同时宣布 Grok 集成到 Warp。Warp 本来就是面向开发者的终端
 3. Dashboard 负责多任务调度。
 4. 文档和 issue 系统负责上下文沉淀。
 
-![开发者在终端、仪表盘和代码仓库之间调度 AI Agent](/images/posts/2026-06-17-coding-agent-workflow/image-02.png)
+![开发者在终端、仪表盘和代码仓库之间调度 AI Agent](/images/posts/2026-06-17-coding-agent-workflow/image-02.webp)
 
 当入口变多，团队更需要统一规范：什么任务可以自动批准编辑，什么任务必须先给方案，什么目录不能碰，什么改动必须先跑测试。
 

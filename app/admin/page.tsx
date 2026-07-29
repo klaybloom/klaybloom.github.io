@@ -1811,7 +1811,7 @@ export default function AdminDashboard() {
                     onChange={(e) => handleFieldChange("cover", e.target.value)}
                     className="flex-1 px-3 py-2 rounded-lg focus:outline-none text-sm"
                     style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
-                    placeholder="/images/uploads/my-cover.png"
+                    placeholder="/images/uploads/my-cover.webp"
                   />
                   <div className="relative">
                     <button

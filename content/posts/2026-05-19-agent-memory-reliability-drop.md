@@ -6,12 +6,12 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-19-agent-memory-reliability-drop/cover.png"
+cover: "/images/posts/2026-05-19-agent-memory-reliability-drop/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-19-agent-memory-reliability-drop/cover.png)
+![封面图](/images/posts/2026-05-19-agent-memory-reliability-drop/cover.webp)
 
 过去一年，很多 AI Agent 产品都在讲“长期记忆”。
 
@@ -47,7 +47,7 @@ featured: false
 
 第三类是过拟合。记忆越来越像某几个样例的描述，遇到相邻但不完全相同的问题，反而更容易错。
 
-![记忆失真机制](/images/posts/2026-05-19-agent-memory-reliability-drop/image-01.png)
+![记忆失真机制](/images/posts/2026-05-19-agent-memory-reliability-drop/image-01.webp)
 
 论文项目页里还有一个很典型的现象：WebShop 实验中，某种记忆方案在 8 个样例时得分 0.64，但扩到 128 个样例后降到 0.20，回到了无记忆基线附近。ScienceWorld 里，把当前任务单独整理的记忆，比把所有历史任务混在一起持续整理的记忆高出 203 分。
 
@@ -67,7 +67,7 @@ Demo 里，任务少、路径短、记忆也少，摘要看起来够用。到了
 
 ## 如果你正在做 Agent 产品
 
-![可靠 Agent 记忆架构](/images/posts/2026-05-19-agent-memory-reliability-drop/image-02.png)
+![可靠 Agent 记忆架构](/images/posts/2026-05-19-agent-memory-reliability-drop/image-02.webp)
 
 这篇论文给出的启发，不是“不要做记忆”，而是记忆系统要换一种设计。
 

@@ -96,13 +96,12 @@ function extractFirstImage(content: string) {
   return match?.[1];
 }
 
-function toSummary(post: Post): PostSummary {
+export function createPostSummary(post: Post): PostSummary {
   const searchText = [
     post.title,
     post.description,
     post.tags.join(" "),
     post.category,
-    post.content
   ]
     .filter(Boolean)
     .join(" ")
@@ -133,7 +132,7 @@ export function getPublishedPosts(): PostSummary[] {
   const posts = getMarkdownFiles()
     .map(readPostFile)
     .filter((post): post is Post => Boolean(post))
-    .map(toSummary);
+    .map(createPostSummary);
 
   return sortByDateDesc(posts);
 }

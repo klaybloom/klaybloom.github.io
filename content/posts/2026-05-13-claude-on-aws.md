@@ -6,12 +6,12 @@ tags:
   - AI
   - 公众号
 category: "AI"
-cover: "/images/posts/2026-05-13-claude-on-aws/cover.png"
+cover: "/images/posts/2026-05-13-claude-on-aws/cover.webp"
 published: true
 featured: false
 ---
 
-![封面图](/images/posts/2026-05-13-claude-on-aws/cover.png)
+![封面图](/images/posts/2026-05-13-claude-on-aws/cover.webp)
 
 昨天的 AIHOT 日报里，Anthropic 有两条消息连在一起看很有意思。
 
@@ -40,7 +40,7 @@ AWS 用户本来就可以通过 Amazon Bedrock 使用 Claude。新的变化是�
 **第三，数据边界需要认真看。**  
 公开信息里明确提到，Claude Platform on AWS 由 Anthropic 运营，客户数据会在 AWS 安全边界外处理。对一些强监管业务来说，这不是小字条款，而是选型时必须先问清楚的问题。
 
-![三种 Claude 使用路径](/images/posts/2026-05-13-claude-on-aws/image-01.png)
+![三种 Claude 使用路径](/images/posts/2026-05-13-claude-on-aws/image-01.webp)
 
 ## 为什么这对创业公司重要
 
