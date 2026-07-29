@@ -5,7 +5,14 @@ const config = [
   ...nextVitals,
   ...nextTypescript,
   {
-    ignores: [".next/**", "out/**", "build/**", "next-env.d.ts"]
+    ignores: [
+      ".next/**",
+      ".worktrees/**",
+      "out/**",
+      "output/**",
+      "build/**",
+      "next-env.d.ts"
+    ]
   }
 ];
 
