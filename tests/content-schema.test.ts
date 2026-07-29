@@ -6,6 +6,7 @@ import {
   homeSectionsFileSchema,
   postSaveSchema,
   profileSchema,
+  projectDisclosureSchema,
   projectsFileSchema,
   projectStatusSchema,
   skillsFileSchema,
@@ -32,6 +33,55 @@ describe("content schemas", () => {
       expect(projectStatusSchema.parse(status)).toBe(status);
     },
   );
+
+  test.each(["public", "limited"])(
+    "accepts the project disclosure level %s",
+    (disclosure) => {
+      expect(projectDisclosureSchema.parse(disclosure)).toBe(disclosure);
+    },
+  );
+
+  test("accepts a project case study and rejects an incomplete one", () => {
+    const current = readJson("projects.json").projects[0];
+    const project = {
+      ...current,
+      disclosure: "public",
+      caseStudy: {
+        role: "Java / AI 应用开发",
+        responsibilities: ["负责知识库问答链路开发"],
+        highlights: ["实现混合检索与重排序"],
+        outcomes: ["形成可公开验证的项目实现"],
+      },
+    };
+
+    expect(projectsFileSchema.parse({ projects: [project] })).toBeTruthy();
+    expect(() =>
+      projectsFileSchema.parse({
+        projects: [
+          {
+            ...project,
+            caseStudy: {
+              ...project.caseStudy,
+              role: "",
+            },
+          },
+        ],
+      }),
+    ).toThrow(/role/i);
+    expect(() =>
+      projectsFileSchema.parse({
+        projects: [
+          {
+            ...project,
+            caseStudy: {
+              ...project.caseStudy,
+              responsibilities: [],
+            },
+          },
+        ],
+      }),
+    ).toThrow(/responsibilities/i);
+  });
 
   test("rejects duplicate project slugs", () => {
     const current = readJson("projects.json");

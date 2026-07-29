@@ -20,6 +20,8 @@ export type {
   ExperienceItem,
   Profile,
   Project,
+  ProjectCaseStudy,
+  ProjectDisclosure,
   ProjectStatus,
   SkillGroup,
 } from "@/lib/content-schema";

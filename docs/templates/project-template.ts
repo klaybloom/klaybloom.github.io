@@ -6,6 +6,13 @@ export const projectTemplate: Project = {
   description: "TODO: Short project summary for cards and list pages.",
   longDescription:
     "TODO: Longer explanation of the project's purpose, scope, and implementation.",
+  disclosure: "public",
+  caseStudy: {
+    role: "TODO: Your role",
+    responsibilities: ["TODO: One responsibility per item"],
+    highlights: ["TODO: One implementation highlight per item"],
+    outcomes: ["TODO: One verified outcome per item"],
+  },
   stack: ["TODO: Tech"],
   category: "TODO: Category",
   cover: "/images/projects/TODO-project-cover.png",

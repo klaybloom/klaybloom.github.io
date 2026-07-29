@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Project } from "@/content/types";
+import { ProjectArtwork } from "@/components/projects/ProjectArtwork";
 import { formatDate } from "@/lib/date";
 import { Section } from "./Section";
 
@@ -22,7 +23,11 @@ export function Projects({ projects, title, number }: ProjectsProps) {
         {projects.map((project, index) => {
           const card = (
             <article className="tahoe-project-card h-full">
-              <div className={`tahoe-project-art tahoe-project-art-${(index % 4) + 1}`} />
+              <ProjectArtwork
+                cover={project.cover}
+                index={index}
+                title={project.title}
+              />
               <div className="p-5">
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-[12px] text-[color:var(--tahoe-faint)]">
                   <span className="tahoe-status">{getStatusText(project.status)}</span>

@@ -8,12 +8,23 @@ function sortByDateDesc(items: Project[]) {
   );
 }
 
+function sortHomepageProjects(items: Project[]) {
+  return items.sort(
+    (a, b) =>
+      Number(b.pinned) - Number(a.pinned) ||
+      new Date(b.updated).getTime() - new Date(a.updated).getTime() ||
+      new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
+}
+
 export function getAllProjects() {
   return sortByDateDesc([...projects]);
 }
 
 export function getFeaturedProjects() {
-  return getAllProjects().filter((project) => project.featured);
+  return sortHomepageProjects(
+    projects.filter((project) => project.featured),
+  );
 }
 
 export function getLatestProjects(limit: number) {

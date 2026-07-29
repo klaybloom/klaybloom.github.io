@@ -142,7 +142,10 @@ export function getAllPosts() {
 }
 
 export function getLatestPosts(limit: number) {
-  return getPublishedPosts().slice(0, limit);
+  const posts = getPublishedPosts();
+  const featured = posts.filter((post) => post.featured);
+  const latest = posts.filter((post) => !post.featured);
+  return [...featured, ...latest].slice(0, limit);
 }
 
 export function getPostBySlug(slug: string): Post | null {

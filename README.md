@@ -300,6 +300,13 @@ TypeScript 文件如 `content/profile.ts`、`content/projects.ts`、`content/ski
   "slug": "project-name",
   "description": "一句话简介。",
   "longDescription": "更完整的项目说明。",
+  "disclosure": "public",
+  "caseStudy": {
+    "role": "Java 后端与 AI 应用开发",
+    "responsibilities": ["负责核心功能设计与开发。"],
+    "highlights": ["实现关键技术链路。"],
+    "outcomes": ["形成可验证的交付结果。"]
+  },
   "stack": ["Next.js", "TypeScript"],
   "category": "Personal Site",
   "cover": "/images/projects/project-name.png",
@@ -318,7 +325,9 @@ TypeScript 文件如 `content/profile.ts`、`content/projects.ts`、`content/ski
 - `slug` 会成为详情页路径：`/projects/{slug}/`。
 - `stack` 用于项目页技术栈筛选。
 - `featured: true` 后可被首页「精选项目」区块展示。
-- `date` 影响项目排序。
+- 首页精选项目先按 `pinned` 排序，再按 `updated` 排序；项目列表仍按 `date` 排序。
+- `disclosure: public` 展示公开链接；`disclosure: limited` 显示脱敏说明，并隐藏项目源码和演示入口。
+- `caseStudy` 用于展示角色、职责、关键实现和交付结果。
 - `cover` 建议放在 `public/images/projects/`，引用路径写成 `/images/projects/file-name.webp`。
 
 可用状态：
@@ -370,7 +379,7 @@ featured: false
 - `category`：分类。
 - `cover`：封面图。
 - `published: false`：隐藏文章，不生成详情页。
-- `featured`：已解析，当前不单独控制首页展示。
+- `featured: true`：文章优先进入首页技术文章区块；数量不足时再由最新文章补齐。
 
 封面优先级：
 

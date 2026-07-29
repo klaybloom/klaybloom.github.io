@@ -2,6 +2,7 @@ import { z } from "zod";
 
 const nonEmptyString = z.string().trim().min(1);
 const stringList = z.array(nonEmptyString);
+const nonEmptyStringList = stringList.min(1);
 const slugSchema = z
   .string()
   .regex(/^[a-z0-9][a-z0-9-_]*$/, "slug must use lowercase letters, numbers, hyphens, or underscores");
@@ -68,12 +69,25 @@ export const projectStatusSchema = z.enum([
   "archived",
 ]);
 
+export const projectDisclosureSchema = z.enum(["public", "limited"]);
+
+export const projectCaseStudySchema = z
+  .object({
+    role: nonEmptyString,
+    responsibilities: nonEmptyStringList,
+    highlights: nonEmptyStringList,
+    outcomes: nonEmptyStringList,
+  })
+  .strict();
+
 export const projectSchema = z
   .object({
     title: nonEmptyString,
     slug: slugSchema,
     description: nonEmptyString,
     longDescription: nonEmptyString,
+    disclosure: projectDisclosureSchema,
+    caseStudy: projectCaseStudySchema,
     stack: stringList,
     category: nonEmptyString,
     cover: publicLinkSchema,
@@ -192,6 +206,8 @@ export const postSaveSchema = z
 export type Profile = z.infer<typeof profileSchema>;
 export type ExperienceItem = z.infer<typeof experienceItemSchema>;
 export type ProjectStatus = z.infer<typeof projectStatusSchema>;
+export type ProjectDisclosure = z.infer<typeof projectDisclosureSchema>;
+export type ProjectCaseStudy = z.infer<typeof projectCaseStudySchema>;
 export type Project = z.infer<typeof projectSchema>;
 export type SkillGroup = z.infer<typeof skillGroupSchema>;
 export type HomeSection = z.infer<typeof homeSectionSchema>;

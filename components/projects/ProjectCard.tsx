@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Project } from "@/content/types";
 import { formatProjectDate, getProjectStatusLabel } from "@/lib/projects";
+import { ProjectArtwork } from "./ProjectArtwork";
 
 type ProjectCardProps = {
   project: Project;
@@ -10,7 +11,11 @@ type ProjectCardProps = {
 export function ProjectCard({ project, index }: ProjectCardProps) {
   const card = (
     <article className="tahoe-project-card h-full">
-      <div className={`tahoe-project-art tahoe-project-art-${(index % 4) + 1}`} />
+      <ProjectArtwork
+        cover={project.cover}
+        index={index}
+        title={project.title}
+      />
       <div className="p-5">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-[12px] text-[color:var(--tahoe-faint)]">
           <span className="tahoe-status">{getProjectStatusLabel(project.status)}</span>

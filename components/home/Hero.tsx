@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Highlight, Profile } from "@/content/types";
 
 type HeroProps = {
@@ -26,6 +27,28 @@ export function Hero({ profile, highlights }: HeroProps) {
               ))}
             </div>
           ) : null}
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Link
+              className="tahoe-button tahoe-button-primary px-5 py-2.5 text-sm font-semibold"
+              href={profile.links.projects}
+            >
+              查看项目
+            </Link>
+            <a
+              className="tahoe-button tahoe-button-glass px-5 py-2.5 text-sm font-semibold"
+              href={profile.links.github}
+              rel="noreferrer"
+              target="_blank"
+            >
+              GitHub
+            </a>
+            <a
+              className="tahoe-button tahoe-button-glass px-5 py-2.5 text-sm font-semibold"
+              href={`mailto:${profile.links.email}`}
+            >
+              联系我
+            </a>
+          </div>
         </div>
 
         <aside className="tahoe-info-panel relative z-10">

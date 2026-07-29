@@ -62,8 +62,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     notFound();
   }
 
-  const statusDescription = getProjectStatusDescription(project.status);
-
   return (
     <main data-tahoe-preview className="tahoe-shell min-h-screen overflow-x-hidden">
       <div className="tahoe-bg-fixed" aria-hidden />
@@ -115,37 +113,45 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           ) : null}
 
           <div className="tahoe-experience-card space-y-10">
-            <section>
-              <h2
-                className="mb-4 border-l-4 pl-3 text-[15px] font-semibold"
-                style={{ borderColor: "var(--tahoe-accent)", color: "var(--tahoe-text)" }}
+            {project.disclosure === "limited" ? (
+              <aside
+                className="rounded-2xl px-5 py-4 text-[14px] leading-7"
+                style={{
+                  background: "var(--tahoe-accent-soft)",
+                  color: "var(--tahoe-muted)",
+                }}
               >
-                项目说明
-              </h2>
+                项目内容涉及企业内部信息，仅展示经过脱敏的职责与技术实践，不提供源码或演示地址。
+              </aside>
+            ) : null}
+
+            <section>
+              <CaseStudyHeading>项目背景</CaseStudyHeading>
               <p className="text-[15px] leading-8 text-[color:var(--tahoe-muted)]">
                 {project.longDescription}
               </p>
             </section>
 
             <section>
-              <h2
-                className="mb-4 border-l-4 pl-3 text-[15px] font-semibold"
-                style={{ borderColor: "var(--tahoe-accent)", color: "var(--tahoe-text)" }}
-              >
-                当前状态
-              </h2>
-              <p className="text-[15px] leading-8 text-[color:var(--tahoe-muted)]">
-                {statusDescription}
+              <CaseStudyHeading>我的职责</CaseStudyHeading>
+              <p className="mb-4 text-[14px] font-semibold text-[color:var(--tahoe-text)]">
+                {project.caseStudy.role}
               </p>
+              <CaseStudyList items={project.caseStudy.responsibilities} />
             </section>
 
             <section>
-              <h2
-                className="mb-4 border-l-4 pl-3 text-[15px] font-semibold"
-                style={{ borderColor: "var(--tahoe-accent)", color: "var(--tahoe-text)" }}
-              >
-                技术栈
-              </h2>
+              <CaseStudyHeading>关键实现</CaseStudyHeading>
+              <CaseStudyList items={project.caseStudy.highlights} />
+            </section>
+
+            <section>
+              <CaseStudyHeading>交付结果</CaseStudyHeading>
+              <CaseStudyList items={project.caseStudy.outcomes} />
+            </section>
+
+            <section>
+              <CaseStudyHeading>技术栈</CaseStudyHeading>
               <div className="flex flex-wrap gap-2">
                 {project.stack.map((item) => (
                   <span className="tahoe-small-tag" key={item}>
@@ -155,14 +161,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </div>
             </section>
 
-            {project.github || project.demo ? (
+            {project.disclosure === "public" && (project.github || project.demo) ? (
               <section>
-                <h2
-                  className="mb-4 border-l-4 pl-3 text-[15px] font-semibold"
-                  style={{ borderColor: "var(--tahoe-accent)", color: "var(--tahoe-text)" }}
-                >
-                  链接
-                </h2>
+                <CaseStudyHeading>公开链接</CaseStudyHeading>
                 <div className="flex flex-wrap gap-3 text-[14px]">
                   {project.github ? (
                     <a
@@ -199,14 +200,28 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   );
 }
 
-function getProjectStatusDescription(status: string) {
-  const descriptions: Record<string, string> = {
-    planning: "项目仍在规划中，功能边界和技术路线还会继续调整。",
-    building: "项目正在建设和迭代中，当前版本可用于了解方向和阶段性成果。",
-    launched: "项目已经上线或完成交付，当前页面保留项目说明与技术栈记录。",
-    paused: "项目暂时暂停维护，后续是否继续取决于实际需求。",
-    archived: "项目已归档，主要作为历史记录和作品展示保留。",
-  };
+function CaseStudyHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h2
+      className="mb-4 border-l-4 pl-3 text-[15px] font-semibold"
+      style={{
+        borderColor: "var(--tahoe-accent)",
+        color: "var(--tahoe-text)",
+      }}
+    >
+      {children}
+    </h2>
+  );
+}
 
-  return descriptions[status] ?? "项目状态待补充。";
+function CaseStudyList({ items }: { items: string[] }) {
+  return (
+    <ul className="grid gap-3 text-[15px] leading-8 text-[color:var(--tahoe-muted)]">
+      {items.map((item) => (
+        <li className="tahoe-experience-point" key={item}>
+          {item}
+        </li>
+      ))}
+    </ul>
+  );
 }

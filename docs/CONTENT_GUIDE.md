@@ -41,7 +41,8 @@ Field notes:
 - If `cover` is empty, the site uses the first Markdown image in the post body.
 - If the post body has no image, the site uses `/images/default-cover.jpg`.
 - `description`, `tags`, and `category` are used for cards, filtering, and search text.
-- `featured` is parsed but does not currently control homepage placement.
+- `featured: true` places the post ahead of non-featured posts on the homepage.
+- If fewer featured posts are available than the configured count, the homepage fills the remaining slots with the latest published posts.
 
 Use `docs/templates/post-template.md` as a copyable starting point.
 
@@ -59,6 +60,13 @@ Add a project by appending a new object to the `projects` array:
       "slug": "example-project",
       "description": "Short project summary.",
       "longDescription": "Longer project explanation.",
+      "disclosure": "public",
+      "caseStudy": {
+        "role": "Backend and AI application developer",
+        "responsibilities": ["Owned the retrieval and answer pipeline."],
+        "highlights": ["Combined hybrid retrieval with reranking."],
+        "outcomes": ["Published a verifiable implementation."]
+      },
       "stack": ["Next.js", "TypeScript"],
       "category": "Personal Site",
       "cover": "/images/projects/example-project.webp",
@@ -80,6 +88,11 @@ Required project fields:
 - `slug`
 - `description`
 - `longDescription`
+- `disclosure`
+- `caseStudy.role`
+- `caseStudy.responsibilities`
+- `caseStudy.highlights`
+- `caseStudy.outcomes`
 - `stack`
 - `category`
 - `cover`
@@ -106,7 +119,9 @@ Field notes:
 - `slug` becomes the detail page path: `/projects/{slug}`.
 - `stack` powers the project filter.
 - `featured: true` allows the project to appear on the homepage.
-- `pinned` is stored in the content model for future display rules.
+- `pinned: true` places a featured project ahead of non-pinned projects; projects in the same group are sorted by `updated`.
+- Use `disclosure: "public"` for projects with public links and `disclosure: "limited"` for anonymized enterprise work.
+- Limited projects show a disclosure notice and do not render source or demo links.
 - Keep image paths under `public/images/projects/` and reference them as `/images/projects/file-name.webp`.
 
 Use `docs/templates/project-template.ts` as a copyable starting point.
@@ -115,8 +130,8 @@ Use `docs/templates/project-template.ts` as a copyable starting point.
 
 The homepage uses these existing data helpers:
 
-- Latest projects: newest 3 projects where `featured: true`, sorted by `date` descending.
-- Latest posts: newest 3 published posts, sorted by `date` descending.
+- Homepage projects: projects where `featured: true`, sorted by `pinned` and then `updated`.
+- Homepage posts: featured published posts first, then the latest published posts until the configured count is reached.
 
 ## Profile And Site Info
 

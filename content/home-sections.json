@@ -7,11 +7,12 @@
       "params": {}
     },
     {
-      "id": "skills",
-      "type": "skills",
+      "id": "latest-projects",
+      "type": "latest-projects",
       "enabled": true,
       "params": {
-        "title": "技术能力"
+        "title": "精选项目",
+        "count": 3
       }
     },
     {
@@ -23,20 +24,19 @@
       }
     },
     {
+      "id": "skills",
+      "type": "skills",
+      "enabled": true,
+      "params": {
+        "title": "技术能力"
+      }
+    },
+    {
       "id": "latest-posts",
       "type": "latest-posts",
       "enabled": true,
       "params": {
         "title": "技术文章",
-        "count": 5
-      }
-    },
-    {
-      "id": "latest-projects",
-      "type": "latest-projects",
-      "enabled": true,
-      "params": {
-        "title": "精选项目",
         "count": 3
       }
     },

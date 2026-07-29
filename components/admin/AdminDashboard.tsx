@@ -188,6 +188,8 @@ export function AdminDashboard() {
       slug: project.slug.trim(),
       description: project.description,
       longDescription: project.longDescription,
+      disclosure: project.disclosure,
+      caseStudy: project.caseStudy,
       stack: project.stack,
       category: project.category,
       cover: project.cover,
@@ -828,6 +830,31 @@ export function AdminDashboard() {
         handleFieldChange("stack", tags);
       };
 
+      const handleCaseStudyChange = <K extends keyof Project["caseStudy"]>(
+        field: K,
+        val: Project["caseStudy"][K],
+      ) => {
+        const updated = [...projects];
+        updated[selectedProjIndex] = {
+          ...proj,
+          caseStudy: {
+            ...proj.caseStudy,
+            [field]: val,
+          },
+        };
+        setProjects(updated);
+      };
+
+      const handleCaseStudyListChange = (
+        field: "responsibilities" | "highlights" | "outcomes",
+        val: string,
+      ) => {
+        handleCaseStudyChange(
+          field,
+          val.split("\n").map((item) => item.trim()).filter(Boolean),
+        );
+      };
+
       return (
         <div className="tahoe-system-card space-y-6 max-w-5xl !p-6">
           <div className="flex justify-between items-center pb-2"
@@ -1033,6 +1060,94 @@ export function AdminDashboard() {
             />
           </div>
 
+          <div className="space-y-5 rounded-2xl p-5" style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)" }}>
+            <div>
+              <h4 className="text-base font-semibold" style={{ color: "var(--tahoe-text)" }}>
+                项目案例信息
+              </h4>
+              <p className="mt-1 text-xs leading-5" style={{ color: "var(--tahoe-faint)" }}>
+                每行填写一项职责、关键实现或交付结果。受限项目会在公开页面显示脱敏说明。
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <label htmlFor="project-disclosure" className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>
+                  信息公开级别
+                </label>
+                <select
+                  id="project-disclosure"
+                  value={proj?.disclosure || "limited"}
+                  onChange={(event) => handleFieldChange("disclosure", event.target.value as Project["disclosure"])}
+                  className="w-full rounded-lg px-3 py-2 text-sm outline-none"
+                  style={{ background: "var(--tahoe-glass)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                >
+                  <option value="public">公开项目</option>
+                  <option value="limited">受限项目（脱敏展示）</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="project-case-role" className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>
+                  我的角色
+                </label>
+                <input
+                  id="project-case-role"
+                  type="text"
+                  value={proj?.caseStudy?.role || ""}
+                  onChange={(event) => handleCaseStudyChange("role", event.target.value)}
+                  className="w-full rounded-lg px-3 py-2 text-sm outline-none"
+                  style={{ background: "var(--tahoe-glass)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                  placeholder="例如：Java 后端与 AI 应用开发"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="project-case-responsibilities" className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>
+                职责清单
+              </label>
+              <textarea
+                id="project-case-responsibilities"
+                value={proj?.caseStudy?.responsibilities?.join("\n") || ""}
+                onChange={(event) => handleCaseStudyListChange("responsibilities", event.target.value)}
+                rows={4}
+                className="w-full rounded-lg px-3 py-2 text-sm leading-6 outline-none"
+                style={{ background: "var(--tahoe-glass)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                placeholder="每行一项职责"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="project-case-highlights" className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>
+                关键实现清单
+              </label>
+              <textarea
+                id="project-case-highlights"
+                value={proj?.caseStudy?.highlights?.join("\n") || ""}
+                onChange={(event) => handleCaseStudyListChange("highlights", event.target.value)}
+                rows={4}
+                className="w-full rounded-lg px-3 py-2 text-sm leading-6 outline-none"
+                style={{ background: "var(--tahoe-glass)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                placeholder="每行一项技术实现"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="project-case-outcomes" className="block text-sm font-medium mb-1" style={{ color: "var(--tahoe-muted)" }}>
+                交付结果清单
+              </label>
+              <textarea
+                id="project-case-outcomes"
+                value={proj?.caseStudy?.outcomes?.join("\n") || ""}
+                onChange={(event) => handleCaseStudyListChange("outcomes", event.target.value)}
+                rows={4}
+                className="w-full rounded-lg px-3 py-2 text-sm leading-6 outline-none"
+                style={{ background: "var(--tahoe-glass)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
+                placeholder="每行一项已验证结果"
+              />
+            </div>
+          </div>
+
           <div className="flex justify-end gap-3 pt-4" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
             <button
               onClick={() => {
@@ -1077,6 +1192,13 @@ export function AdminDashboard() {
         slug: "",
         description: "",
         longDescription: "",
+        disclosure: "limited",
+        caseStudy: {
+          role: "",
+          responsibilities: [],
+          highlights: [],
+          outcomes: [],
+        },
         stack: [],
         category: "Web Application",
         cover: "/images/projects/default-cover.jpg",
