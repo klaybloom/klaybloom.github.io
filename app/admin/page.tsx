@@ -9,96 +9,40 @@ import {
   type HomeSection,
   type HomeSectionType,
 } from "@/lib/home-sections";
+import { MarkdownPreview } from "@/components/admin/MarkdownPreview";
+import { ProductionAdminNotice } from "@/components/admin/ProductionAdminNotice";
 import { TahoeModeToggle } from "@/components/layout/TahoeModeToggle";
+import { adminClient } from "@/lib/admin/client";
+import type {
+  ExperienceItem as SharedExperienceItem,
+  PostFrontmatter,
+  Profile,
+  Project,
+  SkillGroup,
+} from "@/lib/content-schema";
 
 // ==========================================
 // Types
 // ==========================================
 
-interface Profile {
-  name: string;
-  nickname: string;
-  title: string;
-  summary: string;
-  bio: string[];
-  links: {
-    github: string;
-    blog: string;
-    projects: string;
-    email: string;
-  };
-}
-
-interface ExperienceItem {
-  period: string;
-  title: string;
-  company: string;
-  description: string[];
+type ExperienceItem = SharedExperienceItem & {
   isNewExp?: boolean;
-}
+};
 
-interface ProjectItem {
-  title: string;
-  slug: string;
-  description: string;
-  longDescription: string;
-  stack: string[];
-  category: string;
-  cover: string;
-  github?: string;
-  demo?: string;
-  date: string;
-  updated?: string;
-  status: "planning" | "building" | "launched";
-  featured: boolean;
-  pinned: boolean;
+type ProjectItem = Project & {
   isNewProj?: boolean;
-}
-
-interface SkillGroup {
-  group: string;
-  items: string[];
-}
-
-interface PostFrontmatter {
-  title: string;
-  date: string;
-  updated?: string;
-  description: string;
-  tags: string[];
-  category?: string;
-  cover?: string;
-  published: boolean;
-  featured: boolean;
-}
+};
 
 interface PostItem {
   slug: string;
   frontmatter: PostFrontmatter;
   content: string;
-  sha?: string; // used for GitHub API updates
   isNewPost?: boolean;
   originalSlug?: string;
 }
 
-const IMAGE_EXTENSIONS = new Set(["png", "jpg", "jpeg", "webp", "gif"]);
-
 function isSafePostSlug(value: string) {
   return /^[a-z0-9][a-z0-9-_]*$/.test(value);
-}
-
-function getSafeImageFileName(file: File) {
-  const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
-  if (!IMAGE_EXTENSIONS.has(extension)) return null;
-
-  const rawName = file.name.slice(0, Math.max(0, file.name.length - extension.length - 1));
-  const safeName = rawName
-    .toLowerCase()
-    .replace(/[^a-z0-9-_]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80) || "upload";
-
-  return `${Date.now()}-${safeName}.${extension}`;
 }
 
 function getErrorMessage(error: unknown) {
@@ -139,12 +83,7 @@ function validatePostBeforeSave(post: PostItem, slug: string) {
 // ==========================================
 
 export default function AdminDashboard() {
-  // Environment & Auth States
-  const [isLocal, setIsLocal] = useState<boolean>(false);
-  const [githubPat, setGithubPat] = useState<string>("");
-  const [githubRepo, setGithubRepo] = useState<string>("klaybloom/klaybloom.github.io");
-  const [githubBranch, setGithubBranch] = useState<string>("main");
-  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const isLocal = process.env.NODE_ENV === "development";
   const [activeTab, setActiveTab] = useState<"profile" | "experience" | "projects" | "skills" | "posts" | "home">("profile");
 
   // Loaders & Alerts
@@ -167,15 +106,6 @@ export default function AdminDashboard() {
   const [posts, setPosts] = useState<PostItem[]>([]);
   const [homeSections, setHomeSections] = useState<HomeSection[]>(DEFAULT_SECTIONS);
 
-  // SHAs for GitHub tracking
-  const [shas, setShas] = useState<{
-    profile?: string;
-    experience?: string;
-    projects?: string;
-    skills?: string;
-    home?: string;
-  }>({});
-
   // Active editors state
   const [selectedExpIndex, setSelectedExpIndex] = useState<number | null>(null);
   const [selectedProjIndex, setSelectedProjIndex] = useState<number | null>(null);
@@ -192,37 +122,6 @@ export default function AdminDashboard() {
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
 
-  // Checks environment & localStorage token on mount
-  useEffect(() => {
-    const isDev = process.env.NODE_ENV === "development";
-    // Check if we are running on localhost or 127.0.0.1
-    const isLocalhost = typeof window !== "undefined" && (
-      window.location.hostname === "localhost" || 
-      window.location.hostname === "127.0.0.1"
-    );
-    
-    queueMicrotask(() => setIsLocal(isDev && isLocalhost));
-
-    if (typeof window !== "undefined") {
-      const storedPat = localStorage.getItem("klay_admin_pat");
-      const storedRepo = localStorage.getItem("klay_admin_repo") || "klaybloom/klaybloom.github.io";
-      const storedBranch = localStorage.getItem("klay_admin_branch") || "main";
-      
-      if (storedPat) {
-        queueMicrotask(() => {
-          setGithubPat(storedPat);
-          setGithubRepo(storedRepo);
-          setGithubBranch(storedBranch);
-          
-          if (!(isDev && isLocalhost)) {
-            // If online and we have a PAT, authorize
-            setIsAuthorized(true);
-          }
-        });
-      }
-    }
-  }, []);
-
   // Alert self-diminish
   useEffect(() => {
     if (alert) {
@@ -238,11 +137,10 @@ export default function AdminDashboard() {
   const loadLocalData = async () => {
     setIsLoading(true);
     try {
-      // Fetch profile, experience, projects, skills
-      const dataRes = await fetch("http://localhost:8081/api/admin/load-data");
-      if (!dataRes.ok) throw new Error("Failed to load local data");
-      const data = await dataRes.json();
-
+      const [data, loadedPosts] = await Promise.all([
+        adminClient.loadData(),
+        adminClient.listPosts(),
+      ]);
       setProfile(data.profile);
       setExperiences(data.experience);
       setProjects(data.projects);
@@ -252,13 +150,7 @@ export default function AdminDashboard() {
       } else {
         setHomeSections(DEFAULT_SECTIONS);
       }
-
-      // Fetch posts
-      const postsRes = await fetch("http://localhost:8081/api/admin/list-posts");
-      if (postsRes.ok) {
-        const postsData = await postsRes.json();
-        setPosts(postsData.posts || []);
-      }
+      setPosts(loadedPosts);
       
       setAlert({ type: "success", msg: "成功加载本地文件数据" });
     } catch (e: unknown) {
@@ -271,15 +163,8 @@ export default function AdminDashboard() {
   const saveLocalData = async (type: "profile" | "experience" | "projects" | "skills" | "post" | "delete-post" | "home-sections", payload: unknown, slug?: string) => {
     setIsSaving(true);
     try {
-      const res = await fetch("http://localhost:8081/api/admin/save", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type, data: payload, slug }),
-      });
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.error || "保存失败");
-      
-      setAlert({ type: "success", msg: `本地保存成功！${result.message || ""}` });
+      await adminClient.save(type, payload, slug);
+      setAlert({ type: "success", msg: "本地保存成功" });
       return true;
     } catch (e: unknown) {
       setAlert({ type: "error", msg: `保存错误: ${getErrorMessage(e)}` });
@@ -292,23 +177,9 @@ export default function AdminDashboard() {
   const uploadLocalImage = async (file: File): Promise<string | null> => {
     setIsUploading(true);
     try {
-      const reader = new FileReader();
-      const base64Promise = new Promise<string>((resolve) => {
-        reader.onloadend = () => resolve(reader.result as string);
-        reader.readAsDataURL(file);
-      });
-      const fileData = await base64Promise;
-      
-      const res = await fetch("http://localhost:8081/api/admin/upload", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fileName: file.name, fileData }),
-      });
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.error || "图片上传失败");
-      
-      setAlert({ type: "success", msg: `图片已上传至本地: ${result.url}` });
-      return result.url;
+      const url = await adminClient.upload(file);
+      setAlert({ type: "success", msg: `图片已转为 WebP 并保存至本地: ${url}` });
+      return url;
     } catch (e: unknown) {
       setAlert({ type: "error", msg: `图片上传错误: ${getErrorMessage(e)}` });
       return null;
@@ -317,425 +188,15 @@ export default function AdminDashboard() {
     }
   };
 
-  // ==========================================
-  // Online GitHub API Calls
-  // ==========================================
-
-  const getFileSha = async (path: string): Promise<string | undefined> => {
-    try {
-      const lastSlashIdx = path.lastIndexOf("/");
-      const dirPath = lastSlashIdx !== -1 ? path.slice(0, lastSlashIdx) : "";
-      const fileName = lastSlashIdx !== -1 ? path.slice(lastSlashIdx + 1) : path;
-      
-      const url = `https://api.github.com/repos/${githubRepo}/contents/${dirPath}?ref=${githubBranch}`;
-      const res = await fetch(url, {
-        cache: "no-store",
-        headers: {
-          Authorization: `token ${githubPat}`,
-          Accept: "application/vnd.github.v3+json",
-        },
-      });
-      if (!res.ok) return undefined;
-      const items = await res.json();
-      if (Array.isArray(items)) {
-        const match = items.find((item) => item.name === fileName);
-        if (match) return match.sha;
-      }
-    } catch {}
-    return undefined;
-  };
-
-  const fetchGithubFile = async (path: string) => {
-    const url = `https://api.github.com/repos/${githubRepo}/contents/${path}?ref=${githubBranch}`;
-    const res = await fetch(url, {
-      cache: "no-store",
-      headers: {
-        Authorization: `token ${githubPat}`,
-        Accept: "application/vnd.github.v3+json",
-      },
-    });
-    if (res.status === 404) return null;
-    if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
-    const data = await res.json();
-    
-    let decodedContent = "";
-    try {
-      decodedContent = decodeURIComponent(escape(atob(data.content.replace(/\s/g, ""))));
-    } catch {
-      decodedContent = data.content; // If binary (e.g. image), fallback to raw base64
-    }
-    
-    return {
-      content: decodedContent,
-      sha: data.sha,
-    };
-  };
-
-  const commitGithubFile = async (path: string, contentStr: string, sha?: string, message?: string, isBase64?: boolean) => {
-    const url = `https://api.github.com/repos/${githubRepo}/contents/${path}`;
-    
-    let base64Content = "";
-    if (isBase64) {
-      base64Content = contentStr;
-    } else {
-      const utf8Content = unescape(encodeURIComponent(contentStr));
-      base64Content = btoa(utf8Content);
-    }
-
-    let fileSha = sha;
-    if (!fileSha) {
-      fileSha = await getFileSha(path);
-    }
-
-    const body: { message: string; content: string; branch: string; sha?: string } = {
-      message: message || `admin: update ${path}`,
-      content: base64Content,
-      branch: githubBranch,
-    };
-    if (fileSha) body.sha = fileSha;
-
-    const res = await fetch(url, {
-      method: "PUT",
-      headers: {
-        Authorization: `token ${githubPat}`,
-        "Content-Type": "application/json",
-        Accept: "application/vnd.github.v3+json",
-      },
-      body: JSON.stringify(body),
-    });
-    const result = await res.json();
-    if (!res.ok) throw new Error(result.message || "Failed to commit file to GitHub");
-    return result.content.sha;
-  };
-
-  const loadOnlineData = async () => {
-    setIsLoading(true);
-    try {
-      // 1. Profile
-      const profileFile = await fetchGithubFile("content/profile.json");
-      if (profileFile) {
-        setProfile(JSON.parse(profileFile.content));
-        setShas((prev) => ({ ...prev, profile: profileFile.sha }));
-      }
-
-      // 2. Experience
-      const expFile = await fetchGithubFile("content/experience.json");
-      if (expFile) {
-        const parsed = JSON.parse(expFile.content);
-        setExperiences(parsed.experience || []);
-        setShas((prev) => ({ ...prev, experience: expFile.sha }));
-      }
-
-      // 3. Projects
-      const projFile = await fetchGithubFile("content/projects.json");
-      if (projFile) {
-        const parsed = JSON.parse(projFile.content);
-        setProjects(parsed.projects || []);
-        setShas((prev) => ({ ...prev, projects: projFile.sha }));
-      }
-
-      // 4. Skills
-      const skillFile = await fetchGithubFile("content/skills.json");
-      if (skillFile) {
-        const parsed = JSON.parse(skillFile.content);
-        setSkills(parsed.skills || []);
-        setShas((prev) => ({ ...prev, skills: skillFile.sha }));
-      }
-
-      // 4b. Home Sections (optional file)
-      try {
-        const homeFile = await fetchGithubFile("content/home-sections.json");
-        if (homeFile) {
-          const parsed = JSON.parse(homeFile.content);
-          if (parsed && Array.isArray(parsed.sections) && parsed.sections.length > 0) {
-            setHomeSections(parsed.sections);
-          } else {
-            setHomeSections(DEFAULT_SECTIONS);
-          }
-          setShas((prev) => ({ ...prev, home: homeFile.sha }));
-        } else {
-          setHomeSections(DEFAULT_SECTIONS);
-        }
-      } catch {
-        setHomeSections(DEFAULT_SECTIONS);
-      }
-
-      // 5. Posts (Read list of files under content/posts)
-      const postsUrl = `https://api.github.com/repos/${githubRepo}/contents/content/posts?ref=${githubBranch}`;
-      const postsRes = await fetch(postsUrl, {
-        cache: "no-store",
-        headers: {
-          Authorization: `token ${githubPat}`,
-          Accept: "application/vnd.github.v3+json",
-        },
-      });
-      
-      if (postsRes.ok) {
-        const files = await postsRes.json();
-        if (Array.isArray(files)) {
-          const mdFiles = files.filter((f) => f.name.endsWith(".md"));
-          
-          // Simple custom client-side YAML Frontmatter Parser
-          const parsedPosts = await Promise.all(
-            mdFiles.map(async (file): Promise<PostItem | null> => {
-              const fileData = await fetchGithubFile(file.path);
-              if (!fileData) return null;
-              
-              const raw = fileData.content;
-              const slug = file.name.replace(/\.md$/, "");
-              
-              // Parse frontmatter
-              const match = raw.match(/^---\r?\n([\s\S]+?)\r?\n---\r?\n([\s\S]*)$/);
-              const frontmatter: PostFrontmatter = {
-                title: slug,
-                date: new Date().toISOString().split("T")[0],
-                description: "",
-                tags: [],
-                published: true,
-                featured: false,
-              };
-              let content = raw;
-
-              if (match) {
-                const fmBlock = match[1];
-                content = match[2];
-                
-                fmBlock.split("\n").forEach((line) => {
-                  const colonIdx = line.indexOf(":");
-                  if (colonIdx > 0) {
-                    const key = line.slice(0, colonIdx).trim();
-                    let val = line.slice(colonIdx + 1).trim();
-                    // strip quotes if wrapped
-                    if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
-                      val = val.slice(1, -1);
-                    }
-                    
-                    if (key === "title") frontmatter.title = val;
-                    else if (key === "date") frontmatter.date = val;
-                    else if (key === "updated") frontmatter.updated = val;
-                    else if (key === "description") frontmatter.description = val;
-                    else if (key === "category") frontmatter.category = val;
-                    else if (key === "cover") frontmatter.cover = val;
-                    else if (key === "published") frontmatter.published = val !== "false";
-                    else if (key === "featured") frontmatter.featured = val === "true";
-                    else if (key === "tags") {
-                      // simple array parsing e.g. [Tag1, Tag2] or list strings
-                      try {
-                        if (val.startsWith("[") && val.endsWith("]")) {
-                          frontmatter.tags = val.slice(1, -1).split(",").map(s => s.trim().replace(/['"]/g, ""));
-                        } else {
-                          frontmatter.tags = val.split(",").map(s => s.trim());
-                        }
-                      } catch {
-                        frontmatter.tags = [val];
-                      }
-                    }
-                  }
-                });
-              }
-
-              return {
-                slug,
-                frontmatter,
-                content,
-                sha: fileData.sha,
-              };
-            })
-          );
-
-          const filteredPosts = parsedPosts.filter((p): p is PostItem => p !== null);
-          // Sort by date desc
-          filteredPosts.sort((a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime());
-          setPosts(filteredPosts);
-        }
-      }
-
-      setAlert({ type: "success", msg: "成功从 GitHub 仓库加载数据" });
-    } catch (e: unknown) {
-      setAlert({ type: "error", msg: `GitHub 数据加载失败: ${getErrorMessage(e)}` });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const saveOnlineFile = async (path: string, contentStr: string, shaKey: "profile" | "experience" | "projects" | "skills" | string, sha?: string): Promise<string | null> => {
-    setIsSaving(true);
-    try {
-      const currentSha = sha || shas[shaKey as keyof typeof shas] || undefined;
-      const newSha = await commitGithubFile(path, contentStr, currentSha);
-      
-      // Update SHA tracker
-      if (["profile", "experience", "projects", "skills", "home"].includes(shaKey)) {
-        setShas((prev) => ({ ...prev, [shaKey]: newSha }));
-      }
-      
-      setAlert({ type: "success", msg: `已提交更改至 GitHub 仓库: ${path}，GitHub Actions 正在自动构建部署！` });
-      return newSha;
-    } catch (e: unknown) {
-      setAlert({ type: "error", msg: `GitHub 提交失败: ${getErrorMessage(e)}` });
-      return null;
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const deleteOnlinePostFile = async (slug: string, sha?: string) => {
-    if (!sha) {
-      setAlert({ type: "error", msg: "无法删除文章，未找到对应的 SHA" });
-      return false;
-    }
-    setIsSaving(true);
-    try {
-      const url = `https://api.github.com/repos/${githubRepo}/contents/content/posts/${slug}.md`;
-      const res = await fetch(url, {
-        method: "DELETE",
-        headers: {
-          Authorization: `token ${githubPat}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: `admin: delete post content/posts/${slug}.md`,
-          sha,
-          branch: githubBranch,
-        }),
-      });
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.message || "Failed to delete post from GitHub");
-      
-      setAlert({ type: "success", msg: `文章已从 GitHub 仓库删除！` });
-      return true;
-    } catch (e: unknown) {
-      setAlert({ type: "error", msg: `删除失败: ${getErrorMessage(e)}` });
-      return false;
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const uploadOnlineImage = async (file: File): Promise<string | null> => {
-    setIsUploading(true);
-    try {
-      const safeFileName = getSafeImageFileName(file);
-      if (!safeFileName) {
-        throw new Error("仅支持 png、jpg、jpeg、webp、gif 图片");
-      }
-
-      const reader = new FileReader();
-      const base64Promise = new Promise<string>((resolve) => {
-        reader.onloadend = () => resolve(reader.result as string);
-        reader.readAsDataURL(file);
-      });
-      const fileData = await base64Promise;
-      const match = /^data:image\/(png|jpe?g|webp|gif);base64,([A-Za-z0-9+/=]+)$/i.exec(fileData);
-      if (!match) {
-        throw new Error("图片数据格式无效");
-      }
-      const base64Data = match[2];
-
-      const path = `public/images/uploads/${safeFileName}`;
-      
-      // Check if file already exists to get SHA (best-effort using our robust check)
-      const fileSha = await getFileSha(path);
-
-      await commitGithubFile(path, base64Data, fileSha, `admin: upload image ${safeFileName}`, true);
-
-      const publicPath = `/images/uploads/${safeFileName}`;
-      setAlert({ type: "success", msg: `图片已上传并保存至 GitHub 仓库: ${publicPath}` });
-      return publicPath;
-    } catch (e: unknown) {
-      setAlert({ type: "error", msg: `图片上传错误: ${getErrorMessage(e)}` });
-      return null;
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  // Fetch all data
   useEffect(() => {
+    if (!isLocal) return;
     const timer = window.setTimeout(() => {
-      if (isLocal) {
-        void loadLocalData();
-      } else if (isAuthorized && githubPat) {
-        void loadOnlineData();
-      }
+      void loadLocalData();
     }, 0);
-
     return () => window.clearTimeout(timer);
-    // loadLocalData/loadOnlineData are event-style loaders that intentionally read current state.
+    // loadLocalData is an event-style loader that intentionally reads current state.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLocal, isAuthorized, githubPat]);
-
-  // ==========================================
-  // Auth Form Handlers
-  // ==========================================
-
-  const handleSignIn = () => {
-    if (!githubPat.trim()) {
-      setAlert({ type: "error", msg: "请输入有效的 GitHub 访问令牌 (PAT)" });
-      return;
-    }
-    
-    if (typeof window !== "undefined") {
-      localStorage.setItem("klay_admin_pat", githubPat.trim());
-      localStorage.setItem("klay_admin_repo", githubRepo.trim());
-      localStorage.setItem("klay_admin_branch", githubBranch.trim());
-    }
-    
-    setIsAuthorized(true);
-    setAlert({ type: "info", msg: "正在验证令牌并加载仓库数据..." });
-  };
-
-  const handleSignOut = () => {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("klay_admin_pat");
-    }
-    setGithubPat("");
-    setIsAuthorized(false);
-    setAlert({ type: "info", msg: "已退出登录" });
-  };
-
-  // ==========================================
-  // Markdown Custom Parser (Simplified for Live Preview)
-  // ==========================================
-
-  const parseMarkdown = (md: string): string => {
-    if (!md) return "";
-    let html = md
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
-
-    // Headings
-    html = html.replace(/^### (.*$)/gim, '<h3 class="text-md font-bold mt-4 mb-2 text-notion-text">$1</h3>');
-    html = html.replace(/^## (.*$)/gim, '<h2 class="text-lg font-bold mt-6 mb-3 pb-1 border-b border-notion-line text-notion-text">$1</h2>');
-    html = html.replace(/^# (.*$)/gim, '<h1 class="text-xl font-bold mt-8 mb-4 text-notion-text">$1</h1>');
-
-    // Code blocks
-    html = html.replace(/```([\s\S]*?)```/gm, '<pre class="bg-gray-900 text-gray-100 p-3 rounded-lg my-3 font-mono text-sm overflow-x-auto"><code>$1</code></pre>');
-
-    // Inline code
-    html = html.replace(/`([^`]+)`/g, '<code class="bg-notion-hover text-red-600 px-1 py-0.5 rounded text-sm font-mono">$1</code>');
-
-    // Bold & Italic
-    html = html.replace(/\*\*([^*]+)\*\*/g, '<strong class="font-bold">$1</strong>');
-    html = html.replace(/\*([^*]+)\*/g, '<em class="italic">$1</em>');
-
-    // Blockquotes
-    html = html.replace(/^\> (.*$)/gim, '<blockquote class="border-l-4 border-notion-line pl-3 py-1 my-3 text-notion-muted italic">$1</blockquote>');
-
-    // Unordered lists
-    html = html.replace(/^\- (.*$)/gim, '<li class="ml-4 list-disc my-1">$1</li>');
-    html = html.replace(/^\* (.*$)/gim, '<li class="ml-4 list-disc my-1">$1</li>');
-
-    // Links & Images
-    html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="max-w-full h-auto rounded border border-notion-line my-3" />');
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" class="text-notion-accent font-semibold underline">$1</a>');
-
-    // Line breaks
-    html = html.replace(/\n/g, "<br />");
-
-    return html;
-  };
+  }, [isLocal]);
 
   // ==========================================
   // Form Save Actions
@@ -743,13 +204,7 @@ export default function AdminDashboard() {
 
   const handleProfileSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = profile;
-    if (isLocal) {
-      await saveLocalData("profile", payload);
-    } else {
-      const contentStr = JSON.stringify(payload, null, 2);
-      await saveOnlineFile("content/profile.json", contentStr, "profile");
-    }
+    await saveLocalData("profile", profile);
   };
 
   const handleExperienceSave = async (customExpList?: ExperienceItem[]) => {
@@ -761,13 +216,7 @@ export default function AdminDashboard() {
       description,
     }));
     setExperiences(cleaned);
-    const payload = { experience: cleaned };
-    if (isLocal) {
-      await saveLocalData("experience", payload);
-    } else {
-      const contentStr = JSON.stringify(payload, null, 2);
-      await saveOnlineFile("content/experience.json", contentStr, "experience");
-    }
+    await saveLocalData("experience", { experience: cleaned });
     setSelectedExpIndex(null);
   };
 
@@ -790,34 +239,16 @@ export default function AdminDashboard() {
       pinned: project.pinned,
     }));
     setProjects(cleaned);
-    const payload = { projects: cleaned };
-    if (isLocal) {
-      await saveLocalData("projects", payload);
-    } else {
-      const contentStr = JSON.stringify(payload, null, 2);
-      await saveOnlineFile("content/projects.json", contentStr, "projects");
-    }
+    await saveLocalData("projects", { projects: cleaned });
     setSelectedProjIndex(null);
   };
 
   const handleSkillsSave = async () => {
-    const payload = { skills };
-    if (isLocal) {
-      await saveLocalData("skills", payload);
-    } else {
-      const contentStr = JSON.stringify(payload, null, 2);
-      await saveOnlineFile("content/skills.json", contentStr, "skills");
-    }
+    await saveLocalData("skills", { skills });
   };
 
   const handleHomeSectionsSave = async () => {
-    const payload = { sections: homeSections };
-    if (isLocal) {
-      await saveLocalData("home-sections", payload);
-    } else {
-      const contentStr = JSON.stringify(payload, null, 2);
-      await saveOnlineFile("content/home-sections.json", contentStr, "home");
-    }
+    await saveLocalData("home-sections", { sections: homeSections });
   };
 
   const handleEditPost = (idx: number) => {
@@ -861,22 +292,6 @@ export default function AdminDashboard() {
       fm.title = post.slug;
     }
 
-    const frontmatterLines = [
-      "---",
-      `title: "${fm.title.replace(/"/g, '\\"')}"`,
-      `date: "${fm.date}"`,
-      fm.updated ? `updated: "${fm.updated}"` : null,
-      `description: "${fm.description.replace(/"/g, '\\"')}"`,
-      `tags: [${fm.tags.map((t) => `"${t.trim()}"`).join(", ")}]`,
-      fm.category ? `category: "${fm.category}"` : null,
-      fm.cover ? `cover: "${fm.cover}"` : null,
-      `published: ${fm.published}`,
-      `featured: ${fm.featured}`,
-      "---",
-    ].filter(Boolean);
-
-    const fullContent = `${frontmatterLines.join("\n")}\n${post.content || ""}`;
-
     const isRename = post.originalSlug && post.originalSlug !== targetSlug;
 
     const savedItem: PostItem = {
@@ -886,36 +301,15 @@ export default function AdminDashboard() {
       originalSlug: targetSlug,
     };
 
-    if (isLocal) {
-      if (isRename) {
-        await saveLocalData("delete-post", null, post.originalSlug);
-      }
-      const success = await saveLocalData("post", { frontmatter: fm, content: post.content }, targetSlug);
-      if (success) {
-        // 乐观 UI 更新
-        const updatedPosts = [...posts];
-        updatedPosts[selectedPostIndex!] = savedItem;
-        setPosts(updatedPosts);
-        setSelectedPostIndex(null);
-      }
-    } else {
-      if (isRename) {
-        try {
-          await deleteOnlinePostFile(post.originalSlug!, post.sha);
-        } catch {}
-      }
-      const newSha = await saveOnlineFile(`content/posts/${targetSlug}.md`, fullContent, targetSlug, isRename ? undefined : post.sha);
-      if (newSha) {
-        const savedItemOnline: PostItem = {
-          ...savedItem,
-          sha: newSha,
-        };
-        // 乐观 UI 更新
-        const updatedPosts = [...posts];
-        updatedPosts[selectedPostIndex!] = savedItemOnline;
-        setPosts(updatedPosts);
-        setSelectedPostIndex(null);
-      }
+    if (isRename) {
+      await saveLocalData("delete-post", null, post.originalSlug);
+    }
+    const success = await saveLocalData("post", { frontmatter: fm, content: post.content }, targetSlug);
+    if (success) {
+      const updatedPosts = [...posts];
+      updatedPosts[selectedPostIndex!] = savedItem;
+      setPosts(updatedPosts);
+      setSelectedPostIndex(null);
     }
   };
 
@@ -950,16 +344,9 @@ export default function AdminDashboard() {
       setSelectedPostIndex(null);
     };
     
-    if (isLocal) {
-      const success = await saveLocalData("delete-post", null, targetSlug);
-      if (success) {
-        removeDeletedPost();
-      }
-    } else {
-      const success = await deleteOnlinePostFile(targetSlug, post.sha);
-      if (success) {
-        removeDeletedPost();
-      }
+    const success = await saveLocalData("delete-post", null, targetSlug);
+    if (success) {
+      removeDeletedPost();
     }
   };
 
@@ -987,12 +374,7 @@ export default function AdminDashboard() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    let uploadedUrl: string | null = null;
-    if (isLocal) {
-      uploadedUrl = await uploadLocalImage(file);
-    } else {
-      uploadedUrl = await uploadOnlineImage(file);
-    }
+    const uploadedUrl = await uploadLocalImage(file);
 
     if (uploadedUrl) {
       onUrlResult(uploadedUrl);
@@ -1339,13 +721,7 @@ export default function AdminDashboard() {
           setPendingConfirm(null);
           const updated = experiences.filter((_, i) => i !== index);
           setExperiences(updated);
-          const payload = { experience: updated };
-          if (isLocal) {
-            saveLocalData("experience", payload);
-          } else {
-            const contentStr = JSON.stringify(payload, null, 2);
-            saveOnlineFile("content/experience.json", contentStr, "experience");
-          }
+          void saveLocalData("experience", { experience: updated });
         },
       });
     };
@@ -1368,13 +744,7 @@ export default function AdminDashboard() {
       setExperiences(updated);
       
       // Save order
-      const payload = { experience: updated };
-      if (isLocal) {
-        saveLocalData("experience", payload);
-      } else {
-        const contentStr = JSON.stringify(payload, null, 2);
-        saveOnlineFile("content/experience.json", contentStr, "experience");
-      }
+      void saveLocalData("experience", { experience: updated });
     };
 
     return (
@@ -1579,6 +949,8 @@ export default function AdminDashboard() {
                     <option value="planning">规划中 (Planning)</option>
                     <option value="building">进行中 (Building)</option>
                     <option value="launched">已上线 (Launched)</option>
+                    <option value="paused">已暂停 (Paused)</option>
+                    <option value="archived">已归档 (Archived)</option>
                   </select>
                 </div>
                 <div>
@@ -1733,13 +1105,7 @@ export default function AdminDashboard() {
           setPendingConfirm(null);
           const updated = projects.filter((_, i) => i !== index);
           setProjects(updated);
-          const payload = { projects: updated };
-          if (isLocal) {
-            saveLocalData("projects", payload);
-          } else {
-            const contentStr = JSON.stringify(payload, null, 2);
-            saveOnlineFile("content/projects.json", contentStr, "projects");
-          }
+          void saveLocalData("projects", { projects: updated });
         },
       });
     };
@@ -1753,7 +1119,10 @@ export default function AdminDashboard() {
         stack: [],
         category: "Web Application",
         cover: "/images/projects/default-cover.jpg",
+        github: "",
+        demo: "",
         date: new Date().toISOString().split("T")[0],
+        updated: new Date().toISOString().split("T")[0],
         status: "building",
         featured: true,
         pinned: false,
@@ -1775,13 +1144,7 @@ export default function AdminDashboard() {
       setProjects(updated);
       
       // Save order
-      const payload = { projects: updated };
-      if (isLocal) {
-        saveLocalData("projects", payload);
-      } else {
-        const contentStr = JSON.stringify(payload, null, 2);
-        saveOnlineFile("content/projects.json", contentStr, "projects");
-      }
+      void saveLocalData("projects", { projects: updated });
     };
 
     return (
@@ -1810,9 +1173,17 @@ export default function AdminDashboard() {
                   <span className={`px-2 py-0.5 text-xs font-semibold rounded-md uppercase font-mono ${
                     proj.status === "launched" ? "bg-green-100 text-green-800" :
                     proj.status === "building" ? "bg-orange-100 text-orange-800" :
+                    proj.status === "paused" ? "bg-yellow-100 text-yellow-800" :
+                    proj.status === "archived" ? "bg-gray-100 text-gray-700" :
                     "bg-blue-100 text-blue-800"
                   }`}>
-                    {proj.status === "launched" ? "已上线" : proj.status === "building" ? "进行中" : "规划中"}
+                    {
+                      proj.status === "launched" ? "已上线" :
+                      proj.status === "building" ? "进行中" :
+                      proj.status === "paused" ? "已暂停" :
+                      proj.status === "archived" ? "已归档" :
+                      "规划中"
+                    }
                   </span>
                 </div>
 
@@ -2290,12 +1661,7 @@ export default function AdminDashboard() {
 
             e.preventDefault(); // Stop default text paste
             
-            let uploadedUrl: string | null = null;
-            if (isLocal) {
-              uploadedUrl = await uploadLocalImage(file);
-            } else {
-              uploadedUrl = await uploadOnlineImage(file);
-            }
+            const uploadedUrl = await uploadLocalImage(file);
 
             if (uploadedUrl) {
               insertImageAtCursor(uploadedUrl);
@@ -2313,12 +1679,7 @@ export default function AdminDashboard() {
           if (files[i].type.indexOf("image") !== -1) {
             e.preventDefault();
             
-            let uploadedUrl: string | null = null;
-            if (isLocal) {
-              uploadedUrl = await uploadLocalImage(files[i]);
-            } else {
-              uploadedUrl = await uploadOnlineImage(files[i]);
-            }
+            const uploadedUrl = await uploadLocalImage(files[i]);
 
             if (uploadedUrl) {
               insertImageAtCursor(uploadedUrl);
@@ -2557,11 +1918,9 @@ export default function AdminDashboard() {
                     // eslint-disable-next-line @next/next/no-img-element -- Admin previews support arbitrary user-entered image URLs.
                     <img src={post.frontmatter.cover} alt="Cover Preview" className="w-full h-44 object-cover rounded-lg my-3" style={{ border: "1px solid var(--tahoe-card-border)" }} />
                   )}
-                  <div
-                    className="mt-4 prose prose-sm max-w-none leading-relaxed"
-                    style={{ color: "var(--tahoe-muted)" }}
-                    dangerouslySetInnerHTML={{ __html: parseMarkdown(post?.content || "") }}
-                  />
+                  <div className="mt-4 prose prose-sm max-w-none leading-relaxed" style={{ color: "var(--tahoe-muted)" }}>
+                    <MarkdownPreview markdown={post?.content || ""} />
+                  </div>
                 </div>
               </div>
             </div>
@@ -2629,13 +1988,7 @@ export default function AdminDashboard() {
           </h3>
           <div className="flex items-center gap-3">
             <button
-              onClick={() => {
-                if (isLocal) {
-                  loadLocalData();
-                } else {
-                  loadOnlineData();
-                }
-              }}
+              onClick={() => void loadLocalData()}
               className="px-4 py-2 text-sm font-semibold rounded-lg transition flex items-center gap-1.5"
               style={{ color: "var(--tahoe-muted)", background: "var(--tahoe-card)", border: "1px solid var(--tahoe-card-border)" }}
             >
@@ -2723,94 +2076,11 @@ export default function AdminDashboard() {
   };
 
   // ==========================================
-  // Auth Screen Render
-  // ==========================================
-
-  const renderAuthScreen = () => {
-    return (
-      <div data-tahoe-preview className="tahoe-shell min-h-screen flex flex-col justify-center items-center p-5">
-        <div className="tahoe-bg-fixed" aria-hidden />
-        <div className="relative z-10 w-full max-w-md tahoe-system-card !p-8 space-y-6">
-          <div className="text-center space-y-2">
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mx-auto" style={{ background: "var(--tahoe-accent-soft)", color: "var(--tahoe-accent)" }}>
-              🔒
-            </div>
-            <h2 className="text-2xl font-bold" style={{ color: "var(--tahoe-text)" }}>Studio 内容管理器</h2>
-            <p className="text-xs" style={{ color: "var(--tahoe-muted)" }}>
-              您当前正通过 GitHub Pages 访问线上后台。<br />
-              请输入您的 GitHub 访问令牌以建立安全连接。
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold mb-1" style={{ color: "var(--tahoe-muted)" }}>
-                GitHub 个人访问令牌 (PAT)
-              </label>
-              <input
-                type="password"
-                value={githubPat}
-                onChange={(e) => setGithubPat(e.target.value)}
-                placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxx"
-                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm"
-                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
-              />
-              <p className="text-[10px] mt-1 leading-normal" style={{ color: "var(--tahoe-faint)" }}>
-                需要目标仓库 Contents 写入权限；如需修改 workflow，还需要 Workflows 写入权限。令牌会保存在浏览器 localStorage，请只在可信设备使用。
-              </p>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold mb-1" style={{ color: "var(--tahoe-muted)" }}>
-                目标 GitHub 仓库 (用户名/仓库名)
-              </label>
-              <input
-                type="text"
-                value={githubRepo}
-                onChange={(e) => setGithubRepo(e.target.value)}
-                placeholder="klaybloom/klaybloom.github.io"
-                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm font-mono"
-                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold mb-1" style={{ color: "var(--tahoe-muted)" }}>
-                发布分支 (Branch)
-              </label>
-              <input
-                type="text"
-                value={githubBranch}
-                onChange={(e) => setGithubBranch(e.target.value)}
-                placeholder="main"
-                className="w-full px-3 py-2 rounded-lg focus:outline-none text-sm font-mono"
-                style={{ background: "var(--tahoe-reader)", border: "1px solid var(--tahoe-card-border)", color: "var(--tahoe-text)" }}
-              />
-            </div>
-
-            <button
-              onClick={handleSignIn}
-              className="tahoe-button tahoe-button-primary w-full py-2.5 font-bold text-sm"
-            >
-              🔐 授权登录后台
-            </button>
-          </div>
-
-          <div className="text-center text-[10px]" style={{ color: "var(--tahoe-faint)" }}>
-            如果您在本地运行项目，请访问 <a href="http://localhost:3000/admin/" className="underline" style={{ color: "var(--tahoe-accent)" }}>localhost:3000/admin/</a> 免密自动连接本地磁盘。
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  // ==========================================
   // Layout Render
   // ==========================================
 
-  // Render Auth screen if online & not authorized
-  if (!isLocal && !isAuthorized) {
-    return renderAuthScreen();
+  if (!isLocal) {
+    return <ProductionAdminNotice />;
   }
 
   return (
@@ -3023,18 +2293,9 @@ export default function AdminDashboard() {
               </div>
               <div className="flex items-center justify-between pt-2" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
                 <div className="flex items-center gap-1.5 text-[11px] font-semibold" style={{ color: "var(--tahoe-text)" }}>
-                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isLocal ? "bg-blue-500" : "bg-green-500"}`} />
-                  <span>{isLocal ? "本地模式" : "线上模式"}</span>
+                  <span className="w-1.5 h-1.5 rounded-full shrink-0 bg-blue-500" />
+                  <span>本地模式</span>
                 </div>
-                {!isLocal && (
-                  <button 
-                    onClick={handleSignOut} 
-                    className="text-[11px] text-red-500 hover:text-red-600 font-semibold flex items-center gap-0.5 hover:underline transition"
-                  >
-                    <span>🚪</span>
-                    <span>退出</span>
-                  </button>
-                )}
               </div>
             </div>
           ) : (
@@ -3045,19 +2306,7 @@ export default function AdminDashboard() {
               <div style={{ transform: "scale(0.9)", transformOrigin: "center" }}>
                 <TahoeModeToggle iconOnly />
               </div>
-              <span
-                className={`w-1.5 h-1.5 rounded-full shrink-0 ${isLocal ? "bg-blue-500" : "bg-green-500"}`}
-                title={isLocal ? "本地" : "线上"}
-              />
-              {!isLocal && (
-                <button 
-                  onClick={handleSignOut} 
-                  className="text-xs text-red-500 hover:text-red-600 font-semibold transition" 
-                  title="退出登录"
-                >
-                  🚪
-                </button>
-              )}
+              <span className="w-1.5 h-1.5 rounded-full shrink-0 bg-blue-500" title="本地" />
             </div>
           )}
         </div>
