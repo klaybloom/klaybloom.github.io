@@ -20,6 +20,8 @@ import {
 const DEFAULT_ALLOWED_ORIGINS = [
   "http://localhost:3000",
   "http://127.0.0.1:3000",
+  "http://localhost:4100",
+  "http://127.0.0.1:4100",
 ];
 const DEFAULT_MAX_SAVE_BYTES = 1024 * 1024;
 const DEFAULT_MAX_UPLOAD_BYTES = 12 * 1024 * 1024;

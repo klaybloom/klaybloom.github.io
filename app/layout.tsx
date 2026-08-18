@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { siteConfig } from "@/content/site";
 import { Interactions } from "@/components/Interactions";
+import { PearlMascot } from "@/components/home/PearlMascot";
+import { XiangXiangProgress } from "@/components/home/XiangXiangProgress";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -42,7 +44,7 @@ export const metadata: Metadata = {
 
 // Runs before hydration to set theme attributes from localStorage (or OS preference),
 // preventing light/dark flashes before the client theme toggles mount.
-const themeInitScript = `(function(){try{var r=document.documentElement;var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'){r.dataset.theme=t;}var m=localStorage.getItem('tahoe-mode');if(m!=='dark'&&m!=='light'){m=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}r.dataset.tahoeMode=m;}catch(e){}})();`;
+const themeInitScript = `(function(){try{var r=document.documentElement;var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'){r.dataset.theme=t;}var m=localStorage.getItem('tahoe-mode');if(m!=='dark'&&m!=='light'){m=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}r.dataset.tahoeMode=m;var p=localStorage.getItem('tahoe-palette');if(p==='1'||p==='2'||p==='3'||p==='4'){r.dataset.tahoePalette=p;}}catch(e){}})();`;
 
 export default function RootLayout({
   children
@@ -60,6 +62,8 @@ export default function RootLayout({
       </head>
       <body>
         <Interactions />
+        <XiangXiangProgress />
+        <PearlMascot />
         {children}
       </body>
     </html>
