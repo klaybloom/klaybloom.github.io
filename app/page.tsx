@@ -6,6 +6,7 @@ import { Projects } from "@/components/home/Projects";
 import { Posts } from "@/components/home/Posts";
 import { Experience } from "@/components/home/Experience";
 import { CustomSection } from "@/components/home/CustomSection";
+import { PalettePreviewControls } from "@/components/home/PalettePreviewControls";
 
 import { experience } from "@/content/experience";
 import { highlights } from "@/content/highlights";
@@ -36,7 +37,10 @@ export default async function Home() {
   const nextNumber = () => String(++n).padStart(2, "0");
 
   return (
-    <main data-tahoe-preview className="tahoe-shell min-h-screen overflow-x-hidden">
+    <main
+      data-tahoe-preview
+      className="tahoe-shell min-h-screen overflow-x-hidden"
+    >
       <div className="tahoe-bg-fixed" aria-hidden />
       <Header name={siteConfig.name} nav={siteConfig.nav} />
       <TahoeSectionRail sections={sections} />
@@ -50,6 +54,7 @@ export default async function Home() {
       </div>
 
       <Footer nav={siteConfig.nav} />
+      <PalettePreviewControls />
     </main>
   );
 }

@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hide Next.js dev badge */
+#__next-build-indicator,
+.nextjs-dev-badge {
+  display: none !important;
+}
+
 /* Light (default, Notion warm-cream) */
 :root {
   --color-bg: 247 245 240;          /* #f7f5f0 */
@@ -197,6 +203,13 @@ html[data-tahoe-mode="dark"] [data-tahoe-preview],
   --tahoe-accent: #7ab7ff;
   --tahoe-accent-soft: rgba(122, 183, 255, 0.16);
   --tahoe-shadow: rgba(0, 0, 0, 0.42);
+  --tahoe-button-surface: #1d2732;
+  --tahoe-button-surface-hover: #263644;
+  --tahoe-button-border: rgba(122, 183, 255, 0.22);
+  --tahoe-button-primary: #3f6f8d;
+  --tahoe-button-primary-hover: #568aaa;
+  --tahoe-button-active: #294c63;
+  --tahoe-button-shadow: rgba(0, 0, 0, 0.28);
 }
 
 html[data-tahoe-mode="dark"] [data-tahoe-preview].tahoe-shell::before,
@@ -225,6 +238,521 @@ html[data-tahoe-mode="light"] [data-tahoe-preview],
   --tahoe-accent: #007aff;
   --tahoe-accent-soft: rgba(0, 122, 255, 0.12);
   --tahoe-shadow: rgba(44, 62, 100, 0.18);
+}
+
+/* Personal-IP palette previews. These variables are only active with ?palette=1..4. */
+html[data-tahoe-mode] [data-tahoe-preview][data-palette="1"] {
+  --tahoe-bg: #f6f1e8;
+  --tahoe-text: #20252b;
+  --tahoe-muted: #5f6770;
+  --tahoe-faint: #7d858b;
+  --tahoe-glass: rgba(255, 253, 248, 0.64);
+  --tahoe-glass-strong: rgba(255, 253, 248, 0.84);
+  --tahoe-border: rgba(255, 253, 248, 0.72);
+  --tahoe-highlight: rgba(255, 255, 255, 0.94);
+  --tahoe-card: rgba(255, 253, 248, 0.88);
+  --tahoe-card-border: rgba(84, 64, 45, 0.12);
+  --tahoe-reader: rgba(255, 253, 248, 0.94);
+  --tahoe-accent: #6faed9;
+  --tahoe-accent-strong: #3e759d;
+  --tahoe-accent-soft: rgba(111, 174, 217, 0.18);
+  --tahoe-button-text: #ffffff;
+  --tahoe-shadow: rgba(82, 64, 48, 0.18);
+}
+
+html[data-tahoe-mode] [data-tahoe-preview][data-palette="2"] {
+  --tahoe-bg: #f4f1e9;
+  --tahoe-text: #27312b;
+  --tahoe-muted: #5e6a60;
+  --tahoe-faint: #7f8b80;
+  --tahoe-glass: rgba(252, 250, 244, 0.62);
+  --tahoe-glass-strong: rgba(252, 250, 244, 0.84);
+  --tahoe-border: rgba(255, 255, 255, 0.74);
+  --tahoe-highlight: rgba(255, 255, 255, 0.95);
+  --tahoe-card: rgba(252, 250, 244, 0.88);
+  --tahoe-card-border: rgba(53, 85, 65, 0.12);
+  --tahoe-reader: rgba(252, 250, 244, 0.94);
+  --tahoe-accent: #547a61;
+  --tahoe-accent-strong: #355541;
+  --tahoe-accent-soft: rgba(84, 122, 97, 0.18);
+  --tahoe-button-text: #ffffff;
+  --tahoe-shadow: rgba(53, 67, 52, 0.18);
+}
+
+html[data-tahoe-mode] [data-tahoe-preview][data-palette="3"] {
+  --tahoe-bg: #eff6fa;
+  --tahoe-text: #1d2a35;
+  --tahoe-muted: #556a7a;
+  --tahoe-faint: #718593;
+  --tahoe-glass: rgba(255, 255, 255, 0.62);
+  --tahoe-glass-strong: rgba(255, 255, 255, 0.84);
+  --tahoe-border: rgba(255, 255, 255, 0.74);
+  --tahoe-highlight: rgba(255, 255, 255, 0.96);
+  --tahoe-card: rgba(255, 255, 255, 0.88);
+  --tahoe-card-border: rgba(40, 101, 141, 0.12);
+  --tahoe-reader: rgba(255, 255, 255, 0.95);
+  --tahoe-accent: #5a9ac7;
+  --tahoe-accent-strong: #28658d;
+  --tahoe-accent-soft: rgba(90, 154, 199, 0.18);
+  --tahoe-button-text: #ffffff;
+  --tahoe-shadow: rgba(46, 96, 124, 0.16);
+}
+
+html[data-tahoe-mode] [data-tahoe-preview][data-palette="4"] {
+  --tahoe-bg: #101820;
+  --tahoe-text: #f3f0e8;
+  --tahoe-muted: #c0c4c6;
+  --tahoe-faint: #8e9ba3;
+  --tahoe-glass: rgba(25, 37, 49, 0.62);
+  --tahoe-glass-strong: rgba(31, 49, 63, 0.84);
+  --tahoe-border: rgba(140, 199, 232, 0.22);
+  --tahoe-highlight: rgba(255, 255, 255, 0.14);
+  --tahoe-card: rgba(25, 37, 49, 0.88);
+  --tahoe-card-border: rgba(140, 199, 232, 0.14);
+  --tahoe-reader: rgba(18, 29, 38, 0.94);
+  --tahoe-accent: #8cc7e8;
+  --tahoe-accent-strong: #4e91b7;
+  --tahoe-accent-soft: rgba(140, 199, 232, 0.16);
+  --tahoe-button-text: #10202b;
+  --tahoe-shadow: rgba(0, 0, 0, 0.42);
+}
+
+[data-tahoe-preview][data-palette="1"].tahoe-shell::before {
+  background-image:
+    radial-gradient(circle at 12% 12%, rgba(111, 174, 217, 0.22), transparent 32%),
+    radial-gradient(circle at 86% 14%, rgba(231, 163, 62, 0.16), transparent 30%),
+    radial-gradient(circle at 50% 92%, rgba(226, 202, 169, 0.2), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.6), transparent 45%);
+}
+
+[data-tahoe-preview][data-palette="2"].tahoe-shell::before {
+  background-image:
+    radial-gradient(circle at 12% 12%, rgba(84, 122, 97, 0.2), transparent 32%),
+    radial-gradient(circle at 86% 14%, rgba(217, 155, 69, 0.14), transparent 30%),
+    radial-gradient(circle at 50% 92%, rgba(167, 190, 160, 0.2), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.58), transparent 45%);
+}
+
+[data-tahoe-preview][data-palette="3"].tahoe-shell::before {
+  background-image:
+    radial-gradient(circle at 12% 12%, rgba(90, 154, 199, 0.22), transparent 32%),
+    radial-gradient(circle at 86% 14%, rgba(231, 162, 59, 0.18), transparent 30%),
+    radial-gradient(circle at 50% 92%, rgba(183, 222, 235, 0.22), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.62), transparent 45%);
+}
+
+[data-tahoe-preview][data-palette="4"].tahoe-shell::before {
+  background-image:
+    radial-gradient(circle at 14% 18%, rgba(78, 145, 183, 0.2), transparent 32%),
+    radial-gradient(circle at 84% 12%, rgba(181, 139, 104, 0.14), transparent 30%),
+    radial-gradient(circle at 48% 92%, rgba(48, 101, 125, 0.16), transparent 34%);
+}
+
+[data-tahoe-preview][data-palette="4"] .tahoe-bg-fixed {
+  background:
+    linear-gradient(180deg, rgba(140, 199, 232, 0.08), transparent 28%),
+    radial-gradient(circle at 68% 42%, rgba(181, 139, 104, 0.1), transparent 28%);
+}
+
+[data-tahoe-preview][data-palette] .tahoe-button-primary {
+  background: linear-gradient(180deg, var(--tahoe-accent), var(--tahoe-accent-strong));
+  color: var(--tahoe-button-text);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    0 14px 28px -14px var(--tahoe-accent-soft);
+}
+
+body:has(main[data-palette="1"]) .xiangxiang-progress {
+  --tahoe-border: rgba(255, 253, 248, 0.72);
+  --tahoe-glass: rgba(255, 253, 248, 0.64);
+  --tahoe-highlight: rgba(255, 255, 255, 0.94);
+  --tahoe-accent: #6faed9;
+  --tahoe-accent-soft: rgba(111, 174, 217, 0.18);
+  --tahoe-shadow: rgba(82, 64, 48, 0.18);
+}
+
+body:has(main[data-palette="2"]) .xiangxiang-progress {
+  --tahoe-border: rgba(255, 255, 255, 0.74);
+  --tahoe-glass: rgba(252, 250, 244, 0.62);
+  --tahoe-highlight: rgba(255, 255, 255, 0.95);
+  --tahoe-accent: #547a61;
+  --tahoe-accent-soft: rgba(84, 122, 97, 0.18);
+  --tahoe-shadow: rgba(53, 67, 52, 0.18);
+}
+
+body:has(main[data-palette="3"]) .xiangxiang-progress {
+  --tahoe-border: rgba(255, 255, 255, 0.74);
+  --tahoe-glass: rgba(255, 255, 255, 0.62);
+  --tahoe-highlight: rgba(255, 255, 255, 0.96);
+  --tahoe-accent: #5a9ac7;
+  --tahoe-accent-soft: rgba(90, 154, 199, 0.18);
+  --tahoe-shadow: rgba(46, 96, 124, 0.16);
+}
+
+body:has(main[data-palette="4"]) .xiangxiang-progress {
+  --tahoe-border: rgba(140, 199, 232, 0.22);
+  --tahoe-glass: rgba(25, 37, 49, 0.62);
+  --tahoe-highlight: rgba(255, 255, 255, 0.14);
+  --tahoe-accent: #8cc7e8;
+  --tahoe-accent-soft: rgba(140, 199, 232, 0.16);
+  --tahoe-shadow: rgba(0, 0, 0, 0.42);
+}
+
+body:has(main[data-palette="1"]) .xiangxiang-progress-fill { background: #6faed9; }
+body:has(main[data-palette="2"]) .xiangxiang-progress-fill { background: #547a61; }
+body:has(main[data-palette="3"]) .xiangxiang-progress-fill { background: #5a9ac7; }
+body:has(main[data-palette="4"]) .xiangxiang-progress-fill { background: #8cc7e8; }
+
+.palette-preview-controls {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  z-index: 80;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100% - 24px);
+  padding: 8px;
+  overflow-x: auto;
+  border: 1px solid var(--tahoe-border);
+  border-radius: 999px;
+  background: var(--tahoe-glass-strong);
+  box-shadow:
+    inset 0 1px 0 var(--tahoe-highlight),
+    0 18px 42px -24px var(--tahoe-shadow);
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  transform: translateX(-50%);
+}
+
+[data-palette-preview-controls][data-visible="true"] {
+  display: flex;
+}
+
+.palette-preview-label,
+.palette-preview-option,
+.palette-preview-exit {
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.palette-preview-label {
+  padding: 0 6px 0 4px;
+  color: var(--tahoe-muted);
+  font-weight: 700;
+}
+
+.palette-preview-option,
+.palette-preview-exit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 0 9px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--tahoe-muted);
+  transition:
+    background-color 180ms var(--tahoe-ease),
+    color 180ms var(--tahoe-ease),
+    border-color 180ms var(--tahoe-ease);
+}
+
+.palette-preview-option:hover,
+.palette-preview-option.is-active,
+.palette-preview-exit:hover {
+  border-color: var(--tahoe-border);
+  background: var(--tahoe-glass);
+  color: var(--tahoe-text);
+}
+
+.palette-preview-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.palette-preview-swatch-1 { background: #6faed9; }
+.palette-preview-swatch-2 { background: #547a61; }
+.palette-preview-swatch-3 { background: #5a9ac7; }
+.palette-preview-swatch-4 { background: #8cc7e8; }
+
+.palette-preview-exit {
+  margin-left: 2px;
+  border-left-color: var(--tahoe-border);
+  border-radius: 0 999px 999px 0;
+}
+
+@media (max-width: 640px) {
+  .palette-preview-controls {
+    bottom: 10px;
+    gap: 2px;
+    padding: 6px;
+  }
+
+  .palette-preview-label {
+    display: none;
+  }
+}
+
+/* Persistent personal-IP palettes selected from the theme menu. */
+html[data-tahoe-palette="1"][data-tahoe-mode="light"] {
+  --personal-tahoe-bg: #f6f1e8;
+  --personal-tahoe-text: #20252b;
+  --personal-tahoe-muted: #5f6770;
+  --personal-tahoe-faint: #7d858b;
+  --personal-tahoe-glass: rgba(255, 253, 248, 0.64);
+  --personal-tahoe-glass-strong: rgba(255, 253, 248, 0.84);
+  --personal-tahoe-border: rgba(255, 253, 248, 0.72);
+  --personal-tahoe-highlight: rgba(255, 255, 255, 0.94);
+  --personal-tahoe-card: rgba(255, 253, 248, 0.88);
+  --personal-tahoe-card-border: rgba(84, 64, 45, 0.12);
+  --personal-tahoe-reader: rgba(255, 253, 248, 0.94);
+  --personal-tahoe-accent: #6faed9;
+  --personal-tahoe-accent-strong: #3e759d;
+  --personal-tahoe-accent-soft: rgba(111, 174, 217, 0.18);
+  --personal-tahoe-button-text: #ffffff;
+  --personal-tahoe-shadow: rgba(82, 64, 48, 0.18);
+}
+
+html[data-tahoe-palette="1"][data-tahoe-mode="dark"] {
+  --personal-tahoe-bg: #1b242c;
+  --personal-tahoe-text: #f6f1e8;
+  --personal-tahoe-muted: #c7d0d6;
+  --personal-tahoe-faint: #9caab2;
+  --personal-tahoe-glass: rgba(29, 40, 49, 0.62);
+  --personal-tahoe-glass-strong: rgba(38, 53, 63, 0.84);
+  --personal-tahoe-border: rgba(175, 214, 235, 0.22);
+  --personal-tahoe-highlight: rgba(255, 255, 255, 0.14);
+  --personal-tahoe-card: rgba(31, 43, 52, 0.88);
+  --personal-tahoe-card-border: rgba(140, 199, 232, 0.14);
+  --personal-tahoe-reader: rgba(24, 34, 42, 0.94);
+  --personal-tahoe-accent: #8dc9ed;
+  --personal-tahoe-accent-strong: #5d98bd;
+  --personal-tahoe-accent-soft: rgba(141, 201, 237, 0.16);
+  --personal-tahoe-button-text: #11212c;
+  --personal-tahoe-shadow: rgba(0, 0, 0, 0.42);
+  --personal-tahoe-button-surface: #21313b;
+  --personal-tahoe-button-surface-hover: #2a3e4a;
+  --personal-tahoe-button-border: rgba(141, 201, 237, 0.24);
+  --personal-tahoe-button-primary: #477b9a;
+  --personal-tahoe-button-primary-hover: #5d98bd;
+  --personal-tahoe-button-active: #2f5a73;
+  --personal-tahoe-button-shadow: rgba(0, 0, 0, 0.28);
+}
+
+html[data-tahoe-palette="2"][data-tahoe-mode="light"] {
+  --personal-tahoe-bg: #f4f1e9;
+  --personal-tahoe-text: #27312b;
+  --personal-tahoe-muted: #5e6a60;
+  --personal-tahoe-faint: #7f8b80;
+  --personal-tahoe-glass: rgba(252, 250, 244, 0.62);
+  --personal-tahoe-glass-strong: rgba(252, 250, 244, 0.84);
+  --personal-tahoe-border: rgba(255, 255, 255, 0.74);
+  --personal-tahoe-highlight: rgba(255, 255, 255, 0.95);
+  --personal-tahoe-card: rgba(252, 250, 244, 0.88);
+  --personal-tahoe-card-border: rgba(53, 85, 65, 0.12);
+  --personal-tahoe-reader: rgba(252, 250, 244, 0.94);
+  --personal-tahoe-accent: #547a61;
+  --personal-tahoe-accent-strong: #355541;
+  --personal-tahoe-accent-soft: rgba(84, 122, 97, 0.18);
+  --personal-tahoe-button-text: #ffffff;
+  --personal-tahoe-shadow: rgba(53, 67, 52, 0.18);
+}
+
+html[data-tahoe-palette="2"][data-tahoe-mode="dark"] {
+  --personal-tahoe-bg: #14201a;
+  --personal-tahoe-text: #f4f1e9;
+  --personal-tahoe-muted: #c1ccc3;
+  --personal-tahoe-faint: #94a39a;
+  --personal-tahoe-glass: rgba(27, 43, 34, 0.62);
+  --personal-tahoe-glass-strong: rgba(37, 58, 44, 0.84);
+  --personal-tahoe-border: rgba(163, 202, 173, 0.22);
+  --personal-tahoe-highlight: rgba(255, 255, 255, 0.14);
+  --personal-tahoe-card: rgba(28, 45, 35, 0.88);
+  --personal-tahoe-card-border: rgba(131, 178, 149, 0.14);
+  --personal-tahoe-reader: rgba(20, 33, 26, 0.94);
+  --personal-tahoe-accent: #83b295;
+  --personal-tahoe-accent-strong: #547a61;
+  --personal-tahoe-accent-soft: rgba(131, 178, 149, 0.16);
+  --personal-tahoe-button-text: #112019;
+  --personal-tahoe-shadow: rgba(0, 0, 0, 0.42);
+  --personal-tahoe-button-surface: #1d3527;
+  --personal-tahoe-button-surface-hover: #264934;
+  --personal-tahoe-button-border: rgba(131, 178, 149, 0.24);
+  --personal-tahoe-button-primary: #547a61;
+  --personal-tahoe-button-primary-hover: #669476;
+  --personal-tahoe-button-active: #2e533e;
+  --personal-tahoe-button-shadow: rgba(0, 0, 0, 0.28);
+}
+
+html[data-tahoe-palette="3"][data-tahoe-mode="light"] {
+  --personal-tahoe-bg: #eff6fa;
+  --personal-tahoe-text: #1d2a35;
+  --personal-tahoe-muted: #556a7a;
+  --personal-tahoe-faint: #718593;
+  --personal-tahoe-glass: rgba(255, 255, 255, 0.62);
+  --personal-tahoe-glass-strong: rgba(255, 255, 255, 0.84);
+  --personal-tahoe-border: rgba(255, 255, 255, 0.74);
+  --personal-tahoe-highlight: rgba(255, 255, 255, 0.96);
+  --personal-tahoe-card: rgba(255, 255, 255, 0.88);
+  --personal-tahoe-card-border: rgba(40, 101, 141, 0.12);
+  --personal-tahoe-reader: rgba(255, 255, 255, 0.95);
+  --personal-tahoe-accent: #5a9ac7;
+  --personal-tahoe-accent-strong: #28658d;
+  --personal-tahoe-accent-soft: rgba(90, 154, 199, 0.18);
+  --personal-tahoe-button-text: #ffffff;
+  --personal-tahoe-shadow: rgba(46, 96, 124, 0.16);
+}
+
+html[data-tahoe-palette="3"][data-tahoe-mode="dark"] {
+  --personal-tahoe-bg: #13212c;
+  --personal-tahoe-text: #eff6fa;
+  --personal-tahoe-muted: #c3d2dc;
+  --personal-tahoe-faint: #91a9b8;
+  --personal-tahoe-glass: rgba(22, 39, 51, 0.62);
+  --personal-tahoe-glass-strong: rgba(31, 55, 70, 0.84);
+  --personal-tahoe-border: rgba(151, 210, 237, 0.22);
+  --personal-tahoe-highlight: rgba(255, 255, 255, 0.14);
+  --personal-tahoe-card: rgba(24, 43, 56, 0.88);
+  --personal-tahoe-card-border: rgba(137, 196, 224, 0.14);
+  --personal-tahoe-reader: rgba(17, 31, 42, 0.94);
+  --personal-tahoe-accent: #89c8ec;
+  --personal-tahoe-accent-strong: #4b8eb5;
+  --personal-tahoe-accent-soft: rgba(137, 200, 236, 0.16);
+  --personal-tahoe-button-text: #10212b;
+  --personal-tahoe-shadow: rgba(0, 0, 0, 0.42);
+  --personal-tahoe-button-surface: #1d3541;
+  --personal-tahoe-button-surface-hover: #25495b;
+  --personal-tahoe-button-border: rgba(137, 200, 236, 0.24);
+  --personal-tahoe-button-primary: #4b8eb5;
+  --personal-tahoe-button-primary-hover: #62a6ca;
+  --personal-tahoe-button-active: #2c5b73;
+  --personal-tahoe-button-shadow: rgba(0, 0, 0, 0.28);
+}
+
+html[data-tahoe-palette="4"][data-tahoe-mode="light"] {
+  --personal-tahoe-bg: #eff4f7;
+  --personal-tahoe-text: #20313d;
+  --personal-tahoe-muted: #5c6e78;
+  --personal-tahoe-faint: #7a8b94;
+  --personal-tahoe-glass: rgba(255, 255, 255, 0.62);
+  --personal-tahoe-glass-strong: rgba(255, 255, 255, 0.84);
+  --personal-tahoe-border: rgba(255, 255, 255, 0.74);
+  --personal-tahoe-highlight: rgba(255, 255, 255, 0.96);
+  --personal-tahoe-card: rgba(255, 255, 255, 0.88);
+  --personal-tahoe-card-border: rgba(78, 145, 183, 0.12);
+  --personal-tahoe-reader: rgba(255, 255, 255, 0.95);
+  --personal-tahoe-accent: #4e91b7;
+  --personal-tahoe-accent-strong: #2d6d8e;
+  --personal-tahoe-accent-soft: rgba(78, 145, 183, 0.18);
+  --personal-tahoe-button-text: #ffffff;
+  --personal-tahoe-shadow: rgba(46, 84, 105, 0.16);
+}
+
+html[data-tahoe-palette="4"][data-tahoe-mode="dark"] {
+  --personal-tahoe-bg: #101820;
+  --personal-tahoe-text: #f3f0e8;
+  --personal-tahoe-muted: #c0c4c6;
+  --personal-tahoe-faint: #8e9ba3;
+  --personal-tahoe-glass: rgba(25, 37, 49, 0.62);
+  --personal-tahoe-glass-strong: rgba(31, 49, 63, 0.84);
+  --personal-tahoe-border: rgba(140, 199, 232, 0.22);
+  --personal-tahoe-highlight: rgba(255, 255, 255, 0.14);
+  --personal-tahoe-card: rgba(25, 37, 49, 0.88);
+  --personal-tahoe-card-border: rgba(140, 199, 232, 0.14);
+  --personal-tahoe-reader: rgba(18, 29, 38, 0.94);
+  --personal-tahoe-accent: #8cc7e8;
+  --personal-tahoe-accent-strong: #4e91b7;
+  --personal-tahoe-accent-soft: rgba(140, 199, 232, 0.16);
+  --personal-tahoe-button-text: #10202b;
+  --personal-tahoe-shadow: rgba(0, 0, 0, 0.42);
+  --personal-tahoe-button-surface: #1b303c;
+  --personal-tahoe-button-surface-hover: #234454;
+  --personal-tahoe-button-border: rgba(140, 199, 232, 0.24);
+  --personal-tahoe-button-primary: #4e91b7;
+  --personal-tahoe-button-primary-hover: #67a8ca;
+  --personal-tahoe-button-active: #2b5a72;
+  --personal-tahoe-button-shadow: rgba(0, 0, 0, 0.28);
+}
+
+html[data-tahoe-palette][data-tahoe-mode] [data-tahoe-preview][data-palette] {
+  --tahoe-bg: var(--personal-tahoe-bg);
+  --tahoe-text: var(--personal-tahoe-text);
+  --tahoe-muted: var(--personal-tahoe-muted);
+  --tahoe-faint: var(--personal-tahoe-faint);
+  --tahoe-glass: var(--personal-tahoe-glass);
+  --tahoe-glass-strong: var(--personal-tahoe-glass-strong);
+  --tahoe-border: var(--personal-tahoe-border);
+  --tahoe-highlight: var(--personal-tahoe-highlight);
+  --tahoe-card: var(--personal-tahoe-card);
+  --tahoe-card-border: var(--personal-tahoe-card-border);
+  --tahoe-reader: var(--personal-tahoe-reader);
+  --tahoe-accent: var(--personal-tahoe-accent);
+  --tahoe-accent-strong: var(--personal-tahoe-accent-strong);
+  --tahoe-accent-soft: var(--personal-tahoe-accent-soft);
+  --tahoe-button-text: var(--personal-tahoe-button-text);
+  --tahoe-shadow: var(--personal-tahoe-shadow);
+  --tahoe-button-surface: var(--personal-tahoe-button-surface);
+  --tahoe-button-surface-hover: var(--personal-tahoe-button-surface-hover);
+  --tahoe-button-border: var(--personal-tahoe-button-border);
+  --tahoe-button-primary: var(--personal-tahoe-button-primary);
+  --tahoe-button-primary-hover: var(--personal-tahoe-button-primary-hover);
+  --tahoe-button-active: var(--personal-tahoe-button-active);
+  --tahoe-button-shadow: var(--personal-tahoe-button-shadow);
+}
+
+html[data-tahoe-palette] .xiangxiang-progress {
+  --tahoe-border: var(--personal-tahoe-border);
+  --tahoe-glass: var(--personal-tahoe-glass);
+  --tahoe-highlight: var(--personal-tahoe-highlight);
+  --tahoe-accent: var(--personal-tahoe-accent);
+  --tahoe-accent-soft: var(--personal-tahoe-accent-soft);
+  --tahoe-shadow: var(--personal-tahoe-shadow);
+}
+
+html[data-tahoe-palette] .xiangxiang-progress-line {
+  background: color-mix(in srgb, var(--personal-tahoe-accent) 28%, transparent);
+}
+
+html[data-tahoe-palette] .xiangxiang-progress-fill {
+  background: var(--personal-tahoe-accent);
+}
+
+html[data-tahoe-palette][data-tahoe-mode] body:has(main[data-palette]) .xiangxiang-progress {
+  --tahoe-border: var(--personal-tahoe-border);
+  --tahoe-glass: var(--personal-tahoe-glass);
+  --tahoe-highlight: var(--personal-tahoe-highlight);
+  --tahoe-accent: var(--personal-tahoe-accent);
+  --tahoe-accent-soft: var(--personal-tahoe-accent-soft);
+  --tahoe-shadow: var(--personal-tahoe-shadow);
+}
+
+html[data-tahoe-palette][data-tahoe-mode] body:has(main[data-palette]) .xiangxiang-progress-fill {
+  background: var(--personal-tahoe-accent);
+}
+
+html[data-tahoe-palette] [data-tahoe-preview][data-palette="1"].tahoe-shell::before,
+html[data-tahoe-palette] [data-tahoe-preview][data-palette="2"].tahoe-shell::before,
+html[data-tahoe-palette] [data-tahoe-preview][data-palette="3"].tahoe-shell::before,
+html[data-tahoe-palette] [data-tahoe-preview][data-palette="4"].tahoe-shell::before {
+  background-image: none;
+}
+
+html[data-tahoe-palette="4"][data-tahoe-mode="dark"] .tahoe-bg-fixed,
+html[data-tahoe-palette="1"][data-tahoe-mode="dark"] .tahoe-bg-fixed,
+html[data-tahoe-palette="2"][data-tahoe-mode="dark"] .tahoe-bg-fixed,
+html[data-tahoe-palette="3"][data-tahoe-mode="dark"] .tahoe-bg-fixed {
+  display: none;
+}
+
+html[data-tahoe-palette] [data-tahoe-preview][data-palette] .tahoe-button-primary {
+  background: linear-gradient(180deg, var(--personal-tahoe-accent), var(--personal-tahoe-accent-strong));
+  color: var(--personal-tahoe-button-text);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    0 14px 28px -14px var(--personal-tahoe-accent-soft);
 }
 
 .tahoe-shell::before {
@@ -369,6 +897,167 @@ html[data-tahoe-mode="light"] [data-tahoe-preview],
   border-radius: 34px;
   isolation: isolate;
   padding: clamp(28px, 5vw, 58px);
+}
+
+.fangyuan-ip {
+  animation: fangyuan-float 6.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.fangyuan-ip-img {
+  display: block;
+  transform-origin: 50% 88%;
+  animation: fangyuan-breathe 5s ease-in-out infinite;
+}
+
+.fangyuan-ip-mascot {
+  animation: fangyuan-bob 4.2s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+.fangyuan-ip-mascot:last-child {
+  animation-delay: -1.8s;
+}
+
+.pearl-mascot-img {
+  display: block;
+}
+
+.xiangxiang-progress {
+  --page-progress: 0;
+  --progress-length: 194px;
+  --progress-offset: 0px;
+  padding: 8px 0;
+  border: 1px solid var(--tahoe-border);
+  border-radius: 999px;
+  background: var(--tahoe-glass);
+  box-shadow:
+    inset 0 1px 0 var(--tahoe-highlight),
+    0 12px 28px -18px var(--tahoe-shadow);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+}
+
+.xiangxiang-progress-line {
+  width: 3px;
+  border-radius: 999px;
+  background: rgba(0, 122, 255, 0.22);
+}
+
+.xiangxiang-progress-fill {
+  height: var(--progress-length);
+  top: 8px;
+  border-radius: 999px;
+  background: #1687ff;
+  box-shadow: 0 0 12px var(--tahoe-accent-soft);
+  transform: translateX(-50%) scaleY(var(--page-progress));
+  transform-origin: top;
+}
+
+.xiangxiang-progress-bird {
+  width: 50px;
+  /* The feet sit left of the artwork's visual center; align the rail between them. */
+  left: calc(50% + 6px);
+  right: auto;
+  top: calc(8px + var(--progress-offset));
+  transition: top 120ms linear;
+  transform: translateX(-50%);
+}
+
+.xiangxiang-progress-bird img {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+}
+
+@media (min-width: 1024px) {
+  .xiangxiang-progress-bird {
+    width: 50px;
+  }
+}
+
+/* The dog uses the original standing artwork; no synthetic eye or body motion. */
+.pearl-mascot-img {
+  display: block;
+  transform: scaleX(-1);
+}
+
+.pearl-tail {
+  display: block;
+  max-width: none;
+  transform-origin: 100% 65%;
+}
+
+.pearl-mascot.is-scrolling .pearl-tail {
+  animation: pearl-tail-wag 0.62s ease-in-out infinite;
+}
+
+/* Keep the progress marker out of the reading surface and let clicks pass through. */
+.xiangxiang-progress,
+.pearl-mascot {
+  pointer-events: none;
+}
+
+/* Remove the old synthetic pupil layer if a stale stylesheet is cached. */
+.pearl-eye-pupil {
+  position: absolute;
+  display: none;
+}
+
+@media (max-width: 1120px) {
+  .pearl-mascot,
+  .xiangxiang-progress {
+    display: none !important;
+  }
+}
+
+@keyframes fangyuan-float {
+  0%, 100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -8px;
+  }
+}
+
+@keyframes fangyuan-breathe {
+  0%, 100% {
+    scale: 1;
+  }
+  50% {
+    scale: 1.025;
+  }
+}
+
+@keyframes fangyuan-bob {
+  0%, 100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -7px;
+  }
+}
+
+@keyframes pearl-tail-wag {
+  0%, 100% {
+    rotate: -3deg;
+  }
+  50% {
+    rotate: 8deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fangyuan-ip,
+  .fangyuan-ip-img,
+  .fangyuan-ip-mascot {
+    animation: none;
+  }
+
+  .pearl-mascot.is-scrolling .pearl-tail {
+    animation: none;
+  }
 }
 
 .tahoe-content-panel,
@@ -1034,6 +1723,134 @@ html[data-tahoe-mode="light"] [data-tahoe-preview],
   padding: 0;
 }
 
+.tahoe-theme-picker {
+  position: relative;
+}
+
+.tahoe-mode-toggle {
+  position: relative;
+}
+
+.tahoe-current-swatch,
+.tahoe-palette-swatch {
+  display: inline-block;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58);
+}
+
+.tahoe-current-swatch {
+  width: 7px;
+  height: 7px;
+}
+
+.tahoe-theme-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 90;
+  width: 196px;
+  padding: 10px;
+  border: 1px solid var(--tahoe-border);
+  border-radius: 18px;
+  background: var(--tahoe-glass-strong);
+  box-shadow:
+    inset 0 1px 0 var(--tahoe-highlight),
+    0 20px 42px -24px var(--tahoe-shadow);
+  backdrop-filter: blur(22px) saturate(175%);
+  -webkit-backdrop-filter: blur(22px) saturate(175%);
+}
+
+.tahoe-theme-menu-title {
+  padding: 4px 8px 7px;
+  color: var(--tahoe-faint);
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+}
+
+.tahoe-palette-options {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 9px;
+}
+
+.tahoe-palette-option {
+  display: flex;
+  width: 100%;
+  min-height: 32px;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 0 8px;
+  color: var(--tahoe-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  transition:
+    background-color 180ms var(--tahoe-ease),
+    border-color 180ms var(--tahoe-ease),
+    color 180ms var(--tahoe-ease);
+}
+
+.tahoe-palette-option:hover,
+.tahoe-palette-option:focus-visible,
+.tahoe-palette-option.is-active {
+  border-color: var(--tahoe-border);
+  background: var(--tahoe-glass);
+  color: var(--tahoe-text);
+  outline: none;
+}
+
+.tahoe-palette-swatch {
+  width: 11px;
+  height: 11px;
+}
+
+.tahoe-palette-check {
+  margin-left: auto;
+  color: var(--tahoe-accent);
+  font-weight: 800;
+}
+
+.tahoe-mode-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+.tahoe-mode-options button {
+  min-height: 30px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--tahoe-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  transition:
+    background-color 180ms var(--tahoe-ease),
+    border-color 180ms var(--tahoe-ease),
+    color 180ms var(--tahoe-ease);
+}
+
+.tahoe-mode-options button:hover,
+.tahoe-mode-options button:focus-visible,
+.tahoe-mode-options button.is-active {
+  border-color: var(--tahoe-border);
+  background: var(--tahoe-glass);
+  color: var(--tahoe-text);
+  outline: none;
+}
+
+.palette-swatch-default { background: #007aff; }
+.palette-swatch-1 { background: #6faed9; }
+.palette-swatch-2 { background: #547a61; }
+.palette-swatch-3 { background: #5a9ac7; }
+.palette-swatch-4 { background: #8cc7e8; }
+
 .tahoe-section-rail {
   position: fixed;
   left: max(18px, calc((100vw - 1320px) / 2));
@@ -1363,6 +2180,107 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Dark mode controls use a quiet, ink-like surface; cards retain their glass treatment. */
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-button-primary,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-button-glass,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-link-button,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-mini-button,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-banner-nav > a:not(.tahoe-mini-button),
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-mode-toggle,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-contact-button,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-tag,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-small-tag,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-status,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-segment,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-soft-pill {
+  background: var(--tahoe-button-surface);
+  border-color: var(--tahoe-button-border);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-button-primary {
+  background: var(--tahoe-button-primary);
+  background-image: none;
+  border-color: var(--tahoe-button-border);
+  color: var(--tahoe-text);
+}
+
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-button-primary:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-button-primary:focus-visible {
+  background: var(--tahoe-button-primary-hover);
+  box-shadow: 0 10px 22px -16px var(--tahoe-button-shadow);
+}
+
+html[data-tahoe-mode="dark"][data-tahoe-palette] [data-tahoe-preview][data-palette] .tahoe-button-primary {
+  background: var(--tahoe-button-primary);
+  background-image: none;
+  border-color: var(--tahoe-button-border);
+  box-shadow: none;
+  color: var(--tahoe-text);
+}
+
+html[data-tahoe-mode="dark"][data-tahoe-palette] [data-tahoe-preview][data-palette] .tahoe-button-primary:hover,
+html[data-tahoe-mode="dark"][data-tahoe-palette] [data-tahoe-preview][data-palette] .tahoe-button-primary:focus-visible {
+  background: var(--tahoe-button-primary-hover);
+  box-shadow: 0 10px 22px -16px var(--tahoe-button-shadow);
+}
+
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-button-glass:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-button-glass:focus-visible,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-link-button:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-link-button:focus-visible,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-mini-button:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-mini-button:focus-visible,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-banner-nav > a:not(.tahoe-mini-button):hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-banner-nav > a:not(.tahoe-mini-button):focus-visible,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-mode-toggle:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-mode-toggle:focus-visible,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-contact-button:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-contact-button:focus-visible,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-tag:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-tag:focus-visible,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-small-tag:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-small-tag:focus-visible,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-status:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-status:focus-visible,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-segment:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-segment:focus-visible,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-soft-pill:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-soft-pill:focus-visible {
+  background: var(--tahoe-button-surface-hover);
+  border-color: var(--tahoe-button-border);
+  box-shadow: 0 8px 18px -16px var(--tahoe-button-shadow);
+}
+
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-segment.is-active {
+  background: var(--tahoe-button-active);
+  border-color: var(--tahoe-button-border);
+  color: var(--tahoe-text);
+  box-shadow: none;
+}
+
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-nav-item:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-nav-item:focus-visible,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-section-rail a:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-section-rail a:focus-visible,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-dock-item:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-dock-item:focus-visible {
+  background: var(--tahoe-button-surface-hover);
+}
+
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-palette-option:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-palette-option:focus-visible,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-palette-option.is-active,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-mode-options button:hover,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-mode-options button:focus-visible,
+html[data-tahoe-mode="dark"] [data-tahoe-preview] .tahoe-mode-options button.is-active {
+  background: var(--tahoe-button-surface-hover);
+  border-color: var(--tahoe-button-border);
+  box-shadow: none;
 }
 
 a {

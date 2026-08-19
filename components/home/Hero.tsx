@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Highlight, Profile } from "@/content/types";
+import { FangyuanIP } from "./FangyuanIP";
 
 type HeroProps = {
   profile: Profile;
@@ -9,6 +10,7 @@ type HeroProps = {
 export function Hero({ profile, highlights }: HeroProps) {
   return (
     <section id="home" className="tahoe-hero tahoe-content-panel relative overflow-hidden">
+      <FangyuanIP />
       <div className="grid gap-10 lg:grid-cols-[1fr_320px] lg:items-end">
         <div className="relative z-10">
           <p className="tahoe-kicker">Hello, I&apos;m</p>
