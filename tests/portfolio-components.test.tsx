@@ -73,18 +73,18 @@ describe("portfolio visitor path", () => {
     ).toHaveLength(2);
   });
 
-  it("explains why a limited project has no public source links", async () => {
+  it("shows public source links for a public project", async () => {
     render(
       await ProjectPage({
-        params: Promise.resolve({ slug: "bank-audit-platform" }),
+        params: Promise.resolve({ slug: "documind-rag" }),
       }),
     );
 
-    expect(
-      screen.getByText(/项目内容涉及企业内部信息，仅展示经过脱敏的职责与技术实践/),
-    ).toBeInTheDocument();
     const projectArticle = within(screen.getByRole("article"));
-    expect(projectArticle.queryByRole("link", { name: "GitHub" })).not.toBeInTheDocument();
-    expect(projectArticle.queryByRole("link", { name: "在线预览" })).not.toBeInTheDocument();
+    expect(projectArticle.getByRole("link", { name: "GitHub" })).toHaveAttribute(
+      "href",
+      "https://github.com/klaybloom/DocuMind",
+    );
+    expect(screen.queryByText(/项目内容涉及企业内部信息/)).not.toBeInTheDocument();
   });
 });
