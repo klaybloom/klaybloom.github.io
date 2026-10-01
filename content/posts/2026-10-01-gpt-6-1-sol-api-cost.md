@@ -63,11 +63,11 @@ OpenAI 将 GPT-6.1 Sol 定位为以较低成本提供接近 Astra 的编码、�
 
 参考资料：
 
-- OpenAI：GPT-6.1 Sol 模型文档与定价  
+- OpenAI：GPT-6.1 Sol 模型文档与定价
   https://developers.openai.com/api/docs/models/gpt-6.1-sol
-- OpenAI：GPT-6 API 定价  
+- OpenAI：GPT-6 API 定价
   https://developers.openai.com/api/docs/pricing
-- OpenAI：API 更新日志（2026 年 9 月 29 日）  
+- OpenAI：API 更新日志（2026 年 9 月 29 日）
   https://developers.openai.com/api/docs/changelog
 
 你们会优先拿哪类真实任务验证这次降价：高频分类、编码修复，还是多轮工具调用？
