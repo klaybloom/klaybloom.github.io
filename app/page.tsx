@@ -1,12 +1,11 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Hero } from "@/components/home/Hero";
+import { Hero, ProfileAbout } from "@/components/home/Hero";
 import { Skills } from "@/components/home/Skills";
 import { Projects } from "@/components/home/Projects";
 import { Posts } from "@/components/home/Posts";
 import { Experience } from "@/components/home/Experience";
 import { CustomSection } from "@/components/home/CustomSection";
-import { PalettePreviewControls } from "@/components/home/PalettePreviewControls";
 
 import { experience } from "@/content/experience";
 import { highlights } from "@/content/highlights";
@@ -38,56 +37,25 @@ export default async function Home() {
 
   return (
     <main
-      data-tahoe-preview
+      data-tahoe-preview data-fangyuan
       className="tahoe-shell min-h-screen overflow-x-hidden"
     >
       <div className="tahoe-bg-fixed" aria-hidden />
       <Header name={siteConfig.name} nav={siteConfig.nav} />
-      <TahoeSectionRail sections={sections} />
 
-      <div className="relative z-10 mx-auto max-w-[1080px] px-4 pb-20 pt-28 sm:px-6">
-        <div className="space-y-20">
+      <div className="fy-home-content relative z-10 mx-auto max-w-[1200px] px-4 pb-12 pt-28 sm:px-6">
+        <div className="fy-home-sections">
           {sections.map((section) =>
-            renderTahoeSection(section, nextNumber, customHtml)
+            <div key={section.id} className={`fy-section fy-section-${section.type}`}>
+              {renderTahoeSection(section, nextNumber, customHtml)}
+            </div>
           )}
+          {sections.some((section) => section.type === "hero") ? <ProfileAbout profile={profile} highlights={highlights} /> : null}
         </div>
       </div>
 
       <Footer nav={siteConfig.nav} />
-      <PalettePreviewControls />
     </main>
-  );
-}
-
-const SECTION_ANCHORS: Record<string, { anchor: string; label: string }> = {
-  skills: { anchor: "#skills", label: "技术" },
-  "latest-projects": { anchor: "#projects", label: "项目" },
-  "latest-posts": { anchor: "#articles", label: "文章" },
-  experience: { anchor: "#experience", label: "经历" },
-  custom: { anchor: "", label: "" },
-};
-
-function TahoeSectionRail({ sections }: { sections: HomeSection[] }) {
-  const items = sections
-    .filter((s) => s.type === "custom" || s.type in SECTION_ANCHORS)
-    .map((s) => {
-      const entry = SECTION_ANCHORS[s.type];
-      if (!entry) return null;
-      if (s.type === "custom") {
-        return { href: `#custom-${s.id}`, label: s.params?.title ?? "" };
-      }
-      return { href: entry.anchor, label: entry.label };
-    })
-    .filter((item): item is { href: string; label: string } => item !== null && item.label !== "");
-
-  return (
-    <nav aria-label="页面段落" className="tahoe-section-rail">
-      {items.map((item) => (
-        <a href={item.href} key={item.href}>
-          {item.label}
-        </a>
-      ))}
-    </nav>
   );
 }
 

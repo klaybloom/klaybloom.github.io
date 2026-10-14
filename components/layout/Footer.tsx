@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
+import { PearlMascot } from "@/components/home/PearlMascot";
 import type { NavItem } from "@/content/types";
 
 type FooterProps = {
@@ -7,7 +9,7 @@ type FooterProps = {
 
 export function Footer({ nav }: FooterProps) {
   return (
-    <footer className="relative z-10 mx-auto max-w-[1080px] px-4 pb-12 pt-8 sm:px-6">
+    <footer className="fy-footer relative z-10 mx-auto max-w-[1200px] px-4 pb-8 pt-8 sm:px-6">
       <div className="tahoe-contact-bar flex flex-col items-center gap-3 px-5 py-5 sm:flex-row sm:justify-between">
         <span className="text-[12px] font-semibold text-[color:var(--tahoe-faint)]">
           &copy; 2026 Klay&apos;s Studio
@@ -36,8 +38,12 @@ export function Footer({ nav }: FooterProps) {
             href="/rss.xml"
             className="text-[12px] font-medium text-[color:var(--tahoe-faint)] transition hover:text-[color:var(--tahoe-text)]"
           >
-            RSS
+            RSS 订阅
           </a>
+        </div>
+        <div className="fy-pets">
+          <Image className="fy-bird" src="/images/ip/xiangxiang-standing.png" alt="香香，浅蓝白色鹦鹉" width={474} height={632} sizes="50px" />
+          <PearlMascot />
         </div>
       </div>
     </footer>

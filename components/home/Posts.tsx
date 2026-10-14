@@ -13,7 +13,7 @@ export function Posts({ posts, title, number }: PostsProps) {
   return (
     <Section
       actionHref="/blog"
-      actionLabel="全部 →"
+      actionLabel="全部文章 →"
       id="articles"
       number={number}
       title={title}

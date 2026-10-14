@@ -27,12 +27,12 @@ beforeAll(() => {
 afterEach(cleanup);
 
 describe("portfolio visitor path", () => {
-  it("offers direct project, GitHub and email actions in the hero", () => {
+  it("offers a home project anchor, GitHub and email actions in the hero", () => {
     render(<Hero profile={profile} highlights={highlights} />);
 
     expect(screen.getByRole("link", { name: "查看项目" })).toHaveAttribute(
       "href",
-      "/projects",
+      "/#projects",
     );
     expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute(
       "href",

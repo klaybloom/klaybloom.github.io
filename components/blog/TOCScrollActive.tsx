@@ -24,7 +24,7 @@ export function TOCScrollActive() {
       let currentActiveId = "";
       for (let i = 0; i < headings.length; i++) {
         const heading = headings[i] as HTMLElement;
-        if (heading.offsetTop <= scrollPosition) {
+        if (heading.getBoundingClientRect().top + window.scrollY <= scrollPosition) {
           currentActiveId = heading.id;
         } else {
           break; // Headings are in DOM order, so we can stop searching

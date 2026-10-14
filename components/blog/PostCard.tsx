@@ -10,7 +10,7 @@ export function PostCard({ post }: PostCardProps) {
   return (
     <Link className="tahoe-post-tile" href={`/blog/${post.slug}`}>
       <div className="mb-7 flex items-center justify-between gap-3">
-        <time className="text-[15px] font-medium text-[color:var(--tahoe-faint)]">
+        <time className="tahoe-post-date">
           {formatDate(post.date)}
         </time>
         {post.category ? <span className="tahoe-status">{post.category}</span> : null}

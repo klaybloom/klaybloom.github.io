@@ -63,11 +63,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   return (
-    <main data-tahoe-preview className="tahoe-shell min-h-screen overflow-x-hidden">
+    <main data-tahoe-preview data-fangyuan data-fy-content-page className="tahoe-shell min-h-screen overflow-x-clip">
       <div className="tahoe-bg-fixed" aria-hidden />
       <Header name={siteConfig.name} nav={siteConfig.nav} />
 
-      <div className="relative z-10 mx-auto max-w-[760px] px-4 pb-20 pt-28 sm:px-6">
+      <div className="fy-page-content relative z-10">
         <article>
           <Link
             className="tahoe-link-button mb-10 inline-flex"
@@ -76,7 +76,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             ← 返回项目列表
           </Link>
 
-          <header className="mb-10">
+          <header className="fy-detail-heading mb-10">
             <div className="mb-4 flex flex-wrap gap-2 text-[12px]">
               <span className="tahoe-status">
                 {getProjectStatusLabel(project.status)}
@@ -112,7 +112,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </div>
           ) : null}
 
-          <div className="tahoe-experience-card space-y-10">
+          <div className="fy-case-study tahoe-experience-card space-y-10">
             {project.disclosure === "limited" ? (
               <aside
                 className="rounded-2xl px-5 py-4 text-[14px] leading-7"

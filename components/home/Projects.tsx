@@ -14,7 +14,7 @@ export function Projects({ projects, title, number }: ProjectsProps) {
   return (
     <Section
       actionHref="/projects"
-      actionLabel="全部 →"
+      actionLabel="全部项目 →"
       id="projects"
       number={number}
       title={title}

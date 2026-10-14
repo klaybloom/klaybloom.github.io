@@ -6,7 +6,7 @@ import { siteConfig } from "@/content/site";
 import { getAllTags, getPublishedPosts } from "@/lib/posts";
 
 export const metadata: Metadata = {
-  title: `Blog | ${siteConfig.title}`,
+  title: `文章 | ${siteConfig.title}`,
   description: "klay 的技术文章、项目记录和长期思考。"
 };
 
@@ -15,11 +15,11 @@ export default function BlogPage() {
   const tags = getAllTags();
 
   return (
-    <main data-tahoe-preview className="tahoe-shell min-h-screen overflow-x-hidden">
+    <main data-tahoe-preview data-fangyuan data-fy-content-page className="tahoe-shell min-h-screen overflow-x-clip">
       <div className="tahoe-bg-fixed" aria-hidden />
       <Header name={siteConfig.name} nav={siteConfig.nav} />
 
-      <div className="relative z-10 mx-auto max-w-[1080px] px-4 pb-20 pt-28 sm:px-6">
+      <div className="fy-page-content relative z-10">
         <section>
           <div className="tahoe-section-head mb-10">
             <div className="flex min-w-0 items-baseline gap-4">
@@ -27,7 +27,7 @@ export default function BlogPage() {
                 01
               </span>
               <h1 className="text-[1.5rem] font-semibold text-[color:var(--tahoe-text)]">
-                Blog
+                文章
               </h1>
             </div>
           </div>

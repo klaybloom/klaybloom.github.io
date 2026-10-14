@@ -1,70 +1,52 @@
-import Link from "next/link";
+import { HomeSectionLink } from "@/components/layout/HomeSectionLink";
 import type { Highlight, Profile } from "@/content/types";
 import { FangyuanIP } from "./FangyuanIP";
+import { BannerIcon } from "@/components/layout/BannerIcon";
 
-type HeroProps = {
-  profile: Profile;
-  highlights: Highlight[];
-};
+type HeroProps = { profile: Profile; highlights: Highlight[] };
 
-export function Hero({ profile, highlights }: HeroProps) {
+export function Hero({ profile }: HeroProps) {
   return (
-    <section id="home" className="tahoe-hero tahoe-content-panel relative overflow-hidden">
-      <FangyuanIP />
-      <div className="grid gap-10 lg:grid-cols-[1fr_320px] lg:items-end">
-        <div className="relative z-10">
-          <p className="tahoe-kicker">Hello, I&apos;m</p>
-          <h1 className="mt-4 text-[clamp(3rem,6vw,4.5rem)] font-semibold leading-[1.08] tracking-normal text-[color:var(--tahoe-text)]">
-            {profile.nickname}
-          </h1>
-          <p className="mt-5 max-w-[560px] text-[1.2rem] leading-8 text-[color:var(--tahoe-muted)]">
-            {profile.summary}
-          </p>
-          {profile.bio.length ? (
-            <div className="mt-5 max-w-[560px] text-[15px] leading-8 text-[color:var(--tahoe-faint)]">
-              {profile.bio.map((item) => (
-                <p className="[&+p]:mt-3" key={item}>
-                  {item}
-                </p>
-              ))}
-            </div>
-          ) : null}
-          <div className="mt-7 flex flex-wrap gap-3">
-            <Link
-              className="tahoe-button tahoe-button-primary px-5 py-2.5 text-sm font-semibold"
-              href={profile.links.projects}
-            >
-              查看项目
-            </Link>
-            <a
-              className="tahoe-button tahoe-button-glass px-5 py-2.5 text-sm font-semibold"
-              href={profile.links.github}
-              rel="noreferrer"
-              target="_blank"
-            >
-              GitHub
-            </a>
-            <a
-              className="tahoe-button tahoe-button-glass px-5 py-2.5 text-sm font-semibold"
-              href={`mailto:${profile.links.email}`}
-            >
-              联系我
-            </a>
+    <section id="home" className="fy-hero-section">
+      <div className="fy-hero">
+        <div className="fy-hero-copy">
+          <p className="fy-eyebrow">{profile.title}</p>
+          <h1>你好，我是 {profile.name}。</h1>
+          <h2>写代码，也记录<span>思考。</span></h2>
+          <p className="fy-intro">专注 Java 后端开发，探索 AI 应用与效率工具。<br />在这里，分享我的项目、实践与观察。</p>
+          <div className="fy-actions">
+            <HomeSectionLink className="tahoe-button tahoe-button-primary" section="projects">查看项目 <span aria-hidden>↗</span></HomeSectionLink>
+            <HomeSectionLink className="tahoe-button tahoe-button-glass fy-glass" section="articles">读我的文章 <BannerIcon name="book" /></HomeSectionLink>
+          </div>
+          <div className="fy-hero-links">
+            <a href={profile.links.github} target="_blank" rel="noreferrer">GitHub <span aria-hidden>↗</span></a>
+            <a href={`mailto:${profile.links.email}`}>联系我 <span aria-hidden>↗</span></a>
           </div>
         </div>
-
-        <aside className="tahoe-info-panel relative z-10">
-          <div className="mb-4 flex items-center gap-2 text-[12px] font-semibold uppercase text-[color:var(--tahoe-accent)]">
-            <span className="h-2 w-2 rounded-full bg-[color:var(--tahoe-accent)] shadow-[0_0_0_5px_var(--tahoe-accent-soft)]" />
-            Current Status
-          </div>
-          <div className="space-y-3 text-[14px] leading-7 text-[color:var(--tahoe-muted)]">
-            {highlights.map((item) => (
-              <p key={item.label}>{item.value}</p>
-            ))}
-          </div>
-        </aside>
+        <div className="fy-portrait">
+          <div className="fy-halo" aria-hidden />
+          <FangyuanIP />
+          <HomeSectionLink className="fy-portrait-link fy-portrait-code fy-glass" section="projects"><BannerIcon name="code" /> Java 与 AI</HomeSectionLink>
+          <HomeSectionLink className="fy-portrait-link fy-portrait-notes fy-glass" section="articles"><BannerIcon name="pencil" />实践 · 记录 · 分享 <span aria-hidden>↗</span></HomeSectionLink>
+        </div>
       </div>
+
+    </section>
+  );
+}
+
+export function ProfileAbout({ profile, highlights }: HeroProps) {
+  return (
+    <section id="about" className="fy-about-section" aria-labelledby="about-title">
+      <h2 id="about-title">以工程实践，探索新的可能。</h2>
+      <p className="fy-about-summary">{profile.summary}</p>
+      <details className="fy-profile-details">
+        <summary>关于我 · 背景与实践<span aria-hidden>＋</span></summary>
+        <div className="fy-profile-grid">
+          <div className="fy-bio">{profile.bio.map((item) => <p key={item}>{item}</p>)}</div>
+          <aside aria-label="当前关注"><h2>当前关注</h2>{highlights.map((item) => <p key={item.label}>{item.value}</p>)}</aside>
+        </div>
+      </details>
     </section>
   );
 }

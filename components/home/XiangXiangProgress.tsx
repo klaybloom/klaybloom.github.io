@@ -38,7 +38,7 @@ export function XiangXiangProgress() {
   return (
     <aside
       ref={ref}
-      className="xiangxiang-progress pointer-events-none fixed right-6 top-1/2 z-40 hidden h-[210px] w-[64px] -translate-y-1/2 select-none sm:block lg:right-10"
+      className="xiangxiang-progress fy-reading-progress pointer-events-none select-none"
       aria-label="页面阅读进度"
     >
       <div className="xiangxiang-progress-line absolute bottom-2 left-1/2 top-2 -translate-x-1/2" />

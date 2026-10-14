@@ -1,0 +1,274 @@
+/* Fangyuan public-site layer: reuse Tahoe tokens and keep admin/legacy previews isolated. */
+html [data-fangyuan]{font-family:FYMono,FYKai,serif;font-synthesis:none;isolation:isolate;overflow-x:clip}
+html [data-fangyuan] :is(h1,h2,h3,h4,.tahoe-brand,.tahoe-button,.tahoe-banner-nav a){font-weight:400}
+html:not([data-tahoe-palette]) [data-fangyuan]:not([data-palette]){
+ --tahoe-bg:#fff;--tahoe-text:#171717;--tahoe-muted:#5e6a62;--tahoe-faint:#66756c;
+ --tahoe-accent:#d65520;--tahoe-accent-soft:#d6552014;--tahoe-accent-strong:#a13d13;
+ --tahoe-glass:rgba(255,255,255,.4);--tahoe-glass-strong:rgba(255,255,255,.78);--tahoe-border:rgba(255,255,255,.9);--tahoe-highlight:#fff;
+ --tahoe-card:#fff;--tahoe-card-border:#e8eee9;--tahoe-reader:#fff;--tahoe-shadow:rgba(76,58,38,.16);
+ --tahoe-button-surface:rgba(255,255,255,.45);--tahoe-button-surface-hover:rgba(255,255,255,.7);--tahoe-button-border:#ffffffd9;
+ --tahoe-button-primary:#202020;--tahoe-button-primary-hover:#333;--tahoe-button-active:#eee;--tahoe-button-shadow:#17171716;
+ --fy-warm:#fff8f3;--fy-ambient:radial-gradient(ellipse 340px 160px at 23% 0%,#eb8c5655,transparent 85%),radial-gradient(ellipse 410px 280px at 85% 30%,#c6d7c891,transparent 80%),radial-gradient(ellipse 330px 200px at 67% 51%,#f1bc944d,transparent 80%),linear-gradient(#fbfaf6,#fff);
+}
+html[data-tahoe-mode="dark"]:not([data-tahoe-palette]) [data-fangyuan]:not([data-palette]),html:not([data-tahoe-palette]) [data-fangyuan][data-tahoe-mode="dark"]:not([data-palette]){
+ --tahoe-bg:#171717;--tahoe-text:#faf9f7;--tahoe-muted:#bac6bf;--tahoe-faint:#aab9af;--tahoe-accent:#d65520;--tahoe-accent-soft:#d6552026;
+ --tahoe-glass:rgba(39,39,37,.62);--tahoe-glass-strong:rgba(49,49,45,.85);--tahoe-border:#ffffff40;--tahoe-highlight:#ffffff40;
+ --tahoe-card:#1d1e1b;--tahoe-card-border:#363b37;--tahoe-reader:#1b1c19;--tahoe-shadow:#0005;
+ --tahoe-button-surface:#ffffff0d;--tahoe-button-surface-hover:#ffffff18;--tahoe-button-border:#ffffff40;
+ --tahoe-button-primary:#f2f1ed;--tahoe-button-primary-hover:#fff;--tahoe-button-active:#ffffff18;--fy-warm:#28231e;
+ --fy-ambient:radial-gradient(ellipse 330px 160px at 23% 0%,#a655314a,transparent 90%),radial-gradient(ellipse 400px 290px at 85% 32%,#66756c66,transparent 85%),linear-gradient(#20211f,#171717);
+}
+html [data-fangyuan].tahoe-shell::before{position:absolute;inset:0 0 auto;height:740px;background:var(--fy-ambient,linear-gradient(var(--tahoe-bg),transparent));background-attachment:scroll;z-index:-1}
+html [data-fangyuan] .tahoe-bg-fixed{display:none}
+html [data-fangyuan] :is(.fy-glass,.tahoe-menubar,.tahoe-toolbar,.tahoe-toc-panel){background:var(--tahoe-glass);border:1px solid var(--tahoe-border);-webkit-backdrop-filter:blur(22px) saturate(155%);backdrop-filter:blur(22px) saturate(155%);box-shadow:inset 0 1px 1px var(--tahoe-highlight),inset 0 -1px 1px #ffffff33,0 1px 2px #39342b12,0 10px 30px var(--tahoe-shadow)}
+html [data-fangyuan] .tahoe-menubar{width:min(calc(100% - 48px),1240px);top:20px;min-height:68px;border-radius:24px;padding:12px 24px}
+html [data-fangyuan] .tahoe-brand{font-size:18px;letter-spacing:-.7px;white-space:nowrap}
+html [data-fangyuan] .tahoe-brand-mark{font-size:0;width:12px;height:12px;border:0;border-radius:50%;background:#d65520;box-shadow:inset 0 1px 2px #ffbb82;flex:none}
+html [data-fangyuan] .tahoe-banner-nav{gap:7px}
+html [data-fangyuan] .tahoe-banner-nav>a{border:0;background:transparent;box-shadow:none;padding:10px 17px;font-size:14px;min-height:44px;color:var(--tahoe-text)}
+html [data-fangyuan] .tahoe-banner-nav>a:hover{background:var(--tahoe-glass-strong)}
+html [data-fangyuan] :is(a,button,summary):focus-visible{outline:3px solid var(--tahoe-accent);outline-offset:4px}
+html [data-fangyuan] .palette-swatch-default{background:#d65520}
+html [data-fangyuan] .tahoe-theme-menu{max-width:calc(100vw - 40px);background:var(--tahoe-reader);color:var(--tahoe-text);border:1px solid var(--tahoe-card-border);backdrop-filter:none;z-index:60}
+html [data-fangyuan] .tahoe-theme-menu-title{color:var(--tahoe-muted)}
+html [data-fangyuan] .tahoe-button{min-height:48px;border-radius:16px;padding:12px 23px;font-size:16px;gap:15px}
+html:not([data-tahoe-palette]) [data-fangyuan]:not([data-palette]) .tahoe-button-primary{background:var(--tahoe-button-primary);color:var(--tahoe-bg);border:1px solid var(--tahoe-button-primary);box-shadow:inset 0 1px #ffffff30,0 6px 13px #17171720}
+html [data-fangyuan] .tahoe-button-glass{background:var(--tahoe-glass);color:var(--tahoe-text);border:1px solid var(--tahoe-border)}
+html [data-fangyuan] .tahoe-button:hover{transform:translateY(-1px)}
+html [data-fangyuan] .tahoe-button:active{transform:scale(.98)}
+.fy-home-sections{display:grid;gap:52px}.fy-section{min-width:0}.fy-hero{display:grid;grid-template-columns:1.25fr 1fr;gap:24px;align-items:center;min-height:455px}.fy-eyebrow{font-size:12px;color:var(--tahoe-muted);letter-spacing:1.2px;margin-bottom:18px}.fy-eyebrow:before{content:"";display:inline-block;width:20px;height:1px;background:var(--tahoe-accent);vertical-align:middle;margin-right:12px}.fy-hero h1{font-size:clamp(34px,4vw,54px);line-height:1.25;letter-spacing:-1.7px}.fy-hero h2{font-size:34px;line-height:1.5;margin:14px 0 20px}.fy-hero h2 span{color:#d65520}.fy-intro{font-size:18px;line-height:1.9;color:var(--tahoe-muted);max-width:600px}.fy-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:26px}.fy-hero-links{display:flex;gap:28px;margin-top:22px;font-size:12px;color:var(--tahoe-muted)}.fy-hero-links a:hover{text-decoration:underline}.fy-portrait{height:435px;position:relative;align-self:end}.fy-halo{position:absolute;width:335px;height:335px;left:50px;top:50px;border-radius:50%;background:linear-gradient(125deg,#f7e2c988,#cadbce66);border:1px solid #ffffff77;box-shadow:inset 0 1px #fff8}.fy-halo:after{content:"";position:absolute;inset:18px;border:1px solid #ffffff66;border-radius:50%}.fy-person{position:absolute;width:460px;max-width:none;height:460px;object-fit:contain;top:-20px;left:0;z-index:1}.fy-portrait-link{position:absolute;display:flex;align-items:center;gap:12px;z-index:2;border-radius:18px;padding:14px 18px;font-size:12px}.fy-portrait-code{right:0;top:70px}.fy-portrait-code>span{color:#d65520;font-size:19px}.fy-portrait-notes{bottom:36px;left:0}html [data-fangyuan] .fy-portrait-notes{background:rgba(255,255,255,.55)}html[data-tahoe-mode=dark] [data-fangyuan] .fy-portrait-notes{background:rgba(39,39,37,.7)}
+.fy-profile-details{border-block:1px solid var(--tahoe-card-border);padding:14px 0;margin:18px 0 22px}.fy-profile-details summary{display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:15px;list-style:none;min-height:30px}.fy-profile-details summary::-webkit-details-marker{display:none}.fy-profile-details summary span{color:var(--tahoe-muted)}.fy-profile-details[open] summary span{transform:rotate(45deg)}.fy-profile-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:36px;padding:22px 0;color:var(--tahoe-muted);font-size:15px;line-height:1.9}.fy-profile-grid p+p{margin-top:12px}.fy-profile-grid aside{border-left:1px solid var(--tahoe-card-border);padding-left:28px}.fy-profile-grid h2{font-size:16px;color:var(--tahoe-text);margin-bottom:12px}
+html [data-fangyuan] :is(.tahoe-content-panel,.tahoe-info-panel,.tahoe-article-body,.tahoe-system-card,.tahoe-project-card,.tahoe-post-card,.tahoe-post-list,.tahoe-post-tile,.tahoe-skill-card,.tahoe-experience-card,.tahoe-custom-body){background:var(--tahoe-reader);border:1px solid var(--tahoe-card-border);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;border-radius:20px}
+html [data-fangyuan] :is(.tahoe-project-card,.tahoe-post-card,.tahoe-post-tile,.tahoe-skill-card,.tahoe-experience-card):hover{transform:none;box-shadow:none;border-color:var(--tahoe-faint)}
+html [data-fangyuan] .tahoe-section-head{margin-bottom:20px}
+html [data-fangyuan] .tahoe-section-action{background:transparent;border:0;box-shadow:none;color:var(--tahoe-muted);font-size:13px}
+html [data-fangyuan] .tahoe-small-tag,html [data-fangyuan] .tahoe-status{background:var(--tahoe-accent-soft);border-color:var(--tahoe-card-border);box-shadow:none;color:var(--tahoe-muted);font-weight:400}
+html [data-fangyuan] .tahoe-project-grid:has(>a:only-child){grid-template-columns:1fr}
+html [data-fangyuan] .tahoe-project-grid>a:only-child .tahoe-project-card{display:grid;grid-template-columns:1.1fr 1fr;align-items:center;background:linear-gradient(110deg,var(--fy-warm,var(--tahoe-card)),var(--tahoe-reader))}
+html [data-fangyuan] .tahoe-project-grid>a:only-child .tahoe-project-art{height:100%;min-height:260px;order:2;border-radius:0 20px 20px 0}
+html [data-fangyuan] .tahoe-project-grid>a:only-child .tahoe-project-art img{object-fit:contain;padding:20px}
+html [data-fangyuan] .tahoe-project-grid>a:only-child .p-5{padding:30px}
+html [data-fangyuan] .tahoe-post-grid{grid-template-columns:1fr;gap:0}
+html [data-fangyuan] .tahoe-post-tile{border:0;border-bottom:1px solid var(--tahoe-card-border);border-radius:0;padding:24px 0;min-height:0;display:grid;grid-template-columns:190px 1fr;column-gap:30px}
+html [data-fangyuan] .tahoe-post-tile>div:first-child{grid-row:1 / 3;align-items:flex-start;flex-direction:column;justify-content:flex-start;gap:12px;margin:0}
+html [data-fangyuan] .tahoe-post-tile p{margin-top:10px;font-size:15px;line-height:1.9}
+html [data-fangyuan] .tahoe-post-tile h3{font-size:20px}
+html [data-fangyuan] .tahoe-experience-card{padding:28px}
+html [data-fangyuan] .markdown-body{font-family:FYMono,FYKai,serif;line-height:1.95;overflow-wrap:anywhere}
+html [data-fangyuan] .markdown-body :is(pre,table){max-width:100%;overflow:auto}
+html [data-fangyuan] .markdown-body pre{overflow-wrap:normal}
+html [data-fangyuan] .markdown-body a{color:var(--tahoe-text);text-decoration:underline;text-decoration-color:var(--tahoe-accent);text-underline-offset:4px}
+html [data-fangyuan] .tahoe-contact-bar{border:0;border-top:1px solid var(--tahoe-card-border);border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;padding:20px 0;justify-content:space-between;align-items:center}
+.fy-pets{display:flex;align-items:flex-end;gap:40px;width:206px;flex-shrink:0;justify-content:center}.fy-bird{width:47px;height:auto}.fy-dog{position:relative;display:block;width:100px;flex:none;z-index:0}.fy-dog .pearl-mascot-img{filter:none!important;animation:none}.fy-dog .pearl-tail{width:36.6%;filter:none}.fy-reading-progress{position:fixed;inset:0 0 auto;height:3px;z-index:60;display:block;width:100%;transform:none;background:transparent;pointer-events:none}.fy-reading-progress .xiangxiang-progress-fill{inset:0;width:100%;height:100%;transform:scaleX(var(--page-progress,0));transform-origin:left;background:#d65520;opacity:.8}.fy-reading-progress :is(.xiangxiang-progress-line,.xiangxiang-progress-bird,span){display:none}
+html [data-fangyuan] .tahoe-search input{font:inherit;min-width:0}html [data-fangyuan] .tahoe-search{background:var(--tahoe-reader);border-color:var(--tahoe-card-border)}
+@media(min-width:1500px){html [data-fangyuan] .fy-home-content{max-width:1248px}}
+@media(max-width:1100px){.fy-hero h1{font-size:42px}.fy-hero h2{font-size:29px}.fy-intro{font-size:16px}.fy-portrait{height:380px}.fy-person{width:405px;height:405px;left:-10px;top:-12px}.fy-halo{width:285px;height:285px;left:36px}.fy-portrait-code{right:0;font-size:10px;padding:10px}.fy-portrait-notes{font-size:11px}.fy-pets{width:180px;gap:30px}}
+@media(max-width:767px){html [data-fangyuan] .tahoe-menubar{top:12px;width:calc(100% - 24px);padding:10px 14px;min-height:60px;border-radius:20px}html [data-fangyuan] .tahoe-brand{font-size:14px;gap:8px}html [data-fangyuan] .tahoe-banner-nav{gap:2px}html [data-fangyuan] .tahoe-banner-nav>a{font-size:12px;padding:10px 8px}html [data-fangyuan] .tahoe-mode-toggle{min-width:38px;min-height:44px;padding:6px}html [data-fangyuan] .fy-home-content{padding-top:94px}.fy-hero{display:flex;flex-direction:column;align-items:stretch;gap:0;min-height:0}.fy-hero h1{font-size:clamp(32px,7.8vw,46px);letter-spacing:-1.4px}.fy-hero h2{font-size:27px;margin:10px 0 16px}.fy-eyebrow{font-size:11px}.fy-intro{font-size:16px;line-height:1.85}.fy-portrait{width:315px;max-width:100%;height:325px;align-self:center;margin-top:12px}.fy-person{width:345px;height:345px;left:-15px;top:-10px}.fy-halo{width:250px;height:250px;left:29px;top:35px}.fy-portrait-code{top:48px;right:-2px}.fy-portrait-notes{bottom:22px;left:0;font-size:10px;padding:12px 14px}.fy-profile-grid{grid-template-columns:1fr;gap:22px;font-size:15px}.fy-profile-grid aside{border-left:0;border-top:1px solid var(--tahoe-card-border);padding:20px 0 0}.fy-home-sections{gap:36px}html [data-fangyuan] .tahoe-project-grid>a:only-child .tahoe-project-card{grid-template-columns:1fr}html [data-fangyuan] .tahoe-project-grid>a:only-child .tahoe-project-art{min-height:0;height:200px;order:0;border-radius:20px 20px 0 0}html [data-fangyuan] .tahoe-project-grid>a:only-child .p-5{padding:20px}html [data-fangyuan] .tahoe-post-tile{display:block;padding:22px 0}html [data-fangyuan] .tahoe-post-tile>div:first-child{flex-direction:row;justify-content:space-between;margin-bottom:12px}html [data-fangyuan] .tahoe-post-tile h3{font-size:19px}html [data-fangyuan] .tahoe-experience-card{padding:22px}html [data-fangyuan] .tahoe-contact-bar{display:grid;grid-template-columns:1fr auto;gap:16px}html [data-fangyuan] .tahoe-contact-bar>div:not(.fy-pets){justify-content:flex-start;gap:14px}.fy-pets{grid-column:2;grid-row:1/3;width:116px;gap:20px}.fy-bird{width:30px}.fy-dog{width:65px}html [data-fangyuan] .tahoe-article-body{padding:20px 16px!important}html [data-fangyuan] .markdown-body{font-size:17px}html [data-fangyuan] .tahoe-theme-menu{right:0;width:240px}html [data-fangyuan] .tahoe-section-head{gap:14px}html [data-fangyuan] .tahoe-section-action{white-space:nowrap}}
+@media(max-width:360px){html [data-fangyuan] .tahoe-brand{font-size:12px;gap:5px}html [data-fangyuan] .tahoe-brand-mark{width:8px;height:8px}html [data-fangyuan] .tahoe-banner-nav>a{padding:10px 5px}.fy-actions{gap:8px}html [data-fangyuan] .tahoe-button{padding:11px 15px;font-size:15px}.fy-pets{width:104px;gap:16px}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){html [data-fangyuan] :is(.fy-glass,.tahoe-menubar,.tahoe-toolbar,.tahoe-toc-panel){background:var(--tahoe-reader)}}
+@media(prefers-reduced-transparency:reduce){html [data-fangyuan] :is(.fy-glass,.tahoe-menubar,.tahoe-toolbar,.tahoe-toc-panel){background:var(--tahoe-reader);-webkit-backdrop-filter:none;backdrop-filter:none}}
+@media(prefers-reduced-motion:reduce){html:has([data-fangyuan]){scroll-behavior:auto!important}html [data-fangyuan] *,html [data-fangyuan] *:before{animation:none!important;transition:none!important}.fy-reading-progress *{transition:none!important}}
+@media(prefers-contrast:more){html [data-fangyuan] :is(.fy-glass,.tahoe-menubar,.tahoe-toolbar,.tahoe-toc-panel){border-color:var(--tahoe-text)}}
+
+/* Override the legacy hide-on-small-screen rule now that pets live in the footer. */
+.pearl-mascot.fy-dog{display:block!important}
+.xiangxiang-progress.fy-reading-progress{display:block!important;padding:0;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+
+/* Shared date typography avoids repeating long utility classes per article. */
+.tahoe-post-date{font-size:15px;font-weight:500;color:var(--tahoe-faint)}
+html [data-fangyuan] .tahoe-post-tile>div:last-child:not(:first-child){grid-column:2;flex-direction:row;align-items:center;margin-top:14px}
+
+/* Approved prototype: banner geometry, Chinese navigation and line icons. */
+html [data-fangyuan] .fy-banner-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(calc(100% - 56px), 1240px);
+  height: 70px;
+  min-height: 70px;
+  padding: 0 24px;
+  border-radius: 24px;
+}
+html [data-fangyuan] .fy-banner-header .tahoe-brand { gap: 12px; }
+html [data-fangyuan] .tahoe-banner-nav { gap: 8px; }
+html [data-fangyuan] .fy-banner-header svg,
+html [data-fangyuan] .fy-hero svg { display: block; width: 20px; height: 20px; flex: none; }
+html [data-fangyuan] .fy-banner-header .tahoe-banner-nav > a {
+  padding: 8px 18px;
+  border: 0;
+  border-radius: 14px;
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+html [data-fangyuan] .fy-banner-header .tahoe-banner-nav > a[aria-current] {
+  background: rgba(255,255,255,.62);
+  box-shadow: 0 1px 5px #48403312, inset 0 1px #fff;
+}
+html [data-fangyuan] .fy-banner-header .tahoe-banner-nav > a:hover,
+html [data-fangyuan] .fy-appearance-button:hover { background: var(--tahoe-glass-strong); transform: none; }
+.fy-nav-separator { height: 22px; width: 1px; background: #9b9b9b30; margin: 0 8px; }
+html [data-fangyuan] .fy-banner-header .tahoe-banner-nav > .fy-nav-github,
+html [data-fangyuan] .fy-appearance-button {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 11px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--tahoe-text);
+  cursor: pointer;
+  flex: none;
+}
+html [data-fangyuan] .fy-home-content { max-width: 1200px; padding: 90px 0 48px; }
+.fy-hero { grid-template-columns: 1.3fr 1fr; min-height: 475px; gap: 20px; padding-top: 22px; line-height: 1.6; }
+.fy-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 11px; letter-spacing: 1.65px; margin-bottom: 19px; }
+.fy-eyebrow:before { margin: 0; }
+.fy-hero h1 { font-size: 54px; line-height: 1.2; letter-spacing: -2px; white-space: nowrap; }
+.fy-hero h2 { font-size: 34px; line-height: 1.5; letter-spacing: -.6px; margin: 14px 0 20px; }
+.fy-intro { max-width: none; font-size: 18px; line-height: 1.9; }
+html [data-fangyuan] .fy-actions .tahoe-button { line-height: 1.6; gap: 18px; padding: 12px 23px; }
+html [data-fangyuan] .fy-actions .tahoe-button-glass svg { width: 17px; }
+.fy-hero-links { gap: 26px; font-size: 11px; margin-top: 24px; }
+.fy-portrait { height: 435px; }
+.fy-person { width: 460px; height: 460px; left: 4px; top: -20px; }
+.fy-halo { width: 335px; height: 335px; left: 60px; top: 51px; background: linear-gradient(125deg,#f7e2c9aa,#e6eddf88 70%); border-color: #ffffffaa; box-shadow: inset 0 1px #fff; }
+.fy-halo:after { border-color: #ffffffaa; }
+html [data-fangyuan] .fy-portrait-link { background: rgba(255,255,255,.52); gap: 10px; padding: 12px 17px; font-size: 12px; }
+html [data-fangyuan] .fy-portrait-link svg { color: var(--tahoe-accent); width: 18px; }
+.fy-portrait-code { top: 73px; right: 0; }
+html [data-fangyuan] .fy-portrait-notes { bottom: 37px; left: 0; padding: 14px 19px; }
+.fy-about-section { scroll-margin-top: 118px; }
+.fy-about-section > h2 { font-size: 23px; }
+.fy-about-summary { margin-top: 12px; color: var(--tahoe-muted); font-size: 16px; line-height: 1.9; }
+
+html[data-tahoe-mode=dark] [data-fangyuan] .fy-banner-header .tahoe-banner-nav > a[aria-current] { background: #ffffff18; box-shadow: inset 0 1px #ffffff22; }
+html[data-tahoe-mode=dark] [data-fangyuan] .fy-portrait-link { background: rgba(39,39,37,.65); }
+html[data-tahoe-mode=dark] [data-fangyuan] .fy-halo { background: linear-gradient(125deg,#77553b,#425548); border-color: #ffffff33; }
+html[data-tahoe-mode=dark] [data-fangyuan] .fy-halo:after { border-color: #ffffff33; }
+@media (max-width: 1280px) {
+  html [data-fangyuan] .fy-home-content { margin-inline: 48px; }
+  .fy-hero { grid-template-columns: 1.25fr 1fr; }
+  .fy-hero h1 { font-size: 48px; }
+  .fy-person { width: 430px; height: 430px; }
+  .fy-portrait-code { right: -10px; }
+}
+@media (max-width: 900px) {
+  html [data-fangyuan] .fy-home-content { margin-inline: 26px; padding-top: 78px; }
+  html [data-fangyuan] .fy-banner-header { top: 14px; width: calc(100% - 36px); height: 64px; min-height: 64px; padding: 0 16px; }
+  html [data-fangyuan] .fy-banner-header .tahoe-banner-nav > a { padding: 8px 10px; }
+  .fy-hero { grid-template-columns: 1.3fr 1fr; min-height: 420px; }
+  .fy-hero h1 { font-size: 36px; }
+  .fy-hero h2 { font-size: 27px; }
+  .fy-intro { font-size: 15px; }
+  .fy-portrait { height: 360px; }
+  .fy-person { width: 355px; height: 355px; left: -26px; top: 0; }
+  .fy-halo { width: 250px; height: 250px; left: 14px; top: 45px; }
+  .fy-portrait-code { display: none; }
+  html [data-fangyuan] .fy-portrait-notes { font-size: 10px; bottom: 20px; left: 0; }
+}
+@media (min-width: 601px) and (max-width: 767px) {
+  .fy-hero { display: grid; align-items: center; }
+  .fy-portrait { width: auto; max-width: none; margin-top: 0; align-self: end; }
+}
+@media (max-width: 600px) {
+  html [data-fangyuan] .fy-home-content { margin-inline: 22px; }
+  html [data-fangyuan] .fy-banner-header { width: calc(100% - 24px); border-radius: 19px; }
+  html [data-fangyuan] .fy-banner-header .tahoe-brand { font-size: 14px; gap: 8px; }
+  html [data-fangyuan] .fy-banner-header .tahoe-brand-mark { width: 9px; height: 9px; }
+  html [data-fangyuan] .tahoe-banner-nav { gap: 0; }
+  html [data-fangyuan] .fy-banner-header .tahoe-banner-nav > a { font-size: 13px; padding: 8px; }
+  html [data-fangyuan] .fy-banner-header .tahoe-banner-nav > .fy-nav-home,
+  html [data-fangyuan] .fy-banner-header .tahoe-banner-nav > .fy-nav-github,
+  .fy-nav-separator { display: none; }
+  .fy-hero { display: flex; flex-direction: column; align-items: stretch; gap: 0; min-height: 0; padding-top: 38px; }
+  .fy-eyebrow { font-size: 9px; letter-spacing: 1px; margin-bottom: 14px; }
+  .fy-hero h1 { font-size: clamp(30px,9.48vw,37px); letter-spacing: -2px; }
+  .fy-hero h2 { font-size: 27px; margin-top: 9px; }
+  html [data-fangyuan] .fy-actions .tahoe-button { font-size: 14px; padding: 11px 17px; gap: 10px; }
+  .fy-hero-links { margin-top: 18px; }
+  .fy-portrait { width: 300px; height: 315px; max-width: 100%; align-self: center; margin-top: 5px; }
+  .fy-person { width: 335px; height: 335px; left: -10px; top: -10px; }
+  .fy-halo { left: 43px; top: 28px; width: 230px; height: 230px; }
+  html [data-fangyuan] .fy-portrait-notes { left: 0; bottom: 15px; }
+}
+@media (max-width: 360px) {
+  html [data-fangyuan] .fy-banner-header { padding-inline: 10px; }
+  html [data-fangyuan] .fy-banner-header .tahoe-brand { font-size: 12px; gap: 6px; }
+  html [data-fangyuan] .fy-banner-header .tahoe-banner-nav > a { font-size: 12px; padding-inline: 6px; }
+  html [data-fangyuan] .fy-appearance-button { width: 36px; height: 40px; padding: 8px; }
+}
+html [data-fangyuan] .fy-banner-header,
+html [data-fangyuan] .fy-hero .fy-glass {
+  box-shadow: inset 0 1px 1px #fff, inset 0 -1px 1px #ffffff99, 0 1px 2px #39342b12, 0 10px 30px #4c3a261a;
+}
+html [data-fangyuan] .fy-banner-header { background: rgba(255,255,255,.36); border-color: rgba(255,255,255,.88); }
+.fy-banner-header:before,
+.fy-hero .fy-glass:before { content: ""; position: absolute; inset: 1px; border-radius: inherit; border: 1px solid #ffffff55; pointer-events: none; }
+.fy-actions .fy-glass { position: relative; }
+html[data-tahoe-mode=dark] [data-fangyuan] .fy-banner-header { background: rgba(39,39,37,.6); border-color: #ffffff40; }
+html[data-tahoe-mode=dark] [data-fangyuan] .fy-banner-header,
+html[data-tahoe-mode=dark] [data-fangyuan] .fy-hero .fy-glass { box-shadow: inset 0 1px 1px #ffffff35, inset 0 -1px 1px #ffffff0e, 0 10px 30px #0003; }
+html[data-tahoe-mode=dark] [data-fangyuan] :is(.fy-banner-header,.fy-hero .fy-glass):before { border-color: #ffffff0c; }
+@media (prefers-reduced-transparency: reduce) {
+  html [data-fangyuan] :is(.fy-banner-header,.fy-hero .fy-glass) { background: var(--tahoe-reader); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  html [data-fangyuan] :is(.fy-banner-header,.fy-hero .fy-glass) { background: var(--tahoe-reader); }
+}
+/* Keep legacy dark navigation styles from adding filled pills to every link. */
+html[data-tahoe-mode=dark] [data-fangyuan] .fy-banner-header .tahoe-banner-nav > a:not([aria-current]) { background: transparent; box-shadow: none; }
+html[data-tahoe-mode] [data-fangyuan].tahoe-shell::before { background: var(--fy-ambient); }
+@media (max-width: 360px) {
+  .fy-person { width: calc(100vw - 20px); height: calc(100vw - 20px); }
+}
+
+/* Keep anchored section headings clear of the floating navigation. */
+html [data-fangyuan] :is(#home, #projects, #articles, #about) { scroll-margin-top: 118px; }
+@media (max-width: 900px) {
+  html [data-fangyuan] :is(#home, #projects, #articles, #about) { scroll-margin-top: 98px; }
+}
+
+
+/* Public list/detail pages share the floating header's outer edges. */
+html [data-fy-content-page] {
+  --fy-page-width: 1240px;
+  --fy-page-gutter: 28px;
+}
+html [data-fy-content-page] :is(.fy-banner-header, .fy-page-content, .fy-footer) {
+  width: min(calc(100% - var(--fy-page-gutter) * 2), var(--fy-page-width));
+  max-width: none;
+}
+html [data-fy-content-page] .fy-page-content {
+  margin-inline: auto;
+  padding: 132px 0 80px;
+}
+html [data-fy-content-page] .fy-footer { padding-inline: 0; }
+html [data-fy-content-page] .fy-detail-heading { max-width: 960px; }
+html [data-fy-content-page] .fy-detail-heading > p { max-width: 80ch; }
+html [data-fy-content-page] .fy-case-study > :is(section, aside) {
+  max-width: 80ch;
+  margin-inline: auto;
+}
+.fy-reading-layout { display: grid; align-items: start; gap: 32px; }
+.fy-reading-layout > .markdown-body { min-width: 0; }
+.fy-reading-layout .markdown-body > * { max-width: 760px; margin-inline: auto; }
+.fy-article-toc { display: none; }
+@media (min-width: 1024px) {
+  .fy-reading-layout.has-toc { grid-template-columns: minmax(0, 1fr) 272px; }
+  .fy-article-toc { display: block; position: sticky; top: 118px; min-width: 0; }
+}
+@media (max-width: 900px) {
+  html [data-fy-content-page] { --fy-page-gutter: 18px; }
+  html [data-fy-content-page] .fy-page-content { padding-top: 110px; }
+}
+@media (max-width: 600px) {
+  html [data-fy-content-page] { --fy-page-gutter: 12px; }
+  html [data-fy-content-page] .fy-page-content { padding-bottom: 48px; }
+}

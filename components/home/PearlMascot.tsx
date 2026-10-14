@@ -31,8 +31,9 @@ export function PearlMascot() {
   return (
     <div
       ref={ref}
-      className="pearl-mascot pointer-events-none fixed bottom-4 left-4 z-50 hidden w-[132px] select-none sm:block lg:bottom-6 lg:left-7 lg:w-[164px]"
-      aria-hidden
+      className="pearl-mascot fy-dog pointer-events-none select-none"
+      role="img"
+      aria-label="珍珠，黑白色小犬"
     >
       <div className="relative">
         <Image

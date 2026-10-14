@@ -73,35 +73,12 @@ export default async function PostPage({ params }: PostPageProps) {
   const olderPost = currentIndex >= 0 && currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
 
   return (
-    <main data-tahoe-preview className="tahoe-shell min-h-screen overflow-x-hidden">
+    <main data-tahoe-preview data-fangyuan data-fy-content-page className="tahoe-shell min-h-screen overflow-x-clip">
       <div className="tahoe-bg-fixed" aria-hidden />
       <Header name={siteConfig.name} nav={siteConfig.nav} />
       <TOCScrollActive />
 
-      {headings.length ? (
-        <aside className="fixed left-4 top-32 z-40 hidden w-60 xl:block">
-          <nav className="tahoe-toc-panel max-h-[calc(100vh-9rem)] overflow-y-auto">
-            <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-[color:var(--tahoe-accent)]">
-              文章目录
-            </p>
-            <div className="grid gap-1">
-              {headings.map((heading) => (
-                <a
-                  key={heading.id}
-                  href={`#${heading.id}`}
-                  className={`block rounded-md px-2 py-1 text-[13px] leading-snug text-[color:var(--tahoe-muted)] transition hover:bg-[color:var(--tahoe-glass-strong)] hover:text-[color:var(--tahoe-text)] focus-visible:bg-[color:var(--tahoe-glass-strong)] focus-visible:text-[color:var(--tahoe-text)] focus-visible:outline-none ${
-                    heading.level === 3 ? "ml-3" : ""
-                  }`}
-                >
-                  {heading.text}
-                </a>
-              ))}
-            </div>
-          </nav>
-        </aside>
-      ) : null}
-
-      <div className="relative z-10 mx-auto max-w-[760px] px-4 pb-20 pt-28 sm:px-6">
+      <div className="fy-page-content relative z-10">
         <article>
           <Link
             className="tahoe-link-button mb-10 inline-flex"
@@ -110,7 +87,7 @@ export default async function PostPage({ params }: PostPageProps) {
             ← 返回文章列表
           </Link>
 
-          <header className="mb-10">
+          <header className="fy-detail-heading mb-10">
             <p
               className="mb-4 text-[13px] font-semibold uppercase tracking-[0.24em]"
               style={{ color: "var(--tahoe-accent)" }}
@@ -150,11 +127,35 @@ export default async function PostPage({ params }: PostPageProps) {
             </div>
           ) : null}
 
-          <div
-            className="markdown-body tahoe-article-body text-[16px] leading-relaxedBody"
-            style={{ padding: "clamp(24px, 4vw, 48px)" }}
-            dangerouslySetInnerHTML={{ __html: html }}
-          />
+          <div className={`fy-reading-layout${headings.length ? " has-toc" : ""}`}>
+            <div
+              className="markdown-body tahoe-article-body text-[16px] leading-relaxedBody"
+              style={{ padding: "clamp(24px, 4vw, 48px)" }}
+              dangerouslySetInnerHTML={{ __html: html }}
+            />
+            {headings.length ? (
+              <aside className="fy-article-toc">
+                <nav className="tahoe-toc-panel max-h-[calc(100dvh-9rem)] overflow-y-auto">
+                  <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-[color:var(--tahoe-accent)]">
+                    文章目录
+                  </p>
+                  <div className="grid gap-1">
+                    {headings.map((heading) => (
+                      <a
+                        key={heading.id}
+                        href={`#${heading.id}`}
+                        className={`block rounded-md px-2 py-1 text-[13px] leading-snug text-[color:var(--tahoe-muted)] transition hover:bg-[color:var(--tahoe-glass-strong)] hover:text-[color:var(--tahoe-text)] focus-visible:bg-[color:var(--tahoe-glass-strong)] focus-visible:text-[color:var(--tahoe-text)] focus-visible:outline-none ${
+                          heading.level === 3 ? "ml-3" : ""
+                        }`}
+                      >
+                        {heading.text}
+                      </a>
+                    ))}
+                  </div>
+                </nav>
+              </aside>
+            ) : null}
+          </div>
 
           {(newerPost || olderPost) ? (
             <nav className="mt-12 grid gap-3 pt-8 sm:grid-cols-2" style={{ borderTop: "1px solid var(--tahoe-card-border)" }}>
