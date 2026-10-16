@@ -253,8 +253,8 @@ html [data-fy-content-page] .fy-footer { padding-inline: 0; }
 html [data-fy-content-page] .fy-detail-heading { max-width: 960px; }
 html [data-fy-content-page] .fy-detail-heading > p { max-width: 80ch; }
 html [data-fy-content-page] .fy-case-study > :is(section, aside) {
-  max-width: 80ch;
-  margin-inline: auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .fy-reading-layout { display: grid; align-items: start; gap: 32px; }
 .fy-reading-layout > .markdown-body { min-width: 0; }
